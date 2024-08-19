@@ -8,8 +8,8 @@ Este proyecto es de naturaleza académica. Consiste en el desarrollo de una apli
 * Demostrar la capacidad de las tecnologías Spring Boot y Angular para construir aplicaciones empresariales escalables y seguras.
 ## Tecnologías utilizadas
 * Spring Boot versión 3.3.2 ![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=plastic&logo=spring&logoColor=white)
-* Angular
-* Base de datos: MongoDB 
+* Angular ![Angular](https://img.shields.io/badge/angular-%23DD0031.svg?style=for-the-badge&logo=angular&logoColor=white)
+* Base de datos: MongoDB ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
 * API RESTful para la comunicación entre frontend y backend
 ## Características
 * Gestión de usuarios: registro, login, perfil de usuario
