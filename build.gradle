@@ -7,7 +7,7 @@ plugins {
 
 group = 'co.edu.uniquindio'
 version = '0.0.1-SNAPSHOT'
-description = 'Breve descripción del proyecto'
+description = 'Proyecto Programación Avanzada'
 
 
 java {
