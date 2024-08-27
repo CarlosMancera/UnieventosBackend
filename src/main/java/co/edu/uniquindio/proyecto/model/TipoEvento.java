@@ -1,7 +1,7 @@
 package co.edu.uniquindio.proyecto.model;
 
-public class TipoEvento {
+public enum TipoEvento {
 
-    private String id;
-    private String descripcion;
+    CONCIERTO, TEATRO, DEPORTE, FESTIVAL, OTRO
+
 }
