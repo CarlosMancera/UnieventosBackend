@@ -2,15 +2,17 @@ package co.edu.uniquindio.proyecto.model;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Contacto {
+public class CodigoValidacion {
 
-    private String email;
-    private String telefono;
-    private String web;
+    private String codigo;
+    private LocalDateTime fechaCreacion;
+
 }

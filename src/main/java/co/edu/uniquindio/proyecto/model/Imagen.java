@@ -4,13 +4,14 @@ import lombok.*;
 
 @Setter
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Contacto {
+public class Imagen {
 
-    private String email;
-    private String telefono;
-    private String web;
+    @EqualsAndHashCode.Include
+    private String url;
+    private String nombre;
+    private String descripcion;
+
 }
