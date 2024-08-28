@@ -1,7 +1,9 @@
-package co.edu.uniquindio.proyecto.model;
+package co.edu.uniquindio.proyecto.model.docs;
 
-import co.edu.uniquindio.proyecto.enums.EstadoEvento;
-import co.edu.uniquindio.proyecto.enums.TipoEvento;
+import co.edu.uniquindio.proyecto.model.vo.Imagen;
+import co.edu.uniquindio.proyecto.model.enums.EstadoEvento;
+import co.edu.uniquindio.proyecto.model.enums.TipoEvento;
+import co.edu.uniquindio.proyecto.model.vo.Localidad;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

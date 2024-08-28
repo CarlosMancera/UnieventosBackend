@@ -1,28 +1,29 @@
-package co.edu.uniquindio.proyecto.model;
+package co.edu.uniquindio.proyecto.model.docs;
 
 import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document("localidades")
+import java.time.LocalDateTime;
+
+@Document("valoraciones")
 @Setter
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Localidad {
+public class Valoracion {
 
     @Id
     @EqualsAndHashCode.Include
     private String id;
 
-    private String nombre;
     private ObjectId evento;
-    private double precio;
-    private int capacidad;
-    private int vendido;
-    private int disponibilidad;
-    private String descripcion;
-    private String imagen;
+    private ObjectId usuario;
+    private int puntuacion;
+    private String comentario;
+    private LocalDateTime fecha;
+
 }

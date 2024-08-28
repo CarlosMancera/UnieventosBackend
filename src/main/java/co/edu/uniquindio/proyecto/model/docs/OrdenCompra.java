@@ -1,5 +1,7 @@
-package co.edu.uniquindio.proyecto.model;
+package co.edu.uniquindio.proyecto.model.docs;
 
+import co.edu.uniquindio.proyecto.model.vo.DetalleOrden;
+import co.edu.uniquindio.proyecto.model.vo.Pago;
 import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;

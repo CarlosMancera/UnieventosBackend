@@ -1,10 +1,7 @@
-package co.edu.uniquindio.proyecto.model;
+package co.edu.uniquindio.proyecto.model.vo;
 
 import lombok.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document("usuarios")
 @Setter
 @Getter
 @AllArgsConstructor
@@ -13,7 +10,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Usuario {
 
-    @Id
     @EqualsAndHashCode.Include
     private String id;
 

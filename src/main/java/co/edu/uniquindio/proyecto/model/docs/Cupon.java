@@ -1,7 +1,7 @@
-package co.edu.uniquindio.proyecto.model;
+package co.edu.uniquindio.proyecto.model.docs;
 
-import co.edu.uniquindio.proyecto.enums.EstadoCupon;
-import co.edu.uniquindio.proyecto.enums.TipoCupon;
+import co.edu.uniquindio.proyecto.model.enums.EstadoCupon;
+import co.edu.uniquindio.proyecto.model.enums.TipoCupon;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,7 +1,9 @@
-package co.edu.uniquindio.proyecto.model;
+package co.edu.uniquindio.proyecto.model.docs;
 
-import co.edu.uniquindio.proyecto.enums.EstadoCuenta;
-import co.edu.uniquindio.proyecto.enums.TipoUsuario;
+import co.edu.uniquindio.proyecto.model.vo.CodigoValidacion;
+import co.edu.uniquindio.proyecto.model.enums.EstadoCuenta;
+import co.edu.uniquindio.proyecto.model.enums.TipoUsuario;
+import co.edu.uniquindio.proyecto.model.vo.Usuario;
 import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -26,7 +28,7 @@ public class Cuenta {
     private TipoUsuario tipoUsuario;
     private EstadoCuenta estadoCuenta;
     private CodigoValidacion codigoValidacionPassword;
-    private ObjectId idUsuario;
+    private Usuario usuario;
     private LocalDateTime fechaRegistro;
     private String password;
     private CodigoValidacion codigoValidacionRegistro;
