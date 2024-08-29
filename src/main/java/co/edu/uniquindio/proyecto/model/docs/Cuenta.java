@@ -32,4 +32,6 @@ public class Cuenta {
     private LocalDateTime fechaRegistro;
     private String password;
     private CodigoValidacion codigoValidacionRegistro;
+
+    //TODO Historial de conexiones
 }
