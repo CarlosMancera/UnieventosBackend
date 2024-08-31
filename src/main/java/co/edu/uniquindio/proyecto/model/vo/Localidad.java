@@ -15,11 +15,12 @@ public class Localidad {
     private String id;
 
     private String nombre;
-    private ObjectId evento;
     private double precio;
     private int capacidad;
-    private int vendido;
-    private int disponibilidad;
+    private int entradasVendidas;
+    private boolean disponibilidad;
     private String descripcion;
     private String imagen;
+
+
 }
