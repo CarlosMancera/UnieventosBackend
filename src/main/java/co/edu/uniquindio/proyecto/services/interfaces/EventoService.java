@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface EventoService {
 
-    String crearEvento();
+    String crearEvento(CrearEventoDTO crearEventoDTO);
 
-    String editarEvento();
+    String editarEvento(editarEventoDTO editarEventoDTO);
 
     String eliminarEvento();
 
