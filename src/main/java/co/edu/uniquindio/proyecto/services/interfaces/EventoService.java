@@ -1,8 +1,6 @@
 package co.edu.uniquindio.proyecto.services.interfaces;
 
-import co.edu.uniquindio.proyecto.dto.FiltroDTO;
-import co.edu.uniquindio.proyecto.dto.InformacionEventoDTO;
-import co.edu.uniquindio.proyecto.dto.ItemEventoDTO;
+import co.edu.uniquindio.proyecto.dto.*;
 
 import java.util.List;
 
@@ -10,7 +8,7 @@ public interface EventoService {
 
     String crearEvento(CrearEventoDTO crearEventoDTO);
 
-    String editarEvento(editarEventoDTO editarEventoDTO);
+    String editarEvento(EditarEventoDTO editarEventoDTO);
 
     String eliminarEvento();
 

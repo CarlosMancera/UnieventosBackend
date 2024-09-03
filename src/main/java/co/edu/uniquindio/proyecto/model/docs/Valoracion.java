@@ -26,4 +26,13 @@ public class Valoracion {
     private String comentario;
     private LocalDateTime fecha;
 
+    @Builder
+    public Valoracion(ObjectId evento, ObjectId usuario, int puntuacion, String comentario, LocalDateTime fecha) {
+
+        this.evento = evento;
+        this.usuario = usuario;
+        this.puntuacion = puntuacion;
+        this.comentario = comentario;
+        this.fecha = fecha;
+    }
 }

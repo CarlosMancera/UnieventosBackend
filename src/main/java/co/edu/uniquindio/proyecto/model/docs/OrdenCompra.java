@@ -31,6 +31,15 @@ public class OrdenCompra {
     private LocalDateTime fecha;
     private Pago pago;
 
+    @Builder
+    public OrdenCompra(String codigo, ObjectId cliente, List<DetalleOrden> items, ObjectId cupon, double total, LocalDateTime fecha, Pago pago) {
 
-
+        this.codigo = codigo;
+        this.cliente = cliente;
+        this.items = items;
+        this.cupon = cupon;
+        this.total = total;
+        this.fecha = fecha;
+        this.pago = pago;
+    }
 }

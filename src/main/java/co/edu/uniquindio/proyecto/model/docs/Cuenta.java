@@ -5,11 +5,11 @@ import co.edu.uniquindio.proyecto.model.enums.EstadoCuenta;
 import co.edu.uniquindio.proyecto.model.enums.TipoUsuario;
 import co.edu.uniquindio.proyecto.model.vo.Usuario;
 import lombok.*;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Document("cuentas")
 @Setter
@@ -32,6 +32,20 @@ public class Cuenta {
     private LocalDateTime fechaRegistro;
     private String password;
     private CodigoValidacion codigoValidacionRegistro;
+    private List<LocalDateTime> historialConexion;
 
-    //TODO Historial de conexiones
+    @Builder
+    public Cuenta(String email, TipoUsuario tipoUsuario, EstadoCuenta estadoCuenta, CodigoValidacion codigoValidacionPassword, Usuario usuario, LocalDateTime fechaRegistro, String password, CodigoValidacion codigoValidacionRegistro) {
+
+        this.email = email;
+        this.tipoUsuario = tipoUsuario;
+        this.estadoCuenta = estadoCuenta;
+        this.codigoValidacionPassword = codigoValidacionPassword;
+        this.usuario = usuario;
+        this.fechaRegistro = fechaRegistro;
+        this.password = password;
+        this.codigoValidacionRegistro = codigoValidacionRegistro;
+    }
+
+
 }

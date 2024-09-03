@@ -7,12 +7,10 @@ import org.bson.types.ObjectId;
 @Setter
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Localidad {
-
-    @EqualsAndHashCode.Include
-    private String id;
 
     private String nombre;
     private double precio;
