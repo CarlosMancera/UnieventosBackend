@@ -5,6 +5,7 @@ import co.edu.uniquindio.proyecto.model.enums.EstadoEvento;
 import co.edu.uniquindio.proyecto.model.enums.TipoEvento;
 import co.edu.uniquindio.proyecto.model.vo.Localidad;
 import lombok.*;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -32,9 +33,10 @@ public class Evento {
     private LocalDateTime fecha;
     private List<Localidad> localidades;
     private EstadoEvento estadoEvento;
+    private List<ObjectId> artistas;
 
     @Builder
-    public Evento(String nombre, String direccion, String ciudad, String descripcion, TipoEvento tipoEvento, List<Imagen> imagenes, LocalDateTime fecha, List<Localidad> localidades, EstadoEvento estadoEvento) {
+    public Evento(String nombre, String direccion, String ciudad, String descripcion, TipoEvento tipoEvento, List<Imagen> imagenes, LocalDateTime fecha, List<Localidad> localidades, EstadoEvento estadoEvento, List<ObjectId> artistas) {
 
         this.nombre = nombre;
         this.direccion = direccion;
@@ -45,5 +47,6 @@ public class Evento {
         this.fecha = fecha;
         this.localidades = localidades;
         this.estadoEvento = estadoEvento;
+        this.artistas = artistas;
     }
 }

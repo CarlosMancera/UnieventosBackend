@@ -3,7 +3,6 @@ package co.edu.uniquindio.proyecto.model.vo;
 import lombok.*;
 import org.bson.types.ObjectId;
 
-//EMBEBIDAS EN EVENTOS
 @Setter
 @Getter
 @NoArgsConstructor

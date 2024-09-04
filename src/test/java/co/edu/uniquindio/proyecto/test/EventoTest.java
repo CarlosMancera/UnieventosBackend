@@ -6,7 +6,7 @@ import co.edu.uniquindio.proyecto.model.enums.TipoEvento;
 import co.edu.uniquindio.proyecto.model.vo.Imagen;
 import co.edu.uniquindio.proyecto.model.vo.Localidad;
 import co.edu.uniquindio.proyecto.repositories.EventoRepo;
-import jdk.jfr.Event;
+import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,6 +30,8 @@ public class EventoTest {
         imagenes.add(new Imagen("imagen.com", "Portada Rock in Torta","La media torta de la universidad del Quindío"));
         List<Localidad> localidades = new ArrayList<>();
         localidades.add(new Localidad("Unica",10000,500,300,true,"La única localidad que existe","imagen2.com"));
+        List<ObjectId> artistas = new ArrayList<>();
+        artistas.add(new ObjectId("66d26dba608dd86ee6c4955d"));
 
 
         Evento evento = Evento.builder()
@@ -42,6 +44,7 @@ public class EventoTest {
                 .fecha(LocalDateTime.now())
                 .localidades(localidades)
                 .estadoEvento(EstadoEvento.ACTIVO)
+                .artistas(artistas)
                 .build();
 
         Evento eventoRegistro = eventoRepo.save(evento);
