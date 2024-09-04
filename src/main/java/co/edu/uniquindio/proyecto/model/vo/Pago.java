@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class Pago {
 
     @EqualsAndHashCode.Include
-    private String codigoAutorizacion; //??????????
+    private String codigoAutorizacion;
 
     private String metodo;
     private String estado;

@@ -1,4 +1,7 @@
 package co.edu.uniquindio.proyecto.dto;
 
-public record InformacionEventoDTO() {
+public record InformacionEventoDTO(
+
+
+) {
 }
