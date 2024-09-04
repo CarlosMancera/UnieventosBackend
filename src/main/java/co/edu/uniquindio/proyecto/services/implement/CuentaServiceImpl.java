@@ -6,7 +6,7 @@ import co.edu.uniquindio.proyecto.services.interfaces.CuentaService;
 
 public class CuentaServiceImpl implements CuentaService {
 
-    private CuentaRepo cuentaRepo;
+    private final CuentaRepo cuentaRepo;
 
     public CuentaServiceImpl(CuentaRepo cuentaRepo) {
 
