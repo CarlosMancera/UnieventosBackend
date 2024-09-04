@@ -1,6 +1,6 @@
 package co.edu.uniquindio.proyecto.dto;
 
-public record RegistroCuentaDTO(
+public record CrearCuentaDTO(
         String cedula,
         String nombre,
         String telefono,

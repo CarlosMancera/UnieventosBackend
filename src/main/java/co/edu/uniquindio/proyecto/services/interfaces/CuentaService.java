@@ -1,13 +1,12 @@
 package co.edu.uniquindio.proyecto.services.interfaces;
 
 import co.edu.uniquindio.proyecto.dto.*;
-import co.edu.uniquindio.proyecto.model.docs.Cuenta;
 
 public interface CuentaService {
 
     //TODO
 
-    String crearCuenta(RegistroCuentaDTO cuenta) throws Exception;
+    String crearCuenta(CrearCuentaDTO cuenta) throws Exception;
 
     String editarCuenta(EditarCuentaDTO cuenta) throws Exception;
 
