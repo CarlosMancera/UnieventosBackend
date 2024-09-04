@@ -12,12 +12,12 @@ public interface CuentaService {
 
     String eliminarCuenta(String id) throws Exception;
 
-    InformacionCuentaDTO obtenerInformacionCuenta(String id) throws Exception;
+    InformacionCuentaDTO obtenerInformacionCuenta(String id) throws Exception; //Al momento de entrar a su perfil
 
-    String enviarCodigoRecuperacionPassword(String correo) throws Exception;
+    String enviarCodigoRecuperacionPassword(String correo) throws Exception;   //Cuando olvida contraseña, y permite crear una nueva
 
     String cambiarPassword(CambiarPasswordDTO cambiarPasswordDTO) throws Exception;
 
-    String iniciarSEsion(LoginDTO loginDTO) throws Exception;
+    String iniciarSesion(LoginDTO loginDTO) throws Exception;
 
 }
