@@ -11,6 +11,7 @@ public class Imagen {
 
     @EqualsAndHashCode.Include
     private String url;
+
     private String nombre;
     private String descripcion;
 

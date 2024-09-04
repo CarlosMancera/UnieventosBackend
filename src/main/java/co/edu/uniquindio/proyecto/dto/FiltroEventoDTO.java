@@ -1,6 +1,6 @@
 package co.edu.uniquindio.proyecto.dto;
 
-public record FiltroDTO(
+public record FiltroEventoDTO(
 
         String nombre,
         String tipo,
