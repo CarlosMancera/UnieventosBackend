@@ -10,8 +10,6 @@ import lombok.*;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Usuario {
 
-    @EqualsAndHashCode.Include
-    private String id;
 
     private String cedula;
     private String nombreCompleto;
