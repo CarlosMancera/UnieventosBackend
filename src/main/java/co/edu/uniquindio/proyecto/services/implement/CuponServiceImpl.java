@@ -4,6 +4,7 @@ import co.edu.uniquindio.proyecto.dto.cuponDTO.CrearCuponDTO;
 import co.edu.uniquindio.proyecto.dto.cuponDTO.EditarCuponDTO;
 import co.edu.uniquindio.proyecto.dto.cuponDTO.InformacionCuponDTO;
 import co.edu.uniquindio.proyecto.dto.cuponDTO.ResumenCuponDTO;
+import co.edu.uniquindio.proyecto.model.docs.Cuenta;
 import co.edu.uniquindio.proyecto.model.docs.Cupon;
 import co.edu.uniquindio.proyecto.model.enums.EstadoCupon;
 import co.edu.uniquindio.proyecto.repositories.CuponRepo;
@@ -42,18 +43,14 @@ public class CuponServiceImpl implements CuponService {
 
     @Override
     public String editarCupon(EditarCuponDTO cuponDTO) throws Exception {
-        Optional<Cupon> optionalCupon = cuponRepo.findById(cuponDTO.id());
-
-        if (optionalCupon.isEmpty()) {
-            throw new Exception("No existe un cupón con el id " + cuponDTO.id());
-        }
+        Optional<Cupon> optionalCupon = getCupon(cuponDTO.id());
 
         Cupon cupon = optionalCupon.get();
         cupon.setCodigo(cuponDTO.codigo());
         cupon.setDescuento(cuponDTO.descuento());
-        cupon.setFecha_vencimiento(cuponDTO.fechaExpiracion());
+        cupon.setFecha_vencimiento(cuponDTO.fecha_Vencimiento());
         cupon.setLimiteUso(cuponDTO.limiteUso());
-        cupon.setTipoCupon(cuponDTO.tipo());
+        cupon.setTipoCupon(cuponDTO.tipoCupon());
 
         cuponRepo.save(cupon);
         return cupon.getId();
@@ -61,11 +58,8 @@ public class CuponServiceImpl implements CuponService {
 
     @Override
     public String eliminarCupon(String id) throws Exception {
-        Optional<Cupon> optionalCupon = cuponRepo.findById(id);
 
-        if (optionalCupon.isEmpty()) {
-            throw new Exception("No se encontró el cupón con el id " + id);
-        }
+        Optional<Cupon> optionalCupon = getCupon(id);
 
         cuponRepo.delete(optionalCupon.get());
         return id;
@@ -74,11 +68,7 @@ public class CuponServiceImpl implements CuponService {
     @Override
     @Transactional(readOnly = true)
     public InformacionCuponDTO obtenerInformacionCupon(String id) throws Exception {
-        Optional<Cupon> optionalCupon = cuponRepo.findById(id);
-
-        if (optionalCupon.isEmpty()) {
-            throw new Exception("No se encontró el cupón con el id " + id);
-        }
+        Optional<Cupon> optionalCupon = getCupon(id);
 
         Cupon cupon = optionalCupon.get();
         return mapToInformacionCuponDTO(cupon);
@@ -111,12 +101,13 @@ public class CuponServiceImpl implements CuponService {
                 .toList();
     }
 
+    //ANALIZAR FUNCIONALIDAD DE ESTOS MÉTODOS
+
     private InformacionCuponDTO mapToInformacionCuponDTO(Cupon cupon) {
         return new InformacionCuponDTO(
-                cupon.getId(),
                 cupon.getCodigo(),
                 cupon.getDescuento(),
-                cupon.getFechaVencimiento(),
+                cupon.getFecha_vencimiento(),
                 cupon.getLimiteUso(),
                 cupon.getTipoCupon(),
                 cupon.getEstado()
@@ -125,12 +116,26 @@ public class CuponServiceImpl implements CuponService {
 
     private ResumenCuponDTO mapToResumenCuponDTO(Cupon cupon) {
         return new ResumenCuponDTO(
-                cupon.getId(),
                 cupon.getCodigo(),
                 cupon.getDescuento(),
-                cupon.getFechaVencimiento(),
+                cupon.getFecha_vencimiento(),
                 cupon.getEstado()
         );
+    }
+
+
+    //---------------MÉTODOS AUXILIARES-----------------
+
+    private Optional<Cupon> getCupon(String id) throws Exception {
+
+        Optional<Cupon> optionalCupon = cuponRepo.findById(id);                 //Buscamos el cupon  que se quiere obtener
+
+        if(optionalCupon.isEmpty()){
+            throw new Exception("No se encontró el cupon con el id "+id);        //Si no se encontró el cupon, lanzamos una excepción
+        }
+
+        return optionalCupon;
+
     }
 
 }
