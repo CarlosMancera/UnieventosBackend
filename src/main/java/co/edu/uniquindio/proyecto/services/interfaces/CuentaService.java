@@ -2,6 +2,8 @@ package co.edu.uniquindio.proyecto.services.interfaces;
 
 import co.edu.uniquindio.proyecto.dto.*;
 
+import java.util.List;
+
 public interface CuentaService {
 
     //TODO
@@ -19,5 +21,7 @@ public interface CuentaService {
     String cambiarPassword(CambiarPasswordDTO cambiarPasswordDTO) throws Exception;
 
     String iniciarSesion(LoginDTO loginDTO) throws Exception;
+
+    public List<ItemCuentaDTO> listarCuentas() throws Exception;
 
 }

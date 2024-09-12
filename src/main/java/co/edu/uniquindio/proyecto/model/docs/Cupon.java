@@ -26,9 +26,10 @@ public class Cupon {
     private TipoCupon tipoCupon;
     private EstadoCupon estado;
     private boolean es_especial;
+    private int limiteUso;
 
     @Builder
-    public Cupon(String codigo, String nombreDescriptivo, double descuento, LocalDateTime fecha_vencimiento, TipoCupon tipoCupon, EstadoCupon estado, boolean es_especial) {
+    public Cupon(String codigo, String nombreDescriptivo, double descuento, LocalDateTime fecha_vencimiento, TipoCupon tipoCupon, EstadoCupon estado, boolean es_especial, int limiteUso) {
 
         this.codigo = codigo;
         this.nombreDescriptivo = nombreDescriptivo;

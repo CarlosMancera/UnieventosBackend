@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor //Esta anotación sustituye al constructor con la inicialización del atributo cuentaRepo (que es una interface)
-public class CuentaServiceImpl implements CuentaService {
+@RequiredArgsConstructor                                    //Esta anotación sustituye al constructor
+public class CuentaServiceImpl implements CuentaService {   //con la inicialización del atributo cuentaRepo (que es una interface)
 
     private final CuentaRepo cuentaRepo;
 
@@ -59,45 +59,27 @@ public class CuentaServiceImpl implements CuentaService {
 
         //TODO Enviar un email al usuario con el código de validación
 
-        return cuentaCreada.getId().toString();   //Por ahora digamos que está bien retornar retornar el ID
-    }
+        return cuentaCreada.getId().toString();                         //Por ahora digamos que está bien
+    }                                                                   //retornar retornar el ID
 
-    private boolean existeCedula(@NotBlank @Length(max = 10) String cedula) {
 
-        return cuentaRepo.findByCedula(cedula).isPresent();
-
-    }
-
-    private boolean existeEmail(@NotBlank @Length(max = 40) @Email String correo) {
-
-        return cuentaRepo.findByEmail(correo).isPresent();
-
-    }
 
     @Override
     public String editarCuenta(EditarCuentaDTO cuenta) throws Exception {
 
-        //Buscamos la cuenta del usuario que se quiere actualizar
-        Optional<Cuenta> optionalCuenta = cuentaRepo.findById(cuenta.id());
+                                                                            //Buscamos la cuenta del
+        Optional<Cuenta> optionalCuenta = getCuenta(cuenta.id());           //usuario que se quiere actualizar
 
-
-        //Si no se encontró la cuenta del usuario, lanzamos una excepción
-        if(optionalCuenta.isEmpty()){
-            throw new Exception("No existe un usuario con el id dado");
-        }
-
-
-        //Obtenemos la cuenta del usuario a modificar y actualizamos sus datos
-        Cuenta cuentaModificada = optionalCuenta.get();
+                                                                            //Obtenemos la cuenta del
+        Cuenta cuentaModificada = optionalCuenta.get();                     //usuario a modificar y actualizamos sus datos
         cuentaModificada.getUsuario().setNombreCompleto( cuenta.nombre() );
         cuentaModificada.getUsuario().setTelefono( cuenta.telefono() );
         cuentaModificada.getUsuario().setDireccion( cuenta.direccion() );
         cuentaModificada.setPassword( cuenta.password() );
 
-
-        //Como el objeto cuenta ya tiene un id, el save() no crea un nuevo registro sino que actualiza el que ya existe
-        cuentaRepo.save(cuentaModificada);
-
+                                                                        //Como el objeto cuenta ya tiene
+        cuentaRepo.save(cuentaModificada);                              //un id, el save() no crea un nuevo
+                                                                        //registro sino que actualiza el que ya existe
 
         return cuentaModificada.getId();
     }
@@ -105,23 +87,15 @@ public class CuentaServiceImpl implements CuentaService {
     @Override
     public String eliminarCuenta(String id) throws Exception {
 
-        //Buscamos la cuenta del usuario que se quiere eliminar
-        Optional<Cuenta> optionalCuenta = cuentaRepo.findById(id);
+                                                            //Buscamos la cuenta del usuario
+        Optional<Cuenta> optionalCuenta = getCuenta(id);    //que se quiere eliminar
 
-
-        //Si no se encontró la cuenta, lanzamos una excepción
-        if(optionalCuenta.isEmpty()){
-            throw new Exception("No se encontró el usuario con el id "+id);
-        }
-
-
-        //Obtenemos la cuenta del usuario que se quiere eliminar y le asignamos el estado eliminado
-        Cuenta cuenta = optionalCuenta.get();
+                                                            //Obtenemos la cuenta del usuario que
+        Cuenta cuenta = optionalCuenta.get();               //se quiere eliminar y le asignamos el estado eliminado
         cuenta.setEstadoCuenta(EstadoCuenta.ELIMINADO);
 
-
-        //Como el objeto cuenta ya tiene un id, el save() no crea un nuevo registro sino que actualiza el que ya existe
-        cuentaRepo.save(cuenta);
+                                                            //Como el objeto cuenta ya tiene un id,
+        cuentaRepo.save(cuenta);                            //el save() no crea un nuevo registro sino que actualiza el que ya existe
 
 
         return cuenta.getId();
@@ -131,22 +105,14 @@ public class CuentaServiceImpl implements CuentaService {
     @Transactional(readOnly = true)
     public InformacionCuentaDTO obtenerInformacionCuenta(String id) throws Exception {
 
-        //Buscamos la cuenta del usuario que se quiere obtener
-        Optional<Cuenta> optionalCuenta = cuentaRepo.findById(id);
+
+        Optional<Cuenta> optionalCuenta = getCuenta(id);            //Buscamos la cuenta del usuario que se quiere obtener
 
 
-        //Si no se encontró la cuenta, lanzamos una excepción
-        if(optionalCuenta.isEmpty()){
-            throw new Exception("No se encontró el usuario con el id "+id);
-        }
+        Cuenta cuenta = optionalCuenta.get();                   //Obtenemos la cuenta del usuario
 
 
-        //Obtenemos la cuenta del usuario
-        Cuenta cuenta = optionalCuenta.get();
-
-
-        //Retornamos la información de la cuenta del usuario
-        return new InformacionCuentaDTO(
+        return new InformacionCuentaDTO(                        //Retornamos la información de la cuenta del usuario
                 cuenta.getId(),
                 cuenta.getUsuario().getCedula(),
                 cuenta.getUsuario().getNombreCompleto(),
@@ -159,7 +125,6 @@ public class CuentaServiceImpl implements CuentaService {
 
     @Override
     public String enviarCodigoRecuperacionPassword(String correo) throws Exception {
-
 
         return "";
     }
@@ -177,27 +142,52 @@ public class CuentaServiceImpl implements CuentaService {
     @Override
     public List<ItemCuentaDTO> listarCuentas() {
 
+        List<Cuenta> cuentas = cuentaRepo.findAll();                //Obtenemos todas las cuentas de los
+                                                                    //usuarios de la base de datos
 
-        //Obtenemos todas las cuentas de los usuarios de la base de datos
-        List<Cuenta> cuentas = cuentaRepo.findAll();
-
-
-        //Creamos una lista de DTOs
-        List<ItemCuentaDTO> items = new ArrayList<>();
+        List<ItemCuentaDTO> items = new ArrayList<>();              //Creamos una lista de DTOs
 
 
-        //Recorremos la lista de cuentas y por cada uno creamos un DTO y lo agregamos a la lista
-        for (Cuenta cuenta : cuentas) {
-            items.add( new ItemCuentaDTO(
-                   /* cuenta.getId(),
+        for (Cuenta cuenta : cuentas) {                          //Recorremos la lista de cuentas y por cada uno
+            items.add( new ItemCuentaDTO(                        //creamos un DTO y lo agregamos a la lista
+                    cuenta.getId(),
                     cuenta.getUsuario().getNombreCompleto(),
                     cuenta.getEmail(),
-                    cuenta.getUsuario().getTelefono()*/
+                    cuenta.getUsuario().getTelefono()
             ));
         }
 
-
         return items;
     }
+
+
+
+
+    //------------------------MÉTODOS AUXILIARES----------------------------
+
+    private boolean existeCedula(@NotBlank @Length(max = 10) String cedula) {
+
+        return cuentaRepo.findByCedula(cedula).isPresent();
+
+    }
+
+    private boolean existeEmail(@NotBlank @Length(max = 40) @Email String correo) {
+
+        return cuentaRepo.findByEmail(correo).isPresent();
+
+    }
+
+    private Optional<Cuenta> getCuenta(String id) throws Exception {
+
+        Optional<Cuenta> optionalCuenta = cuentaRepo.findById(id);                 //Buscamos la cuenta del usuario que se quiere obtener
+
+        if(optionalCuenta.isEmpty()){
+            throw new Exception("No se encontró el usuario con el id "+id);        //Si no se encontró la cuenta, lanzamos una excepción
+        }
+
+        return optionalCuenta;
+
+    }
+
 
 }
