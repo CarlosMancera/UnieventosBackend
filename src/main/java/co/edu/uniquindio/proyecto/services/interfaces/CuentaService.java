@@ -4,6 +4,9 @@ import co.edu.uniquindio.proyecto.dto.*;
 import co.edu.uniquindio.proyecto.dto.cuentaDTO.CrearCuentaDTO;
 import co.edu.uniquindio.proyecto.dto.cuentaDTO.EditarCuentaDTO;
 import co.edu.uniquindio.proyecto.dto.cuentaDTO.InformacionCuentaDTO;
+import co.edu.uniquindio.proyecto.dto.cuentaDTO.ItemCuentaDTO;
+
+import java.util.List;
 
 public interface CuentaService {
 
@@ -22,5 +25,7 @@ public interface CuentaService {
     String cambiarPassword(CambiarPasswordDTO cambiarPasswordDTO) throws Exception;
 
     String iniciarSesion(LoginDTO loginDTO) throws Exception;
+
+    public List<ItemCuentaDTO> listarCuentas() throws Exception;
 
 }
