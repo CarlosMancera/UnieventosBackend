@@ -14,5 +14,5 @@ public interface CuponService {
     InformacionCuponDTO obtenerInformacionCupon(String id) throws Exception;
     List<ResumenCuponDTO> listarCupones();
     List<ResumenCuponDTO> buscarCuponesPorCodigo(String codigo);
-    List<ResumenCuponDTO> buscarCuponesUtilizadosPorUsuario(String idUsuario);
+    //List<ResumenCuponDTO> buscarCuponesUtilizadosPorUsuario(String idUsuario);
 }

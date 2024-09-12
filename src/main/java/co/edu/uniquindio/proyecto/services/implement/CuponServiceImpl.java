@@ -92,14 +92,14 @@ public class CuponServiceImpl implements CuponService {
                 .toList();
     }
 
-    @Override
+   /* @Override
     @Transactional(readOnly = true)
     public List<ResumenCuponDTO> buscarCuponesUtilizadosPorUsuario(String idUsuario) {
         List<Cupon> cupones = cuponRepo.findByUsuariosUsadosContaining(idUsuario);
         return cupones.stream()
                 .map(this::mapToResumenCuponDTO)
                 .toList();
-    }
+    }*/
 
     //ANALIZAR FUNCIONALIDAD DE ESTOS MÉTODOS
 
