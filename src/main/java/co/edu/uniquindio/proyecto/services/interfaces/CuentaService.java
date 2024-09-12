@@ -1,6 +1,10 @@
 package co.edu.uniquindio.proyecto.services.interfaces;
 
 import co.edu.uniquindio.proyecto.dto.*;
+import co.edu.uniquindio.proyecto.dto.cuentaDTO.CrearCuentaDTO;
+import co.edu.uniquindio.proyecto.dto.cuentaDTO.EditarCuentaDTO;
+import co.edu.uniquindio.proyecto.dto.cuentaDTO.InformacionCuentaDTO;
+import co.edu.uniquindio.proyecto.dto.cuentaDTO.ItemCuentaDTO;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package co.edu.uniquindio.proyecto.services.interfaces;
 
-import co.edu.uniquindio.proyecto.dto.*;
+import co.edu.uniquindio.proyecto.dto.eventoDTO.*;
 
 import java.util.List;
 
