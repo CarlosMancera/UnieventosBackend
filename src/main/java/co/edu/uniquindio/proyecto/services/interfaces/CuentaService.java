@@ -1,6 +1,9 @@
 package co.edu.uniquindio.proyecto.services.interfaces;
 
 import co.edu.uniquindio.proyecto.dto.*;
+import co.edu.uniquindio.proyecto.dto.cuentaDTO.CrearCuentaDTO;
+import co.edu.uniquindio.proyecto.dto.cuentaDTO.EditarCuentaDTO;
+import co.edu.uniquindio.proyecto.dto.cuentaDTO.InformacionCuentaDTO;
 
 public interface CuentaService {
 

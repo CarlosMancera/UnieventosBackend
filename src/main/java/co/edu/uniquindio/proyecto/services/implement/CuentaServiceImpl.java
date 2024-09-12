@@ -1,6 +1,10 @@
 package co.edu.uniquindio.proyecto.services.implement;
 
 import co.edu.uniquindio.proyecto.dto.*;
+import co.edu.uniquindio.proyecto.dto.cuentaDTO.CrearCuentaDTO;
+import co.edu.uniquindio.proyecto.dto.cuentaDTO.EditarCuentaDTO;
+import co.edu.uniquindio.proyecto.dto.cuentaDTO.InformacionCuentaDTO;
+import co.edu.uniquindio.proyecto.dto.cuentaDTO.ItemCuentaDTO;
 import co.edu.uniquindio.proyecto.model.docs.Cuenta;
 import co.edu.uniquindio.proyecto.model.enums.EstadoCuenta;
 import co.edu.uniquindio.proyecto.model.enums.TipoUsuario;
