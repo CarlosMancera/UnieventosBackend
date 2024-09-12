@@ -1,4 +1,10 @@
 package co.edu.uniquindio.proyecto.services.interfaces;
+import co.edu.uniquindio.proyecto.dto.cuponDTO.CrearCuponDTO;
+import co.edu.uniquindio.proyecto.dto.cuponDTO.EditarCuponDTO;
+import co.edu.uniquindio.proyecto.dto.cuponDTO.InformacionCuponDTO;
+import co.edu.uniquindio.proyecto.dto.cuponDTO.ResumenCuponDTO;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 public interface CuponService {
