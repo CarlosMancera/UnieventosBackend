@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -157,6 +159,8 @@ public class CuentaServiceImpl implements CuentaService {
 
     @Override
     public String enviarCodigoRecuperacionPassword(String correo) throws Exception {
+
+
         return "";
     }
 
@@ -169,4 +173,31 @@ public class CuentaServiceImpl implements CuentaService {
     public String iniciarSesion(LoginDTO loginDTO) throws Exception {
         return "";
     }
+
+    @Override
+    public List<ItemCuentaDTO> listarCuentas() {
+
+
+        //Obtenemos todas las cuentas de los usuarios de la base de datos
+        List<Cuenta> cuentas = cuentaRepo.findAll();
+
+
+        //Creamos una lista de DTOs
+        List<ItemCuentaDTO> items = new ArrayList<>();
+
+
+        //Recorremos la lista de cuentas y por cada uno creamos un DTO y lo agregamos a la lista
+        for (Cuenta cuenta : cuentas) {
+            items.add( new ItemCuentaDTO(
+                   /* cuenta.getId(),
+                    cuenta.getUsuario().getNombreCompleto(),
+                    cuenta.getEmail(),
+                    cuenta.getUsuario().getTelefono()*/
+            ));
+        }
+
+
+        return items;
+    }
+
 }
