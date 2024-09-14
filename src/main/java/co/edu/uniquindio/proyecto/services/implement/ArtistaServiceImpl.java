@@ -1,9 +1,13 @@
 package co.edu.uniquindio.proyecto.services.implement;
 
 import co.edu.uniquindio.proyecto.dto.*;
+import co.edu.uniquindio.proyecto.dto.artistasDTO.CrearArtistaDTO;
+import co.edu.uniquindio.proyecto.dto.artistasDTO.EditarArtistaDTO;
+import co.edu.uniquindio.proyecto.dto.artistasDTO.InformacionArtistaDTO;
 import co.edu.uniquindio.proyecto.dto.artistasDTO.ResumenArtistaDTO;
 import co.edu.uniquindio.proyecto.model.docs.Artista;
 import co.edu.uniquindio.proyecto.model.enums.EstadoArtista;
+import co.edu.uniquindio.proyecto.model.vo.Contacto;
 import co.edu.uniquindio.proyecto.repositories.ArtistaRepo;
 import co.edu.uniquindio.proyecto.services.interfaces.ArtistaService;
 import lombok.RequiredArgsConstructor;
@@ -60,7 +64,7 @@ public class ArtistaServiceImpl implements ArtistaService {
         nuevoArtista.setNombre(artista.nombre());
         nuevoArtista.setGeneros(artista.generos());
         nuevoArtista.setTipo(artista.tipo());
-        nuevoArtista.setContacto(new Contacto(artista.email(), artista.telefono()));
+        nuevoArtista.setContacto(new Contacto(artista.email(), artista.telefono(), artista.web()));
         nuevoArtista.setTarifa(artista.tarifa());
         nuevoArtista.setReferencias(artista.referencias());
         nuevoArtista.setBiografia(artista.biografia());
