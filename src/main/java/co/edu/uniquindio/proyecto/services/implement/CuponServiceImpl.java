@@ -32,7 +32,7 @@ public class CuponServiceImpl implements CuponService {
         Cupon nuevoCupon = new Cupon();
         nuevoCupon.setCodigo(cuponDTO.codigo());
         nuevoCupon.setDescuento(cuponDTO.descuento());
-        nuevoCupon.setFecha_vencimiento(cuponDTO.fechaVencimiento());
+        nuevoCupon.setFechaVencimiento(cuponDTO.fechaVencimiento());
         nuevoCupon.setLimiteUso(cuponDTO.limiteUso());
         nuevoCupon.setTipoCupon(cuponDTO.tipoCupon());
         nuevoCupon.setEstado(EstadoCupon.ACTIVO);
@@ -43,12 +43,11 @@ public class CuponServiceImpl implements CuponService {
 
     @Override
     public String editarCupon(EditarCuponDTO cuponDTO) throws Exception {
-        Optional<Cupon> optionalCupon = getCupon(cuponDTO.id());
+        Cupon cupon = getCupon(cuponDTO.id());
 
-        Cupon cupon = optionalCupon.get();
         cupon.setCodigo(cuponDTO.codigo());
         cupon.setDescuento(cuponDTO.descuento());
-        cupon.setFecha_vencimiento(cuponDTO.fecha_Vencimiento());
+        cupon.setFechaVencimiento(cuponDTO.fecha_Vencimiento());
         cupon.setLimiteUso(cuponDTO.limiteUso());
         cupon.setTipoCupon(cuponDTO.tipoCupon());
 
@@ -58,19 +57,16 @@ public class CuponServiceImpl implements CuponService {
 
     @Override
     public String eliminarCupon(String id) throws Exception {
-
-        Optional<Cupon> optionalCupon = getCupon(id);
-
-        cuponRepo.delete(optionalCupon.get());
+        Cupon cupon = getCupon(id);
+        cupon.setEstado(EstadoCupon.INACTIVO);
+        cuponRepo.save(cupon);
         return id;
     }
 
     @Override
     @Transactional(readOnly = true)
     public InformacionCuponDTO obtenerInformacionCupon(String id) throws Exception {
-        Optional<Cupon> optionalCupon = getCupon(id);
-
-        Cupon cupon = optionalCupon.get();
+        Cupon cupon = getCupon(id);
         return mapToInformacionCuponDTO(cupon);
     }
 
@@ -92,6 +88,10 @@ public class CuponServiceImpl implements CuponService {
                 .toList();
     }
 
+    //public boolean estaVigente(){
+
+    //}
+
    /* @Override
     @Transactional(readOnly = true)
     public List<ResumenCuponDTO> buscarCuponesUtilizadosPorUsuario(String idUsuario) {
@@ -107,7 +107,7 @@ public class CuponServiceImpl implements CuponService {
         return new InformacionCuponDTO(
                 cupon.getCodigo(),
                 cupon.getDescuento(),
-                cupon.getFecha_vencimiento(),
+                cupon.getFechaVencimiento(),
                 cupon.getLimiteUso(),
                 cupon.getTipoCupon(),
                 cupon.getEstado()
@@ -118,7 +118,7 @@ public class CuponServiceImpl implements CuponService {
         return new ResumenCuponDTO(
                 cupon.getCodigo(),
                 cupon.getDescuento(),
-                cupon.getFecha_vencimiento(),
+                cupon.getFechaVencimiento(),
                 cupon.getEstado()
         );
     }
@@ -126,7 +126,7 @@ public class CuponServiceImpl implements CuponService {
 
     //---------------MÉTODOS AUXILIARES-----------------
 
-    private Optional<Cupon> getCupon(String id) throws Exception {
+    private Cupon getCupon(String id) throws Exception {
 
         Optional<Cupon> optionalCupon = cuponRepo.findById(id);                 //Buscamos el cupon  que se quiere obtener
 
@@ -134,7 +134,7 @@ public class CuponServiceImpl implements CuponService {
             throw new Exception("No se encontró el cupon con el id "+id);        //Si no se encontró el cupon, lanzamos una excepción
         }
 
-        return optionalCupon;
+        return optionalCupon.get();
 
     }
 

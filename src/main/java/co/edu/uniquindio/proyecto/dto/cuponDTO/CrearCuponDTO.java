@@ -10,8 +10,7 @@ public record CrearCuponDTO(
         double descuento,
         LocalDateTime fechaVencimiento,
         int limiteUso,
-        TipoCupon tipoCupon,
-        EstadoCupon estado
+        TipoCupon tipoCupon
 
 
 ) {
