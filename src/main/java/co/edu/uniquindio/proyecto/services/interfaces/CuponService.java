@@ -15,4 +15,5 @@ public interface CuponService {
     List<ResumenCuponDTO> listarCupones();
     List<ResumenCuponDTO> buscarCuponesPorCodigo(String codigo);
     //List<ResumenCuponDTO> buscarCuponesUtilizadosPorUsuario(String idUsuario);
+   public boolean estaVigente(String idCupon, String idUsuario) throws Exception;
 }

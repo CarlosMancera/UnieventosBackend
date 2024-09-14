@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Document("cupones")
 @Setter
@@ -27,9 +28,11 @@ public class Cupon {
     private EstadoCupon estado;
     private boolean esEspecial;
     private int limiteUso;
+    private int usosTotales;
+    private Set<String> usuariosUsados;
 
     @Builder
-    public Cupon(String codigo, String nombreDescriptivo, double descuento, LocalDateTime fechaVencimiento, TipoCupon tipoCupon, EstadoCupon estado, boolean esEspecial, int limiteUso) {
+    public Cupon(String codigo, String nombreDescriptivo, double descuento, LocalDateTime fechaVencimiento, TipoCupon tipoCupon, EstadoCupon estado, boolean esEspecial, int limiteUso, int usosTotales) {
 
         this.codigo = codigo;
         this.nombreDescriptivo = nombreDescriptivo;

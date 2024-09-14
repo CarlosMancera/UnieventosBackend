@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -137,5 +138,33 @@ public class CuponServiceImpl implements CuponService {
         return optionalCupon.get();
 
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean estaVigente(String idCupon, String idUsuario) throws Exception {
+        Optional<Cupon> optionalCupon = getCupon(idCupon);
+
+        Cupon cupon = optionalCupon.get();
+
+        // Verificar si el cupón ha expirado
+        if (LocalDateTime.now().isAfter(cupon.getFechaVencimiento())) {
+            return false;
+        }
+
+        // Verificar si se ha alcanzado el límite de uso
+        if (cupon.getUsosTotales() >= cupon.getLimiteUso()) {
+            return false;
+        }
+
+        // Verificar si el usuario ya ha usado este cupón
+        if (cupon.getUsuariosUsados().contains(idUsuario)) {
+            return false;
+        }
+
+        // Si pasa todas las verificaciones, el cupón está vigente
+        return true;
+    }
+
+
 
 }
