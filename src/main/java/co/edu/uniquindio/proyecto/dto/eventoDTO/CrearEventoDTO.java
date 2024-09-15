@@ -1,6 +1,19 @@
 package co.edu.uniquindio.proyecto.dto.eventoDTO;
 
-public record CrearEventoDTO(
+import co.edu.uniquindio.proyecto.model.enums.TipoEvento;
+import java.time.LocalDateTime;
+import java.util.List;
 
-) {
+public record CrearEventoDTO(
+        String nombre,
+        String artista,
+        String descripcion,
+        LocalDateTime fecha,
+        String direccion,
+        String ciudad,
+        TipoEvento tipoEvento,
+        List<LocalidadDTO> localidades
+){
+
+
 }
