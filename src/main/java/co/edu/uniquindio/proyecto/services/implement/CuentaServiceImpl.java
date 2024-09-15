@@ -140,7 +140,18 @@ public class CuentaServiceImpl implements CuentaService {   //con la inicializac
 
     @Override
     public String iniciarSesion(LoginDTO loginDTO) throws Exception {
-        return "";
+        Optional<Cuenta> cuentaOptional = cuentaRepo.buscarEmail(loginDTO.correo());
+
+        if (cuentaOptional.isEmpty()){
+            throw new Exception("E correo dado no esta registrado");
+        }
+        Cuenta cuenta = cuentaOptional.get();
+
+        if(!cuenta.getPassword().equals(loginDTO.password())){
+            throw new Exception("La contraseña es incorrecta");
+
+        }
+        return "TOKEN_JWT"; // se genera una autenticacion video 6
     }
 
     @Override

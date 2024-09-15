@@ -15,5 +15,7 @@ public interface CuentaRepo extends MongoRepository<Cuenta,String> {
     @Query("{usuario.cedula : ?0 }")
     Optional<Cuenta> findByCedula(String cedula);
 
+    @Query("{email : ?0, password: ?1 }")
+    Optional <Cuenta> validarDatosAutenticacion(String email, String password);
     //findById
 }
