@@ -14,6 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Optional;
 
+//METODOS POR REVISAR 
+
 @Service
 @RequiredArgsConstructor
 public class EventoServiceImpl implements EventoService {
