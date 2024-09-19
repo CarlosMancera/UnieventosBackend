@@ -27,7 +27,7 @@ public class DeseoServiceImpl implements DeseoService {
     private final DeseoRepo deseoRepo;
     private final CuentaRepo cuentaRepo;
     private final EventoRepo eventoRepo;
-    private final EmailService emailService;
+   // private final EmailService emailService;
 
 
     @Override
@@ -63,19 +63,16 @@ public class DeseoServiceImpl implements DeseoService {
     @Override
     @Transactional(readOnly = true)
     public List<ResumenDeseoDTO> buscarDeseos(ObjectId idCuenta, String nombreEvento) throws Exception {
+        // Esta implementación requerirá una consulta personalizada o procesamiento adicional
+        // ya que MongoDB no soporta directamente búsquedas en campos de documentos relacionados
         List<Deseo> deseos = deseoRepo.findByCuenta(idCuenta);
-        List<ResumenDeseoDTO> resultados = new ArrayList<>();
-
-        for (Deseo deseo : deseos) {
-            Optional<Evento> eventoOptional = eventoRepo.findById(deseo.getEvento());
-            if (eventoOptional.isPresent()) {
-                Evento evento = eventoOptional.get();
-                if (evento.getNombre().toLowerCase().contains(nombreEvento.toLowerCase())) {
-                    ResumenDeseoDTO resumenDeseo = mapToResumenDeseoDTO(deseo);
-                    resultados.add(resumenDeseo);
-                }
-            }
-        }
+        return deseos.stream()
+                .filter(d -> eventoRepo.findById(d.getEvento().toString())
+                        .map(e -> e.getNombre().toLowerCase().contains(nombreEvento.toLowerCase()))
+                        .orElse(false))
+                .map(this::mapToResumenDeseoDTO)
+                .toList();
+    }
 
     @Override
     @Transactional
@@ -83,7 +80,7 @@ public class DeseoServiceImpl implements DeseoService {
         List<Deseo> deseos = deseoRepo.findAll();
         for (Deseo deseo : deseos) {
             if (deseo.isRecibeInfo()) {
-                eventoRepo.findById(deseo.getEvento()).ifPresent(evento -> {
+                eventoRepo.findById(deseo.getEvento().toString()).ifPresent(evento -> {
                     if (esEventoCercano(evento)) {
                         enviarNotificacionEventoCercano(deseo, evento);
                     }
@@ -93,7 +90,7 @@ public class DeseoServiceImpl implements DeseoService {
     }
 
     private ResumenDeseoDTO mapToResumenDeseoDTO(Deseo deseo) {
-        Evento evento = eventoRepo.findById(deseo.getEvento()).orElseThrow();
+        Evento evento = eventoRepo.findById(deseo.getEvento().toString()).orElseThrow();
         return new ResumenDeseoDTO(
                 deseo.getId(),
                 evento.getNombre(),
@@ -113,7 +110,7 @@ public class DeseoServiceImpl implements DeseoService {
     }
 
     private void enviarNotificacionEventoCercano(Deseo deseo, Evento evento) {
-        cuentaRepo.findById(deseo.getCuenta()).ifPresent(cuenta -> {
+        cuentaRepo.findById(deseo.getCuenta().toString()).ifPresent(cuenta -> {
             emailService.enviarCorreo(cuenta.getEmail(), "Evento próximo",
                     "El evento " + evento.getNombre() + " está próximo a realizarse.");
         });
