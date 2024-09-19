@@ -15,7 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class DeseoServiceImpl implements DeseoService {
@@ -60,16 +63,19 @@ public class DeseoServiceImpl implements DeseoService {
     @Override
     @Transactional(readOnly = true)
     public List<ResumenDeseoDTO> buscarDeseos(ObjectId idCuenta, String nombreEvento) throws Exception {
-        // Esta implementación requerirá una consulta personalizada o procesamiento adicional
-        // ya que MongoDB no soporta directamente búsquedas en campos de documentos relacionados
         List<Deseo> deseos = deseoRepo.findByCuenta(idCuenta);
-        return deseos.stream()
-                .filter(d -> eventoRepo.findById(d.getEvento())
-                        .map(e -> e.getNombre().toLowerCase().contains(nombreEvento.toLowerCase()))
-                        .orElse(false))
-                .map(this::mapToResumenDeseoDTO)
-                .toList();
-    }
+        List<ResumenDeseoDTO> resultados = new ArrayList<>();
+
+        for (Deseo deseo : deseos) {
+            Optional<Evento> eventoOptional = eventoRepo.findById(deseo.getEvento());
+            if (eventoOptional.isPresent()) {
+                Evento evento = eventoOptional.get();
+                if (evento.getNombre().toLowerCase().contains(nombreEvento.toLowerCase())) {
+                    ResumenDeseoDTO resumenDeseo = mapToResumenDeseoDTO(deseo);
+                    resultados.add(resumenDeseo);
+                }
+            }
+        }
 
     @Override
     @Transactional
