@@ -1,9 +1,17 @@
 package co.edu.uniquindio.proyecto.dto.eventoDTO;
 
-public record FiltroEventoDTO(
+import co.edu.uniquindio.proyecto.model.enums.TipoEvento;
+import java.time.LocalDateTime;
 
+public record FiltroEventoDTO(
         String nombre,
-        String tipo,
-        String ciudad
-) {
-}
+        String ciudad,
+        TipoEvento tipoEvento,
+        LocalDateTime fechaInicio,
+        LocalDateTime fechaFin,
+        Double precioMin,
+        Double precioMax
+){
+
+
+        }

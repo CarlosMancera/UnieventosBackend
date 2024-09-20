@@ -12,11 +12,29 @@ public interface EventoService {
 
     String eliminarEvento(String id) throws Exception;
 
-    InformacionEventoDTO obtenerInformacionEvento (String id) throws Exception;
+    InformacionEventoDTO obtenerInformacionEvento(String id) throws Exception;
 
     List<ItemEventoDTO> listarEventos() throws Exception;
 
     List<ItemEventoDTO> filtrarEventos(FiltroEventoDTO filtroDTO) throws Exception;
+
+    void cambiarEstadoEvento(String id, EstadoEvento nuevoEstado) throws Exception;
+
+    List<ItemEventoDTO> buscarEventosPorNombre(String nombre);
+
+    void agregarImagenEvento(String idEvento, MultipartFile imagen) throws Exception;
+
+    void agregarImagenLocalidad(String idEvento, String nombreLocalidad, MultipartFile imagen) throws Exception;
+
+    byte[] generarReporteVentasHTML(String idEvento) throws Exception;
+
+    byte[] generarReporteVentasPDF(String idEvento) throws Exception;
+
+    byte[] generarReporteVentasXML(String idEvento) throws Exception;
+
+
+
+
 
     //TODO
 
