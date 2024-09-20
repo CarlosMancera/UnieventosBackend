@@ -12,7 +12,7 @@ public record CrearEventoDTO(
         String direccion,
         String ciudad,
         TipoEvento tipoEvento,
-        List<LocalidadDTO> localidades
+        List<LocalidadEventoDTO> localidades
 ){
 
 

@@ -33,10 +33,11 @@ public class Evento {
     private LocalDateTime fecha;
     private List<Localidad> localidades;
     private EstadoEvento estadoEvento;
-    private List<ObjectId> artistas;
+    private ObjectId artista;
+    private EstadoEvento estado;
 
     @Builder
-    public Evento(String nombre, String direccion, String ciudad, String descripcion, TipoEvento tipoEvento, List<Imagen> imagenes, LocalDateTime fecha, List<Localidad> localidades, EstadoEvento estadoEvento, List<ObjectId> artistas) {
+    public Evento(String nombre, String direccion, String ciudad, String descripcion, TipoEvento tipoEvento, List<Imagen> imagenes, LocalDateTime fecha, List<Localidad> localidades, EstadoEvento estadoEvento, ObjectId artista) {
 
         this.nombre = nombre;
         this.direccion = direccion;
@@ -47,6 +48,6 @@ public class Evento {
         this.fecha = fecha;
         this.localidades = localidades;
         this.estadoEvento = estadoEvento;
-        this.artistas = artistas;
+        this.artista = artista;
     }
 }

@@ -4,6 +4,7 @@ package co.edu.uniquindio.proyecto.services.implement;
 import co.edu.uniquindio.proyecto.dto.ordenDTO.*;
 import co.edu.uniquindio.proyecto.model.docs.*;
 import co.edu.uniquindio.proyecto.repositories.*;
+import co.edu.uniquindio.proyecto.services.interfaces.EmailService;
 import co.edu.uniquindio.proyecto.services.interfaces.OrdenService;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;

@@ -2,6 +2,8 @@ package co.edu.uniquindio.proyecto.dto.eventoDTO;
 
 import co.edu.uniquindio.proyecto.model.enums.EstadoEvento;
 import co.edu.uniquindio.proyecto.model.enums.TipoEvento;
+import co.edu.uniquindio.proyecto.model.vo.Imagen;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -15,8 +17,8 @@ public record InformacionEventoDTO(
         String ciudad,
         TipoEvento tipoEvento,
         EstadoEvento estado,
-        List<LocalidadDTO> localidades,
-        List<String>imagenes
+        List<LocalidadEventoDTO> localidades,
+        List<Imagen>imagenes
 ){
 
 }

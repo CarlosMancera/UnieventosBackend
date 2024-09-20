@@ -5,8 +5,10 @@ import co.edu.uniquindio.proyecto.dto.eventoDTO.*;
 import co.edu.uniquindio.proyecto.model.docs.Evento;
 import co.edu.uniquindio.proyecto.model.enums.EstadoEvento;
 import co.edu.uniquindio.proyecto.repositories.EventoRepo;
+import co.edu.uniquindio.proyecto.services.interfaces.ArchivoService;
 import co.edu.uniquindio.proyecto.services.interfaces.EventoService;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Optional;
 
-//METODOS POR REVISAR
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +29,7 @@ public class EventoServiceImpl implements EventoService {
     public String crearEvento(CrearEventoDTO eventoDTO) throws Exception {
         Evento nuevoEvento = new Evento();
         nuevoEvento.setNombre(eventoDTO.nombre());
-        nuevoEvento.setArtista(eventoDTO.artista());
+        nuevoEvento.setArtista(new ObjectId(eventoDTO.artista()));
         nuevoEvento.setDescripcion(eventoDTO.descripcion());
         nuevoEvento.setFecha(eventoDTO.fecha());
         nuevoEvento.setDireccion(eventoDTO.direccion());
@@ -36,7 +37,7 @@ public class EventoServiceImpl implements EventoService {
         nuevoEvento.setTipoEvento(eventoDTO.tipoEvento());
         nuevoEvento.setEstado(EstadoEvento.ACTIVO);
 
-        for (LocalidadDTO localidadDTO : eventoDTO.localidades()) {
+        for (LocalidadEventoDTO localidadDTO : eventoDTO.localidades()) {
             Localidad localidad = new Localidad();
             localidad.setNombre(localidadDTO.nombre());
             localidad.setPrecio(localidadDTO.precio());
@@ -54,7 +55,7 @@ public class EventoServiceImpl implements EventoService {
         Evento evento = getEvento(eventoDTO.id());
 
         evento.setNombre(eventoDTO.nombre());
-        evento.setArtista(eventoDTO.artista());
+        evento.setArtista(new ObjectId(eventoDTO.artista()));
         evento.setDescripcion(eventoDTO.descripcion());
         evento.setFecha(eventoDTO.fecha());
         evento.setDireccion(eventoDTO.direccion());
@@ -62,7 +63,7 @@ public class EventoServiceImpl implements EventoService {
         evento.setTipoEvento(eventoDTO.tipoEvento());
 
         evento.getLocalidades().clear();
-        for (LocalidadDTO localidadDTO : eventoDTO.localidades()) {
+        for (LocalidadEventoDTO localidadDTO : eventoDTO.localidades()) {
             Localidad localidad = new Localidad();
             localidad.setNombre(localidadDTO.nombre());
             localidad.setPrecio(localidadDTO.precio());
@@ -151,33 +152,20 @@ public class EventoServiceImpl implements EventoService {
         return new InformacionEventoDTO(
                 evento.getId(),
                 evento.getNombre(),
-                evento.getArtista(),
+                evento.getArtista().toString(),
                 evento.getDescripcion(),
                 evento.getFecha(),
                 evento.getDireccion(),
                 evento.getCiudad(),
                 evento.getTipoEvento(),
                 evento.getEstado(),
-                evento.getLocalidades().stream().map(this::mapToLocalidadDTO).toList(),
+                evento.getLocalidades().stream().map(this::mapToLocalidadEventoDTO).toList(),
                 evento.getImagenes()
         );
     }
 
-    private ResumenEventoDTO mapToResumenEventoDTO(Evento evento) {
-        return new ResumenEventoDTO(
-                evento.getId(),
-                evento.getNombre(),
-                evento.getFecha(),
-                evento.getDireccion(),
-                evento.getLocalidades().stream().mapToDouble(Localidad::getPrecio).min().orElse(0),
-                evento.getLocalidades().stream().mapToInt(Localidad::getCapacidad).sum(),
-                evento.getTipoEvento(),
-                evento.getEstado()
-        );
-    }
-
-    private LocalidadDTO mapToLocalidadDTO(Localidad localidad) {
-        return new LocalidadDTO(
+    private LocalidadEventoDTO mapToLocalidadEventoDTO(Localidad localidad) {
+        return new LocalidadEventoDTO(
                 localidad.getNombre(),
                 localidad.getPrecio(),
                 localidad.getCapacidad(),

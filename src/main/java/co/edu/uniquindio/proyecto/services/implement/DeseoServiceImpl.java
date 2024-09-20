@@ -8,6 +8,7 @@ import co.edu.uniquindio.proyecto.repositories.CuentaRepo;
 import co.edu.uniquindio.proyecto.repositories.DeseoRepo;
 import co.edu.uniquindio.proyecto.repositories.EventoRepo;
 import co.edu.uniquindio.proyecto.services.interfaces.DeseoService;
+import co.edu.uniquindio.proyecto.services.interfaces.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class DeseoServiceImpl implements DeseoService {
     private final DeseoRepo deseoRepo;
     private final CuentaRepo cuentaRepo;
     private final EventoRepo eventoRepo;
-   // private final EmailService emailService;
+    private final EmailService emailService;
 
 
     @Override
