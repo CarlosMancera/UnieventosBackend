@@ -1,5 +1,6 @@
 package co.edu.uniquindio.proyecto.model.docs;
 
+import co.edu.uniquindio.proyecto.model.enums.EstadoArtista;
 import co.edu.uniquindio.proyecto.model.vo.Contacto;
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -28,13 +29,10 @@ public class Artista {
 
 
     @Builder
-    public Artista(String nombre, String tipo, List<String> generos, String biografia, Contacto contacto, double tarifa, List<String> referencias) {
-        this.nombre = nombre;
-        this.tipo = tipo;
-        this.generos = generos;
-        this.biografia = biografia;
-        this.contacto = contacto;
-        this.tarifa = tarifa;
-        this.referencias = referencias;
+    public Artista(String nombre, String tipo, List<String> generos, String biografia, Contacto contacto, double tarifa, List<String> referencias, EstadoArtista estado) {
+
     }
+
+
+
 }
