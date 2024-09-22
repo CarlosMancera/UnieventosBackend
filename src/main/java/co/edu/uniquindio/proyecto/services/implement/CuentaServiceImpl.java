@@ -142,6 +142,8 @@ public class CuentaServiceImpl implements CuentaService {   //con la inicializac
     public String iniciarSesion(LoginDTO loginDTO) throws Exception {
         Optional<Cuenta> cuentaOptional = cuentaRepo.buscarEmail(loginDTO.correo());
 
+        //emailServicio.enviarCorreo( new EmailDTO("Asunto", "Cuerpo mensaje", "Correo destino") );
+
         if (cuentaOptional.isEmpty()){
             throw new Exception("E correo dado no esta registrado");
         }
