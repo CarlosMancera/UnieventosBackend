@@ -36,7 +36,10 @@ public class EmailServiceImpl implements EmailService {
     }
 
 
+    @Override
+    public void enviarCorreo(EmailDTO emailDTO) throws Exception {
 
+    }
 }
 
 

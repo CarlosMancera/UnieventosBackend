@@ -5,11 +5,13 @@ import com.google.cloud.storage.*;
 import com.google.firebase.cloud.StorageClient;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.sql.Blob;
 import java.util.UUID;
 
 
 @Service
-public class ImagenesServiceImpl {
+public class ImagenesServiceImpl implements ImagenesService{
 
     @Override
     public String subirImagen(MultipartFile multipartFile) throws Exception{
