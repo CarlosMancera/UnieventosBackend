@@ -14,13 +14,13 @@ public interface EventoService {
 
     InformacionEventoDTO obtenerInformacionEvento(String id) throws Exception;
 
-    List<ItemEventoDTO> listarEventos() throws Exception;
+    List<ResumenEventoDTO> listarEventos() throws Exception;
 
-    List<ItemEventoDTO> filtrarEventos(FiltroEventoDTO filtroDTO) throws Exception;
+    List<ResumenEventoDTO> filtrarEventos(FiltroEventoDTO filtroDTO) throws Exception;
 
     void cambiarEstadoEvento(String id, EstadoEvento nuevoEstado) throws Exception;
 
-    List<ItemEventoDTO> buscarEventosPorNombre(String nombre);
+    List<ResumenEventoDTO> buscarEventosPorNombre(String nombre);
 
     void agregarImagenEvento(String idEvento, MultipartFile imagen) throws Exception;
 

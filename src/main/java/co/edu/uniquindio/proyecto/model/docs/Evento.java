@@ -50,4 +50,18 @@ public class Evento {
         this.estadoEvento = estadoEvento;
         this.artista = artista;
     }
+
+    public int getCapacidad(){
+
+        int capacidad = 0;
+
+        for(Localidad localidad : localidades){
+
+            capacidad+=localidad.getCapacidad();
+
+        }
+
+        return capacidad;
+
+    }
 }

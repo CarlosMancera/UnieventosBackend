@@ -1,5 +1,7 @@
 package co.edu.uniquindio.proyecto.services.implement;
 
+import co.edu.uniquindio.proyecto.dto.cuentaDTO.ItemCuentaDTO;
+import co.edu.uniquindio.proyecto.model.docs.Cuenta;
 import co.edu.uniquindio.proyecto.model.vo.Localidad;
 import co.edu.uniquindio.proyecto.dto.eventoDTO.*;
 import co.edu.uniquindio.proyecto.model.docs.Evento;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -94,20 +97,37 @@ public class EventoServiceImpl implements EventoService {
     @Override
     @Transactional(readOnly = true)
     public List<ResumenEventoDTO> listarEventos() {
-        List<Evento> eventos = eventoRepo.findAll();
-        return eventos.stream()
-                .map(this::mapToResumenEventoDTO)
-                .toList();
+
+        List<Evento> eventos = eventoRepo.findAll();                //Obtenemos todos los eventos
+                                                                    //eventos   de la base de datos
+
+        List<ResumenEventoDTO> items = new ArrayList<>();              //Creamos una lista de DTOs
+
+
+        for (Evento evento : eventos) {                          //Recorremos la lista de eventos y por cada uno
+            items.add( new ResumenEventoDTO(                        //creamos un DTO y lo agregamos a la lista
+                    evento.getId(),
+                    evento.getNombre(),
+                    evento.getFecha(),
+                    evento.getDireccion(),
+                    evento.getCapacidad(),
+                    evento.getTipoEvento(),
+                    evento.getEstadoEvento()
+            ));
+        }
+
+        return items;
+
     }
 
-    @Override
+   /* @Override
     @Transactional(readOnly = true)
     public List<ResumenEventoDTO> buscarEventosPorNombre(String nombre) {
         List<Evento> eventos = eventoRepo.findByNombreContainingIgnoreCase(nombre);
         return eventos.stream()
                 .map(this::mapToResumenEventoDTO)
                 .toList();
-    }
+    }*/
 
     @Override
     @Transactional
