@@ -5,6 +5,7 @@ import co.edu.uniquindio.proyecto.dto.ordenDTO.ResumenCarritoDTO;
 import co.edu.uniquindio.proyecto.model.docs.Carrito;
 import co.edu.uniquindio.proyecto.model.docs.Cuenta;
 import co.edu.uniquindio.proyecto.model.docs.Evento;
+import co.edu.uniquindio.proyecto.model.vo.DetalleCarrito;
 import co.edu.uniquindio.proyecto.repositories.CarritoRepo;
 import co.edu.uniquindio.proyecto.repositories.CuentaRepo;
 import co.edu.uniquindio.proyecto.repositories.EventoRepo;
@@ -25,20 +26,21 @@ public class CarritoServiceImpl implements CarritoService {
     private final EventoRepo eventoRepo;
 
 
+    //TODO
     @Override
     @Transactional
     public String agregarAlCarrito(AgregarAlCarritoDTO agregarAlCarritoDTO) throws Exception {
-        Cuenta cuenta = cuentaRepo.findById(agregarAlCarritoDTO.idCuenta())
+        Cuenta cuenta = cuentaRepo.findById(agregarAlCarritoDTO.idCuenta().toString())
                 .orElseThrow(() -> new Exception("Cuenta no encontrada"));
 
-        Evento evento = eventoRepo.findById(agregarAlCarritoDTO.idEvento())
+        Evento evento = eventoRepo.findById(agregarAlCarritoDTO.idEvento().toString())
                 .orElseThrow(() -> new Exception("Evento no encontrado"));
 
-        Entrada entrada = entradaRepo.save(Entrada.builder()
-                .evento(evento.getId())
-                .localidad(agregarAlCarritoDTO.localidad())
+        DetalleCarrito detalle = entradaRepo.save(DetalleCarrito.builder()
+                .idEvento(new ObjectId(evento.getId()))
+                .nombreLocalidad(agregarAlCarritoDTO.localidad())
                 .cantidad(agregarAlCarritoDTO.cantidad())
-                .precioUnitario(getPrecioLocalidad(agregarAlCarritoDTO.localidad()))
+                .precioUnitario(agregarAlCarritoDTO.localidad())
                 .build());
 
         Carrito carrito = carritoRepo.findByCuenta(cuenta.getId())

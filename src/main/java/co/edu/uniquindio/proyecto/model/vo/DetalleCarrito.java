@@ -5,7 +5,6 @@ import org.bson.types.ObjectId;
 
 @Setter
 @Getter
-@AllArgsConstructor
 @ToString
 public class DetalleCarrito {
 
@@ -14,4 +13,11 @@ public class DetalleCarrito {
     private ObjectId idEvento;
     private double precioUnitario;
 
+    @Builder
+    public DetalleCarrito(String nombreLocalidad, int cantidad, ObjectId idEvento, double precioUnitario) {
+        this.nombreLocalidad = nombreLocalidad;
+        this.cantidad = cantidad;
+        this.idEvento = idEvento;
+        this.precioUnitario = precioUnitario;
+    }
 }
