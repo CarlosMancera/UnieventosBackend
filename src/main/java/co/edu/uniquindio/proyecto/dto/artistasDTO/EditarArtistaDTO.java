@@ -8,13 +8,9 @@ public record EditarArtistaDTO(
 
         String id,
         String nombre,
-        List<String> generos,
-        TipoArtista tipo,
+        String genero,
         String email,
-        String telefono,
-        double tarifa,
-        List<String> referencias,
-        String biografia
+        String telefono
 
 
 ) {

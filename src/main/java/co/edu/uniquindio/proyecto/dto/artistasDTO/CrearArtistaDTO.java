@@ -7,13 +7,9 @@ import java.util.List;
 public record CrearArtistaDTO(
 
         String nombre,
-        List<String> generos,
-        TipoArtista tipo,
+        String genero,
         String email,
-        String telefono,
-        double tarifa,
-        List<String> referencias,
-        String biografia
+        String telefono
 
 ) {
 }

@@ -13,6 +13,7 @@ import java.util.List;
 @Getter
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@NoArgsConstructor
 public class Artista {
 
     @Id
@@ -20,16 +21,14 @@ public class Artista {
     private String id;
 
     private String nombre;
-    private String tipo;
-    private List<String> generos;
-    private String biografia;
-    private Contacto contacto;
-    private double tarifa;
-    private List<String> referencias;
+    private String genero;
+    private String email;
+    private String telefono;
+    private EstadoArtista estado;
 
 
     @Builder
-    public Artista(String nombre, String tipo, List<String> generos, String biografia, Contacto contacto, double tarifa, List<String> referencias, EstadoArtista estado) {
+    public Artista(String nombre, String genero, String email, String telefono, EstadoArtista estado) {
 
     }
 

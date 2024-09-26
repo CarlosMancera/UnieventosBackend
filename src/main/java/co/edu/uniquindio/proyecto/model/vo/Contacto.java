@@ -12,5 +12,4 @@ public class Contacto {
 
     private String email;
     private String telefono;
-    private String web;
 }

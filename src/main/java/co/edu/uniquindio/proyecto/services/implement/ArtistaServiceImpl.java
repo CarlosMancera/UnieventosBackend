@@ -1,8 +1,11 @@
 package co.edu.uniquindio.proyecto.services.implement;
 
-import co.edu.uniquindio.proyecto.dto.*;
-import co.edu.uniquindio.proyecto.dto.artistasDTO.ResumenArtistaDTO;
+import co.edu.uniquindio.proyecto.dto.artistasDTO.CrearArtistaDTO;
+import co.edu.uniquindio.proyecto.dto.artistasDTO.EditarArtistaDTO;
+import co.edu.uniquindio.proyecto.dto.artistasDTO.InformacionArtistaDTO;
+import co.edu.uniquindio.proyecto.dto.cuentaDTO.ItemCuentaDTO;
 import co.edu.uniquindio.proyecto.model.docs.Artista;
+import co.edu.uniquindio.proyecto.model.docs.Cuenta;
 import co.edu.uniquindio.proyecto.model.enums.EstadoArtista;
 import co.edu.uniquindio.proyecto.repositories.ArtistaRepo;
 import co.edu.uniquindio.proyecto.services.interfaces.ArtistaService;
@@ -10,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,34 +24,45 @@ public class ArtistaServiceImpl implements ArtistaService {
 
     private final ArtistaRepo artistaRepo;
 
-    // ... Aqui vamos a almacenar metodos que se usan para crearArtista, editarArtista, eliminarArtista
-
     @Override
     @Transactional(readOnly = true)
-    public List<ResumenArtistaDTO> listarArtistas() {
+    public List<InformacionArtistaDTO> listarArtistas() {
+
+
         List<Artista> artistas = artistaRepo.findAll();
-        return artistas.stream()
-                .map(this::mapToResumenArtistaDTO)
-                .toList();
+        //usuarios de la base de datos
+
+        List<InformacionArtistaDTO> items = new ArrayList<>();
+
+
+        for (Artista artista : artistas) {
+            items.add( new InformacionArtistaDTO(
+                    artista.getNombre(),
+                    artista.getGenero(),
+                    artista.getEmail(),
+                    artista.getTelefono()
+            ));
+        }
+
+        return items;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<ResumenArtistaDTO> buscarArtistasPorNombre(String nombre) {
+    public List<InformacionArtistaDTO> buscarArtistasPorNombre(String nombre) {
         List<Artista> artistas = artistaRepo.findByNombreContainingIgnoreCase(nombre);
-        return artistas.stream()
-                .map(this::mapToResumenArtistaDTO)
-                .toList();
-    }
+        List<InformacionArtistaDTO> resultado = new ArrayList<>();
 
-    private ResumenArtistaDTO mapToResumenArtistaDTO(Artista artista) {
-        return new ResumenArtistaDTO(
-                artista.getNombre(),
-                artista.getGeneros(),
-                artista.getEstadoArtista(),
-                artista.getContacto().getEmail(),
-                artista.getContacto().getTelefono()
-        );
+        for (Artista artista : artistas) {
+            resultado.add( new InformacionArtistaDTO(
+                    artista.getNombre(),
+                    artista.getGenero(),
+                    artista.getEmail(),
+                    artista.getTelefono()
+            ));
+        }
+
+        return resultado;
     }
 
     @Override
@@ -58,12 +73,9 @@ public class ArtistaServiceImpl implements ArtistaService {
 
         Artista nuevoArtista = new Artista();
         nuevoArtista.setNombre(artista.nombre());
-        nuevoArtista.setGeneros(artista.generos());
-        nuevoArtista.setTipo(artista.tipo());
-        nuevoArtista.setContacto(new Contacto(artista.email(), artista.telefono()));
-        nuevoArtista.setTarifa(artista.tarifa());
-        nuevoArtista.setReferencias(artista.referencias());
-        nuevoArtista.setBiografia(artista.biografia());
+        nuevoArtista.setGenero(artista.genero());
+        nuevoArtista.setEmail(artista.email());
+        nuevoArtista.setTelefono(artista.telefono());
         nuevoArtista.setEstado(EstadoArtista.DISPONIBLE);
 
         Artista artistaCreado = artistaRepo.save(nuevoArtista);
@@ -77,13 +89,9 @@ public class ArtistaServiceImpl implements ArtistaService {
 
         Artista artistaModificado = optionalArtista.get();
         artistaModificado.setNombre(artista.nombre());
-        artistaModificado.setGeneros(artista.generos());
-        artistaModificado.setTipo(artista.tipo());
-        artistaModificado.getContacto().setEmail(artista.email());
-        artistaModificado.getContacto().setTelefono(artista.telefono());
-        artistaModificado.setTarifa(artista.tarifa());
-        artistaModificado.setReferencias(artista.referencias());
-        artistaModificado.setBiografia(artista.biografia());
+        artistaModificado.setGenero(artista.genero());
+        artistaModificado.setEmail(artista.email());
+        artistaModificado.setTelefono(artista.telefono());
 
         artistaRepo.save(artistaModificado);
 
@@ -110,16 +118,10 @@ public class ArtistaServiceImpl implements ArtistaService {
         Artista artista = optionalArtista.get();
 
         return new InformacionArtistaDTO(
-                artista.getId(),
                 artista.getNombre(),
-                artista.getGeneros(),
-                artista.getTipo(),
-                artista.getContacto().getEmail(),
-                artista.getContacto().getTelefono(),
-                artista.getTarifa(),
-                artista.getReferencias(),
-                artista.getBiografia(),
-                artista.getEstado()
+                artista.getGenero(),
+                artista.getEmail(),
+                artista.getTelefono()
         );
     }
 

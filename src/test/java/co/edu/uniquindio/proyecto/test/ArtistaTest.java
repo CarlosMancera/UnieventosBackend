@@ -21,9 +21,6 @@ public class ArtistaTest {
     @Test
     public void registrarTest(){
 
-        List<String> generos = new ArrayList<>();
-        generos.add("Metal");
-        generos.add("Rock");
         List<String> referencias = new ArrayList<>();
         referencias.add("Rock al parque 2016");
         referencias.add("Naturaleza por el rock 2017");
@@ -32,12 +29,9 @@ public class ArtistaTest {
 
         Artista artista = Artista.builder()
                 .nombre("CURA METAL")
-                .tipo("Banda")
-                .generos(generos)
-                .biografia("Una banda de Armenia forjada en el año 2014 por Juan Carlos y Carlos Hoyos")
-                .contacto(new Contacto("cura@gmail.com","32015458965","www.curametalofficial.com"))
-                .tarifa(4000000)
-                .referencias(referencias)
+                .genero("Metal")
+                .email("cura@gmail.com")
+                .telefono("7327003")
                 .build();
 
         Artista registro = artistaRepo.save(artista);
