@@ -19,9 +19,9 @@ public class EmailServiceImpl implements EmailService {
 
     Email email = EmailBuilder.startingBlank()
             .from("unieventos20242@gmail.com")
-            .to(emailDTO.destinatario())
-            .withSubject(emailDTO.asunto())
-            .withPlainText(emailDTO.cuerpo())
+            .to(EmailDTO.destinatario())
+            .withSubject(EmailDTO.asunto())
+            .withPlainText(EmailDTO.cuerpo())
             .buildEmail();
 
 
