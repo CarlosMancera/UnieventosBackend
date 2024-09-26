@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface OrdenRepo extends MongoRepository<OrdenCompra,String> {
+
+    //   List<Cupon> findByUsuariosUsadosContaining(String idUsuario);
 }

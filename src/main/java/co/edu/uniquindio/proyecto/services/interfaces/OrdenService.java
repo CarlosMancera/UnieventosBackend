@@ -8,5 +8,6 @@ public interface OrdenService {
     OrdenCompraDTO generarOrdenCompra(ObjectId idCuenta) throws Exception;
     PagoDTO realizarPago(PagoDTO pagoDTO) throws Exception;
     void confirmarPago(ObjectId idOrden, String codigoConfirmacion) throws Exception;
+    //List<ResumenCuponDTO> buscarCuponesUtilizadosPorUsuario(String idUsuario);
 
 }

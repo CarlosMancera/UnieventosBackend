@@ -10,6 +10,6 @@ import java.util.Optional;
 public interface CuponRepo extends MongoRepository<Cupon,String> {
     Optional<Cupon> findByCodigo(String codigo);
     List<Cupon> findByCodigoContainingIgnoreCase(String codigo);
-//    List<Cupon> findByUsuariosUsadosContaining(String idUsuario);
+
 
 }

@@ -23,12 +23,11 @@ public class CuponTest {
 
         Cupon cupon = Cupon.builder()
                 .codigo("666")
-                .nombreDescriptivo("Cupon satánico válido solo para el 31 de octubre")
                 .descuento(0.3)
-                .fecha_vencimiento(LocalDateTime.of(2024,10,31,23,59))
+                .fechaVencimiento(LocalDateTime.of(2024,10,31,23,59))
                 .tipoCupon(TipoCupon.MULTIPLE)
                 .estado(EstadoCupon.ACTIVO)
-                .es_especial(true)
+                .esEspecial(true)
                 .build();
 
         Cupon cuponRegistro = cuponRepo.save(cupon);

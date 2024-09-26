@@ -20,23 +20,23 @@ public class Cupon {
     private String id;
 
     private String codigo;
-    private String nombreDescriptivo;
     private double descuento;
     private LocalDateTime fechaVencimiento;
     private TipoCupon tipoCupon;
     private EstadoCupon estado;
     private boolean esEspecial;
     private int limiteUso;
+    private int cantidadUsados;
 
     @Builder
-    public Cupon(String codigo, String nombreDescriptivo, double descuento, LocalDateTime fechaVencimiento, TipoCupon tipoCupon, EstadoCupon estado, boolean esEspecial, int limiteUso) {
+    public Cupon(String codigo, double descuento, LocalDateTime fechaVencimiento, TipoCupon tipoCupon, EstadoCupon estado, boolean esEspecial, int limiteUso, int cantidadUsados) {
 
         this.codigo = codigo;
-        this.nombreDescriptivo = nombreDescriptivo;
         this.descuento = descuento;
         this.fechaVencimiento = fechaVencimiento;
         this.tipoCupon = tipoCupon;
         this.estado = estado;
         this.esEspecial = esEspecial;
+        this.cantidadUsados=cantidadUsados;
     }
 }

@@ -4,7 +4,6 @@ import co.edu.uniquindio.proyecto.dto.cuponDTO.CrearCuponDTO;
 import co.edu.uniquindio.proyecto.dto.cuponDTO.EditarCuponDTO;
 import co.edu.uniquindio.proyecto.dto.cuponDTO.InformacionCuponDTO;
 import co.edu.uniquindio.proyecto.dto.cuponDTO.ResumenCuponDTO;
-import co.edu.uniquindio.proyecto.model.docs.Cuenta;
 import co.edu.uniquindio.proyecto.model.docs.Cupon;
 import co.edu.uniquindio.proyecto.model.enums.EstadoCupon;
 import co.edu.uniquindio.proyecto.repositories.CuponRepo;
@@ -87,21 +86,6 @@ public class CuponServiceImpl implements CuponService {
                 .map(this::mapToResumenCuponDTO)
                 .toList();
     }
-
-    //public boolean estaVigente(){
-
-    //}
-
-   /* @Override
-    @Transactional(readOnly = true)
-    public List<ResumenCuponDTO> buscarCuponesUtilizadosPorUsuario(String idUsuario) {
-        List<Cupon> cupones = cuponRepo.findByUsuariosUsadosContaining(idUsuario);
-        return cupones.stream()
-                .map(this::mapToResumenCuponDTO)
-                .toList();
-    }*/
-
-    //ANALIZAR FUNCIONALIDAD DE ESTOS MÉTODOS
 
     private InformacionCuponDTO mapToInformacionCuponDTO(Cupon cupon) {
         return new InformacionCuponDTO(
