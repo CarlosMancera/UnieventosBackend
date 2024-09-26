@@ -24,7 +24,8 @@ public class Carrito {
     private LocalDateTime fecha;
     private List<DetalleCarrito> items;
     private ObjectId idUsuario;
-
+    private double total;
+    private double subTotal;
 
     @Builder
     public Carrito(LocalDateTime fecha, List<DetalleCarrito> items, ObjectId idUsuario) {

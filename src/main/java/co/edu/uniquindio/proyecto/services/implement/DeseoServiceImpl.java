@@ -2,6 +2,8 @@ package co.edu.uniquindio.proyecto.services.implement;
 
 import co.edu.uniquindio.proyecto.dto.deseoDTO.AgregarDeseoDTO;
 import co.edu.uniquindio.proyecto.dto.deseoDTO.ResumenDeseoDTO;
+import co.edu.uniquindio.proyecto.dto.emailDTO.EmailDTO;
+import co.edu.uniquindio.proyecto.model.docs.Cuenta;
 import co.edu.uniquindio.proyecto.model.docs.Deseo;
 import co.edu.uniquindio.proyecto.model.docs.Evento;
 import co.edu.uniquindio.proyecto.repositories.CuentaRepo;
@@ -110,10 +112,23 @@ public class DeseoServiceImpl implements DeseoService {
         return diasHastaEvento >= 0 && diasHastaEvento <= 7;
     }
 
-    private void enviarNotificacionEventoCercano(Deseo deseo, Evento evento) {
+    /*private void enviarNotificacionEventoCercano(Deseo deseo, Evento evento) {
         cuentaRepo.findById(deseo.getCuenta().toString()).ifPresent(cuenta -> {
-            emailService.enviarCorreo(cuenta.getEmail(), "Evento próximo",
-                    "El evento " + evento.getNombre() + " está próximo a realizarse.");
+            emailService.enviarCorreo(new EmailDTO("Evento próximo", "El evento " + evento.getNombre() + " está próximo a realizarse."cuenta.getEmail())
+
         });
+    }*/
+
+    private void enviarNotificacionEventoCercano(Deseo deseo, Evento evento) throws Exception {
+        Optional<Cuenta> cuentaOptional = cuentaRepo.findById(deseo.getCuenta().toString());
+
+        if (cuentaOptional.isPresent()) {
+            Cuenta cuenta = cuentaOptional.get();
+            String asunto = "Evento próximo";
+            String cuerpo = "El evento " + evento.getNombre() + " está próximo a realizarse.";
+
+            EmailDTO emailDTO = new EmailDTO(cuenta.getEmail(), asunto, cuerpo);
+            emailService.enviarCorreo(new EmailDTO(asunto, cuerpo, cuenta.getEmail()));
+        }
     }
 }

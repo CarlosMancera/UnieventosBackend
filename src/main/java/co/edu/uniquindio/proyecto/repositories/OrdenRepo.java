@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface OrdenRepo extends MongoRepository<OrdenCompra,String> {
 
     //   List<Cupon> findByUsuariosUsadosContaining(String idUsuario);
+
+    int countByCuenta (String idUsuario);
 }

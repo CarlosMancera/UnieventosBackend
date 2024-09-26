@@ -27,6 +27,7 @@ public class OrdenCompra {
     private ObjectId cliente;
     private List<DetalleOrden> items;
     private ObjectId cupon;
+    private double subTotal;
     private double total;
     private LocalDateTime fecha;
     private Pago pago;
