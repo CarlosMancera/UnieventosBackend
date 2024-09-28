@@ -100,7 +100,7 @@ public class OrdenServiceImpl implements OrdenService{
 
         Carrito carrito = carritoOptional.get();
 
-        Orden orden = new Orden();
+        OrdenCompra orden = new OrdenCompra();
         orden.setCuenta(idCuenta);
         orden.setEntradas(carrito.getEntradas());
         orden.setFechaCreacion(LocalDateTime.now());
