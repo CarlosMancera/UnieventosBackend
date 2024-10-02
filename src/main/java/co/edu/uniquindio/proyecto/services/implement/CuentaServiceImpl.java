@@ -56,8 +56,9 @@ public class CuentaServiceImpl implements CuentaService {   //con la inicializac
                 cuenta.direccion(),cuenta.telefono()));
         nuevaCuenta.setEstadoCuenta(EstadoCuenta.INACTIVO);
         nuevaCuenta.setCodigoValidacionRegistro(new CodigoValidacion(
-                "HA678B",                                                     // Crear método para generar ese código (maybe REGEX)
-                LocalDateTime.now()                                           //Antes de la toma de datos del DTO
+                generarCodigoRecuperacion(),
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(15L)
         ));
 
         Cuenta cuentaCreada = cuentaRepo.save(nuevaCuenta);
@@ -143,9 +144,11 @@ public class CuentaServiceImpl implements CuentaService {   //con la inicializac
         String codigoRecuperacion = generarCodigoRecuperacion(); // Implementar este método
 
         // Actualizar la cuenta con el nuevo código de recuperación
-        cuenta.setCodigoRecuperacionPassword(new CodigoValidacion(
+        cuenta.setCodigoValidacionPassword(new CodigoValidacion(
                 codigoRecuperacion,
-                LocalDateTime.now().plusHours(1) // El código expira en 1 hora
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(15L) // El código expira en 1 hora
+
         ));
 
         cuentaRepo.save(cuenta);
@@ -186,7 +189,13 @@ public class CuentaServiceImpl implements CuentaService {   //con la inicializac
     @Override
     public TokenDTO iniciarSesion(LoginDTO loginDTO) throws Exception {
 
-        Cuenta cuenta = obtenerPorEmail(loginDTO.email());
+        Optional<Cuenta> cuentaOpcional = cuentaRepo.findByEmail(loginDTO.email());
+
+        if(cuentaOpcional.isEmpty()) {
+            throw new Exception("No existe una cuenta con ese correo electrónico");
+        }
+
+        Cuenta cuenta = cuentaOpcional.get();
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 
@@ -264,7 +273,7 @@ public class CuentaServiceImpl implements CuentaService {   //con la inicializac
 
     private Map<String, Object> construirClaims(Cuenta cuenta) {
         return Map.of(
-                "rol", cuenta.getRol(),
+                "rol", cuenta.getTipoUsuario(),
                 "nombre", cuenta.getUsuario().getNombreCompleto(),
                 "id", cuenta.getId()
         );

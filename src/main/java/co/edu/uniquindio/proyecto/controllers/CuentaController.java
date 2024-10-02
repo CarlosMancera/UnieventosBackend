@@ -53,28 +53,23 @@ public class CuentaController {
         return cuentaService.listarCuentas();
     }
     @PostMapping("/recuperar-password")
-    public enviarCodigoRecuperacionPassword(@RequestParam String email) throws Exception; {
+    public ResponseEntity<MensajeDTO<String>> enviarCodigoRecuperacionPassword(@RequestParam String correo) throws Exception {
+        String mensaje = cuentaService.enviarCodigoRecuperacionPassword(correo);
+        return ResponseEntity.ok(new MensajeDTO<>(false, mensaje));
+    }
 
-        try{
-            EmailService.recuparContrasenna(email);
-            return ResponseEntity.ok().body(
-                    new MensajeDTO<>(false, "Link enviado"));
-        }
-        catch (Exception ex) {
-            return ResponseEntity.ok().body(
-                    new MensajeDTO<>(true, ex.getMessage()));
-        }
-
-    }  //Cuando olvida contraseña, y permite crear una nueva
+    //Cuando olvida contraseña, y permite crear una nueva
     @PutMapping("/cambiar-password")
-    public void cambiarPassword(CambiarPasswordDTO cambiarPasswordDTO) throws Exception{
-
+    public ResponseEntity<MensajeDTO<String>> cambiarPassword(@Valid @RequestBody CambiarPasswordDTO cambiarPasswordDTO) throws Exception {
+        String mensaje = cuentaService.cambiarPassword(cambiarPasswordDTO);
+        return ResponseEntity.ok(new MensajeDTO<>(false, mensaje));
     }
 
-    public TokenDTO iniciarSesion(LoginDTO loginDTO) throws Exception{
-        return null;
+    @PostMapping("/iniciar-sesion")
+    public ResponseEntity<MensajeDTO<TokenDTO>> iniciarSesion(@Valid @RequestBody LoginDTO loginDTO) throws Exception {
+        TokenDTO token = cuentaService.iniciarSesion(loginDTO);
+        return ResponseEntity.ok(new MensajeDTO<>(false, token));
     }
-
 
 
 
