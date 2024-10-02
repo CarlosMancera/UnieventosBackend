@@ -22,10 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor                                    //Esta anotación sustituye al constructor
@@ -134,12 +131,56 @@ public class CuentaServiceImpl implements CuentaService {   //con la inicializac
     @Override
     public String enviarCodigoRecuperacionPassword(String correo) throws Exception {
 
-        return "";
+        Optional<Cuenta> optionalCuenta = cuentaRepo.findByEmail(correo);
+
+        if (optionalCuenta.isEmpty()) {
+            throw new Exception("No existe una cuenta con el correo " + correo);
+        }
+
+        Cuenta cuenta = optionalCuenta.get();
+
+        // Generar un código de recuperación único
+        String codigoRecuperacion = generarCodigoRecuperacion(); // Implementar este método
+
+        // Actualizar la cuenta con el nuevo código de recuperación
+        cuenta.setCodigoRecuperacionPassword(new CodigoValidacion(
+                codigoRecuperacion,
+                LocalDateTime.now().plusHours(1) // El código expira en 1 hora
+        ));
+
+        cuentaRepo.save(cuenta);
+
+        // TODO: Enviar un email al usuario con el código de recuperación
+
+        return "Se ha enviado un código de recuperación a su correo electrónico";
     }
 
     @Override
     public String cambiarPassword(CambiarPasswordDTO cambiarPasswordDTO) throws Exception {
-        return "";
+        Optional<Cuenta> optionalCuenta = cuentaRepo.findByEmail(cambiarPasswordDTO.correo());
+
+        if (optionalCuenta.isEmpty()) {
+            throw new Exception("No existe una cuenta con el correo " + cambiarPasswordDTO.correo());
+        }
+
+        Cuenta cuenta = optionalCuenta.get();
+
+        // Verificar que el código de recuperación sea válido y no haya expirado
+        if (cuenta.getCodigoValidacionPassword() == null ||
+                !cuenta.getCodigoValidacionPassword().getCodigo().equals(cambiarPasswordDTO.codigoVerificacion()) ||
+                cuenta.getCodigoValidacionPassword().getFechaExpiracion().isBefore(LocalDateTime.now())) {
+            throw new Exception("El código de recuperación es inválido o ha expirado");
+        }
+
+        // Cambiar la contraseña
+        cuenta.setPassword(encriptarPassword(cambiarPasswordDTO.passwordNuevaT()));
+
+        // Eliminar el código de recuperación
+        cuenta.setCodigoValidacionPassword(null);
+
+        cuentaRepo.save(cuenta);
+
+        return "La contraseña ha sido cambiada exitosamente";
     }
 
     @Override
@@ -207,6 +248,13 @@ public class CuentaServiceImpl implements CuentaService {   //con la inicializac
 
         return optionalCuenta;
 
+    }
+
+    // Método auxiliar para generar un código de recuperación
+    private String generarCodigoRecuperacion() {
+        // Implementar la lógica para generar un código único
+        // Por ejemplo, puedes usar UUID o algún otro método de generación de códigos únicos
+        return UUID.randomUUID().toString().substring(0, 6).toUpperCase();
     }
 
     private String encriptarPassword(String password){

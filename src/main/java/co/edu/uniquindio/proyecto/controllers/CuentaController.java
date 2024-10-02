@@ -2,16 +2,21 @@ package co.edu.uniquindio.proyecto.controllers;
 
 import co.edu.uniquindio.proyecto.dto.CambiarPasswordDTO;
 import co.edu.uniquindio.proyecto.dto.LoginDTO;
+import co.edu.uniquindio.proyecto.dto.MensajeDTO;
 import co.edu.uniquindio.proyecto.dto.TokenDTO;
 import co.edu.uniquindio.proyecto.dto.cuentaDTO.CrearCuentaDTO;
 import co.edu.uniquindio.proyecto.dto.cuentaDTO.EditarCuentaDTO;
 import co.edu.uniquindio.proyecto.dto.cuentaDTO.InformacionCuentaDTO;
 import co.edu.uniquindio.proyecto.dto.cuentaDTO.ItemCuentaDTO;
+import co.edu.uniquindio.proyecto.dto.emailDTO.EmailDTO;
 import co.edu.uniquindio.proyecto.services.interfaces.CuentaService;
+import co.edu.uniquindio.proyecto.services.interfaces.EmailService;
 import com.sanctionco.jmail.Email;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,39 +26,52 @@ import java.util.List;
 @RequestMapping("/api/cuenta")
 public class CuentaController {
 
+    @Autowired
     private final CuentaService cuentaService;
-
-    public void crearCuenta(CrearCuentaDTO cuenta) throws Exception{
+    @PostMapping("/crear-cuenta")
+    public void crearCuenta(@Valid @RequestBody CrearCuentaDTO cuenta) throws Exception{
+        cuentaService.crearCuenta(cuenta);
     }
 
-
-    public void editarCuenta(EditarCuentaDTO cuenta) throws Exception{
+    @PutMapping("/editar-perfil")
+    public void editarCuenta(@Valid @RequestBody EditarCuentaDTO cuenta) throws Exception{
+        cuentaService.editarCuenta(cuenta);
     }
 
-
-    public void eliminarCuenta(String id) throws Exception{
+    @DeleteMapping("/eliminar/{id}")
+    public void eliminarCuenta(@PathVariable String id) throws Exception{
+        cuentaService.eliminarCuenta(id);
     }
 
-
-    public InformacionCuentaDTO obtenerInformacionCuenta(String id) throws Exception{
-        return null;
+    @GetMapping("/obtener/{id}")
+    public InformacionCuentaDTO obtenerInformacionCuenta(@PathVariable String id) throws Exception{
+        return cuentaService.obtenerInformacionCuenta(id);
     }
 
-
+    @GetMapping("/listar-todo")
     public List<ItemCuentaDTO> listarCuentas() throws Exception{
-        return null;
+        return cuentaService.listarCuentas();
     }
+    @PostMapping("/recuperar-password")
+    public enviarCodigoRecuperacionPassword(@RequestParam String email) throws Exception; {
 
-    public  enviarCodigoRecuperacionPassword(String correo) throws Exception; {
+        try{
+            EmailService.recuparContrasenna(email);
+            return ResponseEntity.ok().body(
+                    new MensajeDTO<>(false, "Link enviado"));
+        }
+        catch (Exception ex) {
+            return ResponseEntity.ok().body(
+                    new MensajeDTO<>(true, ex.getMessage()));
+        }
 
-        return null;
     }  //Cuando olvida contraseña, y permite crear una nueva
-
+    @PutMapping("/cambiar-password")
     public void cambiarPassword(CambiarPasswordDTO cambiarPasswordDTO) throws Exception{
 
     }
 
-    TokenDTO iniciarSesion(LoginDTO loginDTO) throws Exception{
+    public TokenDTO iniciarSesion(LoginDTO loginDTO) throws Exception{
         return null;
     }
 
