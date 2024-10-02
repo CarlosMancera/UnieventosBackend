@@ -1,5 +1,6 @@
 package co.edu.uniquindio.proyecto.services.implement;
 
+import co.edu.uniquindio.proyecto.config.JWTUtils;
 import co.edu.uniquindio.proyecto.dto.*;
 import co.edu.uniquindio.proyecto.dto.cuentaDTO.CrearCuentaDTO;
 import co.edu.uniquindio.proyecto.dto.cuentaDTO.EditarCuentaDTO;
@@ -16,12 +17,14 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -29,6 +32,7 @@ import java.util.Optional;
 public class CuentaServiceImpl implements CuentaService {   //con la inicialización del atributo cuentaRepo (que es una interface)
 
     private final CuentaRepo cuentaRepo;
+    private final JWTUtils jwtUtils;
 
 
     @Override
@@ -139,20 +143,21 @@ public class CuentaServiceImpl implements CuentaService {   //con la inicializac
     }
 
     @Override
-    public String iniciarSesion(LoginDTO loginDTO) throws Exception {
-        Optional<Cuenta> cuentaOptional = cuentaRepo.buscarEmail(loginDTO.correo());
+    public TokenDTO iniciarSesion(LoginDTO loginDTO) throws Exception {
 
-        if (cuentaOptional.isEmpty()){
-            throw new Exception("E correo dado no esta registrado");
-        }
-        Cuenta cuenta = cuentaOptional.get();
+        Cuenta cuenta = obtenerPorEmail(loginDTO.email());
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-        if(!cuenta.getPassword().equals(loginDTO.password())){
+
+        if( !passwordEncoder.matches(loginDTO.password(), cuenta.getPassword()) ) {
             throw new Exception("La contraseña es incorrecta");
-
         }
-        return "TOKEN_JWT"; // se genera una autenticacion video 6
+
+
+        Map<String, Object> map = construirClaims(cuenta);
+        return new TokenDTO( jwtUtils.generarToken(cuenta.getEmail(), map) );
     }
+
 
     @Override
     public List<ItemCuentaDTO> listarCuentas() {
@@ -202,6 +207,19 @@ public class CuentaServiceImpl implements CuentaService {   //con la inicializac
 
         return optionalCuenta;
 
+    }
+
+    private String encriptarPassword(String password){
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return passwordEncoder.encode( password );
+    }
+
+    private Map<String, Object> construirClaims(Cuenta cuenta) {
+        return Map.of(
+                "rol", cuenta.getRol(),
+                "nombre", cuenta.getUsuario().getNombreCompleto(),
+                "id", cuenta.getId()
+        );
     }
 
 

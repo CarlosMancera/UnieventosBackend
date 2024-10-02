@@ -24,8 +24,10 @@ public interface CuentaService {
 
     String cambiarPassword(CambiarPasswordDTO cambiarPasswordDTO) throws Exception;
 
-    String iniciarSesion(LoginDTO loginDTO) throws Exception;
+    TokenDTO iniciarSesion(LoginDTO loginDTO) throws Exception;
 
     public List<ItemCuentaDTO> listarCuentas() throws Exception;
+
+
 
 }
