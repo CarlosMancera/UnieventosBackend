@@ -72,12 +72,12 @@ public class CarritoServiceImpl implements CarritoService {
 
     @Override
     @Transactional
-    public void eliminarDelCarrito(ObjectId idCuenta, ObjectId idEntrada) throws Exception {
+    public void eliminarDelCarrito(ObjectId idCuenta, ObjectId idEvento) throws Exception {
         Carrito carrito = carritoRepo.findByIdUsuario(idCuenta)
                 .orElseThrow(() -> new Exception("Carrito no encontrado"));
 
-        carrito.getItems().removeIf(e -> e.getIdEvento().equals(idEntrada));
-        carritoRepo.save(carrito);\
+        carrito.getItems().removeIf(e -> e.getIdEvento().equals(idEvento));
+        carritoRepo.save(carrito);
     }
 
     @Override
