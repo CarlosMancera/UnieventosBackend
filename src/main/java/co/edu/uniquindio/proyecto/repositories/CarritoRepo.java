@@ -9,5 +9,5 @@ import java.util.Optional;
 @Repository
 public interface CarritoRepo extends MongoRepository<Carrito, String> {
 
-    Optional<Carrito> findByCuenta ();
+    Optional<Carrito> findByIdUsuario (Object id);
 }

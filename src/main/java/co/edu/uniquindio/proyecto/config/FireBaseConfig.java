@@ -17,7 +17,7 @@ public class FireBaseConfig {
     @Bean
     public FirebaseApp intializeFirebase() throws IOException {
         FileInputStream serviceAccount = new FileInputStream(
-                "src/main/resources/NOMBRE_ARCHIVO.json"
+                "src/main/resources/unieventos-20242-12566-firebase-adminsdk-2dvvh-ece2b08d7c.json"
         );
 
 

@@ -6,6 +6,7 @@ import co.edu.uniquindio.proyecto.model.docs.Carrito;
 import co.edu.uniquindio.proyecto.model.docs.Cuenta;
 import co.edu.uniquindio.proyecto.model.docs.Evento;
 import co.edu.uniquindio.proyecto.model.vo.DetalleCarrito;
+import co.edu.uniquindio.proyecto.model.vo.Localidad;
 import co.edu.uniquindio.proyecto.repositories.CarritoRepo;
 import co.edu.uniquindio.proyecto.repositories.CuentaRepo;
 import co.edu.uniquindio.proyecto.repositories.EventoRepo;
@@ -15,6 +16,8 @@ import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -36,17 +39,32 @@ public class CarritoServiceImpl implements CarritoService {
         Evento evento = eventoRepo.findById(agregarAlCarritoDTO.idEvento().toString())
                 .orElseThrow(() -> new Exception("Evento no encontrado"));
 
-        DetalleCarrito detalle = entradaRepo.save(DetalleCarrito.builder()
+        double precioUnitario = 0;
+
+        for(Localidad l : evento.getLocalidades()){
+            if(l.getNombre().equals(agregarAlCarritoDTO.localidad())){
+                precioUnitario = l.getPrecio();
+                break;
+            }
+        }
+
+        DetalleCarrito detalle = DetalleCarrito.builder()
                 .idEvento(new ObjectId(evento.getId()))
                 .nombreLocalidad(agregarAlCarritoDTO.localidad())
                 .cantidad(agregarAlCarritoDTO.cantidad())
-                .precioUnitario(agregarAlCarritoDTO.localidad())
-                .build());
+                .precioUnitario(precioUnitario)
+                .build();
 
-        Carrito carrito = carritoRepo.findByCuenta(cuenta.getId())
-                .orElse(Carrito.builder().cuenta(cuenta.getId()).build());
+        Carrito carrito = carritoRepo.findByIdUsuario(cuenta.getId())
+                .orElse(
+                        Carrito.builder()
+                                .idUsuario(new ObjectId(cuenta.getId()))
+                                .fecha(LocalDateTime.now())
+                                .items(new ArrayList<>())
+                                .build()
+                );
 
-        carrito.getEntradas().add(entrada);
+        carrito.getItems().add(detalle);
         carritoRepo.save(carrito);
 
         return carrito.getId();
@@ -55,12 +73,11 @@ public class CarritoServiceImpl implements CarritoService {
     @Override
     @Transactional
     public void eliminarDelCarrito(ObjectId idCuenta, ObjectId idEntrada) throws Exception {
-        Carrito carrito = carritoRepo.findByCuenta(idCuenta)
+        Carrito carrito = carritoRepo.findByIdUsuario(idCuenta)
                 .orElseThrow(() -> new Exception("Carrito no encontrado"));
 
-        carrito.getEntradas().removeIf(e -> e.getId().equals(idEntrada));
-        carritoRepo.save(carrito);
-        entradaRepo.deleteById(idEntrada);
+        carrito.getItems().removeIf(e -> e.getIdEvento().equals(idEntrada));
+        carritoRepo.save(carrito);\
     }
 
     @Override

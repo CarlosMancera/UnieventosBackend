@@ -11,7 +11,6 @@ import co.edu.uniquindio.proyecto.dto.cuentaDTO.ItemCuentaDTO;
 import co.edu.uniquindio.proyecto.dto.emailDTO.EmailDTO;
 import co.edu.uniquindio.proyecto.services.interfaces.CuentaService;
 import co.edu.uniquindio.proyecto.services.interfaces.EmailService;
-import com.sanctionco.jmail.Email;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

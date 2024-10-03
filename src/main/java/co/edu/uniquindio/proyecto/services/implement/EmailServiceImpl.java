@@ -10,34 +10,31 @@ import org.simplejavamail.email.EmailBuilder;
 import org.simplejavamail.mailer.MailerBuilder;
 import org.springframework.stereotype.Service;
 
-
-
 @Service
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
 
-
-    Email email = EmailBuilder.startingBlank()
-            .from("unieventos20242@gmail.com")
-            .to(EmailDTO.destinatario())
-            .withSubject(EmailDTO.asunto())
-            .withPlainText(EmailDTO.cuerpo())
-            .buildEmail();
+    public void enviarCorreo(EmailDTO emailDTO) throws Exception{
 
 
-       try (Mailer mailer = MailerBuilder
-            .withSMTPServer("smtp.gmail.com", 587, "unieventos20242@gmail.com", "agnv ejjt kzqx neoz")
-            .withTransportStrategy(TransportStrategy.SMTP_TLS)
-            .withDebugLogging(true)
-            .buildMailer()) {
+        Email email = EmailBuilder.startingBlank()
+                .from("unieventos20242@gmail.com")
+                .to(emailDTO.destinatario())
+                .withSubject(emailDTO.asunto())
+                .withPlainText(emailDTO.cuerpo())
+                .buildEmail();
+
+        try (Mailer mailer = MailerBuilder
+                .withSMTPServer("smtp.gmail.com", 587, "unieventos20242@gmail.com", "agnv ejjt kzqx neoz")
+                .withTransportStrategy(TransportStrategy.SMTP_TLS)
+                .withDebugLogging(true)
+                .buildMailer()) {
 
 
-        mailer.sendMail(email);
-    }
+            mailer.sendMail(email);
+        }
 
-
-    @Override
-    public void enviarCorreo(EmailDTO emailDTO) throws Exception {
 
     }
+
 }
