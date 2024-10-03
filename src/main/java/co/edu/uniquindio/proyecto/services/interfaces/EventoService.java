@@ -1,6 +1,8 @@
 package co.edu.uniquindio.proyecto.services.interfaces;
 
 import co.edu.uniquindio.proyecto.dto.eventoDTO.*;
+import co.edu.uniquindio.proyecto.model.enums.EstadoEvento;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 

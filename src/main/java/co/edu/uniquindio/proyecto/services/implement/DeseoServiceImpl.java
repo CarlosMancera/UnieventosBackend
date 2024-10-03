@@ -79,13 +79,17 @@ public class DeseoServiceImpl implements DeseoService {
 
     @Override
     @Transactional
-    public void enviarNotificaciones() {
+    public void enviarNotificaciones()  {
         List<Deseo> deseos = deseoRepo.findAll();
         for (Deseo deseo : deseos) {
             if (deseo.isRecibeInfo()) {
                 eventoRepo.findById(deseo.getEvento().toString()).ifPresent(evento -> {
                     if (esEventoCercano(evento)) {
-                        enviarNotificacionEventoCercano(deseo, evento);
+                        try {
+                            enviarNotificacionEventoCercano(deseo, evento);
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 });
             }

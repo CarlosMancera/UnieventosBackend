@@ -29,7 +29,7 @@ public class Evento {
     private String ciudad;
     private String descripcion;
     private TipoEvento tipoEvento;
-    private List<Imagen> imagenes; //O  private String imagenPortada y private String imagenLocalidades
+    private String imagen; //O  private String imagenPortada y private String imagenLocalidades
     private LocalDateTime fecha;
     private List<Localidad> localidades;
     private EstadoEvento estadoEvento;
@@ -37,14 +37,14 @@ public class Evento {
     private EstadoEvento estado;
 
     @Builder
-    public Evento(String nombre, String direccion, String ciudad, String descripcion, TipoEvento tipoEvento, List<Imagen> imagenes, LocalDateTime fecha, List<Localidad> localidades, EstadoEvento estadoEvento, ObjectId artista) {
+    public Evento(String nombre, String direccion, String ciudad, String descripcion, TipoEvento tipoEvento, String imagenes, LocalDateTime fecha, List<Localidad> localidades, EstadoEvento estadoEvento, ObjectId artista) {
 
         this.nombre = nombre;
         this.direccion = direccion;
         this.ciudad = ciudad;
         this.descripcion = descripcion;
         this.tipoEvento = tipoEvento;
-        this.imagenes = imagenes;
+        this.imagen = imagenes;
         this.fecha = fecha;
         this.localidades = localidades;
         this.estadoEvento = estadoEvento;

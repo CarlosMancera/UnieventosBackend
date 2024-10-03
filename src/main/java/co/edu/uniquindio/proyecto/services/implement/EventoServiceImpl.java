@@ -1,7 +1,5 @@
 package co.edu.uniquindio.proyecto.services.implement;
 
-import co.edu.uniquindio.proyecto.dto.cuentaDTO.ItemCuentaDTO;
-import co.edu.uniquindio.proyecto.model.docs.Cuenta;
 import co.edu.uniquindio.proyecto.model.vo.Localidad;
 import co.edu.uniquindio.proyecto.dto.eventoDTO.*;
 import co.edu.uniquindio.proyecto.model.docs.Evento;
@@ -9,6 +7,7 @@ import co.edu.uniquindio.proyecto.model.enums.EstadoEvento;
 import co.edu.uniquindio.proyecto.repositories.EventoRepo;
 import co.edu.uniquindio.proyecto.services.interfaces.ArchivoService;
 import co.edu.uniquindio.proyecto.services.interfaces.EventoService;
+import co.edu.uniquindio.proyecto.services.interfaces.ImagenesService;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,7 @@ import java.util.Optional;
 public class EventoServiceImpl implements EventoService {
 
     private final EventoRepo eventoRepo;
-    private final ArchivoService archivoService;
+    private final ImagenesService archivoService;
 
     @Override
     @Transactional
@@ -120,6 +119,21 @@ public class EventoServiceImpl implements EventoService {
 
     }
 
+    @Override
+    public List<ResumenEventoDTO> filtrarEventos(FiltroEventoDTO filtroDTO) throws Exception {
+        return List.of();
+    }
+
+    @Override
+    public List<ResumenEventoDTO> buscarEventosPorNombre(String nombre) {
+        return List.of();
+    }
+
+    @Override
+    public void cambiarEstadoEvento(String id, EstadoEvento nuevoEstado) throws Exception {
+
+    }
+
    /* @Override
     @Transactional(readOnly = true)
     public List<ResumenEventoDTO> buscarEventosPorNombre(String nombre) {
@@ -129,12 +143,13 @@ public class EventoServiceImpl implements EventoService {
                 .toList();
     }*/
 
+    //TODO
     @Override
     @Transactional
     public void agregarImagenEvento(String idEvento, MultipartFile imagen) throws Exception {
         Evento evento = getEvento(idEvento);
         String rutaImagen = archivoService.subirImagen(imagen);
-        evento.getImagenes().add(rutaImagen);
+        evento.setImagen(rutaImagen);
         eventoRepo.save(evento);
     }
 
@@ -168,6 +183,11 @@ public class EventoServiceImpl implements EventoService {
         return new byte[0];
     }
 
+    @Override
+    public byte[] generarReporteVentasXML(String idEvento) throws Exception {
+        return new byte[0];
+    }
+
     private InformacionEventoDTO mapToInformacionEventoDTO(Evento evento) {
         return new InformacionEventoDTO(
                 evento.getId(),
@@ -180,7 +200,7 @@ public class EventoServiceImpl implements EventoService {
                 evento.getTipoEvento(),
                 evento.getEstado(),
                 evento.getLocalidades().stream().map(this::mapToLocalidadEventoDTO).toList(),
-                evento.getImagenes()
+                evento.getImagen()
         );
     }
 

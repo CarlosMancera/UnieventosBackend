@@ -5,6 +5,7 @@ import co.edu.uniquindio.proyecto.dto.cuponDTO.ResumenCuponDTO;
 import co.edu.uniquindio.proyecto.dto.emailDTO.EmailDTO;
 import co.edu.uniquindio.proyecto.dto.ordenDTO.*;
 import co.edu.uniquindio.proyecto.model.docs.*;
+import co.edu.uniquindio.proyecto.model.vo.DetalleCarrito;
 import co.edu.uniquindio.proyecto.model.vo.DetalleOrden;
 import co.edu.uniquindio.proyecto.model.vo.Localidad;
 import co.edu.uniquindio.proyecto.model.vo.Pago;
@@ -43,15 +44,38 @@ public class OrdenServiceImpl implements OrdenService{
     private final EmailService emailService;
 
 
-    @Override
+  /*
+    public List<ResumenCarritoDTO> listarCarrito(ObjectId idCuenta) throws Exception {
+        Carrito carrito = carritoRepo.findByCuenta(idCuenta)
+                .orElseThrow(() -> new Exception("Carrito no encontrado"));
+
+
+    }*/
+     @Override
     @Transactional(readOnly = true)
     public List<ResumenCarritoDTO> listarCarrito(ObjectId idCuenta) throws Exception {
         Carrito carrito = carritoRepo.findByCuenta(idCuenta)
                 .orElseThrow(() -> new Exception("Carrito no encontrado"));
 
-        return carrito.getEntradas().stream()
-                .map(this::mapToResumenCarritoDTO)
-                .collect(Collectors.toList());
+        List<ResumenCarritoDTO> resumenCarritoList = new ArrayList<>();
+
+        for (DetalleCarrito item : carrito.getItems()) {
+            ResumenCarritoDTO resumen = convertirAResumenCarritoDTO(item);  // Método personalizado para la conversión
+            resumenCarritoList.add(resumen);
+        }
+
+        return resumenCarritoList;
+    }
+
+    private ResumenCarritoDTO convertirAResumenCarritoDTO(DetalleCarrito item) {
+        // Lógica de conversión del item al DTO
+        return new ResumenCarritoDTO(
+                eventoRepo.findById(item.getIdEvento()).get().getNombre(),
+                item.getNombreLocalidad(),
+                item.getCantidad() * item.getPrecioUnitario(),
+
+                // otros campos...
+        );
     }
 
     @Override

@@ -33,7 +33,7 @@ public class CarritoServiceImpl implements CarritoService {
     @Override
     @Transactional
     public String agregarAlCarrito(AgregarAlCarritoDTO agregarAlCarritoDTO) throws Exception {
-        Cuenta cuenta = cuentaRepo.findById(agregarAlCarritoDTO.idCuenta().toString())
+        Cuenta cuenta = cuentaRepo.findById(agregarAlCarritoDTO.idCuenta())
                 .orElseThrow(() -> new Exception("Cuenta no encontrada"));
 
         Evento evento = eventoRepo.findById(agregarAlCarritoDTO.idEvento().toString())
@@ -41,8 +41,8 @@ public class CarritoServiceImpl implements CarritoService {
 
         double precioUnitario = 0;
 
-        for(Localidad l : evento.getLocalidades()){
-            if(l.getNombre().equals(agregarAlCarritoDTO.localidad())){
+        for (Localidad l : evento.getLocalidades()) {
+            if (l.getNombre().equals(agregarAlCarritoDTO.localidad())) {
                 precioUnitario = l.getPrecio();
                 break;
             }
@@ -55,7 +55,7 @@ public class CarritoServiceImpl implements CarritoService {
                 .precioUnitario(precioUnitario)
                 .build();
 
-        Carrito carrito = carritoRepo.findByIdUsuario(cuenta.getId())
+        Carrito carrito = carritoRepo.findByIdUsuario(new ObjectId(cuenta.getId()))
                 .orElse(
                         Carrito.builder()
                                 .idUsuario(new ObjectId(cuenta.getId()))
@@ -86,8 +86,8 @@ public class CarritoServiceImpl implements CarritoService {
     }
 
     //----------------------AUX-----------------------
-    private ResumenCarritoDTO mapToResumenCarritoDTO(Entrada entrada) {
-        Evento evento = eventoRepo.findById(entrada.getEvento()).orElseThrow();
+   /* private ResumenCarritoDTO mapToResumenCarritoDTO(Entrada entrada) {
+        Evento evento =
         return new ResumenCarritoDTO(
                 entrada.getId(),
                 evento.getNombre(),
@@ -96,13 +96,25 @@ public class CarritoServiceImpl implements CarritoService {
                 entrada.getCantidad(),
                 entrada.getPrecioUnitario()
         );
+    }*/
+
+    private ResumenCarritoDTO crearResumenCarritoDTO(DetalleCarrito detalle) {
+        Evento evento = eventoRepo.findById(detalle.getIdEvento()).orElseThrow();
+        return new ResumenCarritoDTO(
+                detalle.getIdEvento(),
+                evento.getNombre(),
+                evento.getFecha(),
+                detalle.getNombreLocalidad(),
+                detalle.getCantidad(),
+                detalle.getPrecioUnitario()
+        );
     }
 
     private double calcularSubtotal(Carrito carrito) {
-        return carrito.getEntradas().stream()
+        return carrito.getItems().stream()
                 .mapToDouble(e -> e.getPrecioUnitario() * e.getCantidad())
                 .sum();
+
+
     }
-
-
 }
