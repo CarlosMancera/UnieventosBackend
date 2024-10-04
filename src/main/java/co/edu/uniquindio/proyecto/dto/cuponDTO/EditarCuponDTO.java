@@ -8,7 +8,7 @@ public record EditarCuponDTO(
         String id,
         String codigo,
         double descuento,
-        LocalDateTime fecha_Vencimiento,
+        LocalDateTime fechaVencimiento,
         int limiteUso,
         TipoCupon tipoCupon
 ) {

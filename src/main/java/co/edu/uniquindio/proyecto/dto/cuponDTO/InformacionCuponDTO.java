@@ -9,7 +9,7 @@ public record InformacionCuponDTO(
 
         String codigo,
         double descuento,
-        LocalDateTime fecha_Vencimiento,
+        LocalDateTime fechaVencimiento,
         int limiteUso,
         TipoCupon tipoCupon,
         EstadoCupon estadoCupon

@@ -46,7 +46,7 @@ public class CuponServiceImpl implements CuponService {
 
         cupon.setCodigo(cuponDTO.codigo());
         cupon.setDescuento(cuponDTO.descuento());
-        cupon.setFechaVencimiento(cuponDTO.fecha_Vencimiento());
+        cupon.setFechaVencimiento(cuponDTO.fechaVencimiento());
         cupon.setLimiteUso(cuponDTO.limiteUso());
         cupon.setTipoCupon(cuponDTO.tipoCupon());
 

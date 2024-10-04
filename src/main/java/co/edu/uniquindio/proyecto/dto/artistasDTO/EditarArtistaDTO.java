@@ -1,6 +1,5 @@
 package co.edu.uniquindio.proyecto.dto.artistasDTO;
 
-import co.edu.uniquindio.proyecto.model.enums.TipoArtista;
 
 import java.util.List;
 

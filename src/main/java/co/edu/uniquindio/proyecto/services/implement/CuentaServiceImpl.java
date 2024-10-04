@@ -189,7 +189,7 @@ public class CuentaServiceImpl implements CuentaService {   //con la inicializac
     @Override
     public TokenDTO iniciarSesion(LoginDTO loginDTO) throws Exception {
 
-        Optional<Cuenta> cuentaOpcional = cuentaRepo.findByEmail(loginDTO.email());
+        Optional<Cuenta> cuentaOpcional = cuentaRepo.findByEmail(loginDTO.correo());
 
         if(cuentaOpcional.isEmpty()) {
             throw new Exception("No existe una cuenta con ese correo electrónico");

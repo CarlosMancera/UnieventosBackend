@@ -1,7 +1,13 @@
 package co.edu.uniquindio.proyecto.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import org.hibernate.validator.constraints.Length;
+
 public record LoginDTO(
-    String email,
-    String password
+        @NotBlank @Length(max = 40) @Email
+        String correo,
+        @NotBlank @Length(min = 7, max = 20)
+        String password
 ) {
 }

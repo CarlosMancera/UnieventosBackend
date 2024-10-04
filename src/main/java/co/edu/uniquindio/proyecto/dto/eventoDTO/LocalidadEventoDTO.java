@@ -1,7 +1,10 @@
 package co.edu.uniquindio.proyecto.dto.eventoDTO;
 
-public record LocalidadEventoDTO(
+import jakarta.validation.constraints.NotBlank;
+import org.hibernate.validator.constraints.Length;
 
+public record LocalidadEventoDTO(
+        @NotBlank @Length(max = 50)
         String nombre,
         double precio,
         int capacidad,

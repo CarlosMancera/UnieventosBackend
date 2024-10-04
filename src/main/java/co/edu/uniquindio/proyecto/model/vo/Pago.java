@@ -1,6 +1,6 @@
 package co.edu.uniquindio.proyecto.model.vo;
 
-import co.edu.uniquindio.proyecto.model.enums.EstadoPago;
+
 import lombok.*;
 import java.time.LocalDateTime;
 

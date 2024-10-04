@@ -18,24 +18,24 @@ public class ValoracionServiceImpl implements ValoracionService {
     }
 
     @Override
-    public List<Valoracion> listarValoracionByUsuario(String usuario) {
+    public List<Valoracion> listarValoracionByUsuario(String usuario) throws Exception{
         List<Valoracion> listarValoraciones =valoracionRepo.listarValoracionByUsuario(usuario);
         return listarValoraciones;
     }
 
     @Override
-    public void crearValoracion(Valoracion valoracion) {
+    public void crearValoracion(Valoracion valoracion) throws Exception{
         valoracionRepo.save(valoracion);
     }
 
     @Override
-    public List<Valoracion> obtenerValoracionByUsuarioID(String usuarioId) {
+    public List<Valoracion> obtenerValoracionByUsuarioID(String usuarioId) throws Exception {
         List<Valoracion> listaValoraciones =valoracionRepo.listarValoracionByUsuario(usuarioId);
         return listaValoraciones;
     }
 
     @Override
-    public void eliminarValoracionByUsuarioId(String usuarioId, Valoracion valoracion) {
+    public void eliminarValoracionByUsuarioId(String usuarioId, Valoracion valoracion) throws Exception{
         valoracionRepo.eliminarValoracionByUsuarioId(usuarioId,valoracion.getCodigo().toString());
     }
 }
