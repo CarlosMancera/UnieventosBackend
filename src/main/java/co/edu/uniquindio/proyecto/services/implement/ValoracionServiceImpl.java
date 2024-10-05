@@ -18,8 +18,8 @@ public class ValoracionServiceImpl implements ValoracionService {
     }
 
     @Override
-    public List<Valoracion> listarValoracionByUsuario(String usuario) {
-        List<Valoracion> listarValoraciones =valoracionRepo.listarValoracionByUsuario(usuario);
+    public List<Valoracion> listarValoracionByNombre(String nombre) {
+        List<Valoracion> listarValoraciones =valoracionRepo.listarValoracionByUsuario(nombre);
         return listarValoraciones;
     }
 
@@ -36,6 +36,6 @@ public class ValoracionServiceImpl implements ValoracionService {
 
     @Override
     public void eliminarValoracionByUsuarioId(String usuarioId, Valoracion valoracion) {
-        valoracionRepo.eliminarValoracionByUsuarioId(usuarioId,valoracion.getCodigo().toString());
+        valoracionRepo.eliminarValoracionByUsuarioId(usuarioId,valoracion.getId()); //Query en el repo
     }
 }

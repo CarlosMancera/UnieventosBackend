@@ -27,7 +27,7 @@ public class OrdenCompraTest {
 
 
         List<DetalleOrden> items = new ArrayList<>();
-        items.add(new DetalleOrden("123456789",new ObjectId("66d655cb6cab961e099b1fc4"),"Unica",5,10000));
+        items.add(new DetalleOrden("Platea", 5,new ObjectId("66d655cb6cab961e099b1fc4"),10000));
 
         OrdenCompra ordenCompra = OrdenCompra.builder()
                 .codigo("666")

@@ -6,17 +6,20 @@ import org.bson.types.ObjectId;
 @Setter
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class DetalleOrden {
 
-    @EqualsAndHashCode.Include
-    private String id;
-
-    private ObjectId evento;
-    private String localidad;
+    private String nombreLocalidad;
     private int cantidad;
+    private ObjectId idEvento;
     private double precioUnitario;
 
+    @Builder
+    public DetalleOrden(String nombreLocalidad, int cantidad, ObjectId idEvento, double precioUnitario) {
+        this.nombreLocalidad = nombreLocalidad;
+        this.cantidad = cantidad;
+        this.idEvento = idEvento;
+        this.precioUnitario = precioUnitario;
+    }
 }

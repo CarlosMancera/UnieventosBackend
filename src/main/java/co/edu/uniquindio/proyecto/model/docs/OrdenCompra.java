@@ -31,6 +31,7 @@ public class OrdenCompra {
     private double total;
     private LocalDateTime fecha;
     private Pago pago;
+    private String codigoPasarela;
 
     @Builder
     public OrdenCompra(String codigo, ObjectId cliente, List<DetalleOrden> items, ObjectId cupon, double total, LocalDateTime fecha, Pago pago) {

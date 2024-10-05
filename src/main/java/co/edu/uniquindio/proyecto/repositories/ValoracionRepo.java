@@ -10,5 +10,8 @@ import java.util.List;
 public interface ValoracionRepo extends MongoRepository<Valoracion,String> {
     List<Valoracion> listarValoracionByUsuario(String usuario);
 
+    void deleteByUsuario(String usuario);  //OJO CON ESTE MÉTODO
+    void eliminarValoracionByUsuarioId (String usuarioId,String idValoracion);
+
 
 }
