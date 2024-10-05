@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class EmailController {
     private final EmailService emailService;
 
-    @PostMapping(value = "/enviar")
+    @PostMapping(value = "/enviar-email")
     public ResponseEntity<MensajeDTO<String>> enviarEmail(@Valid @RequestBody EmailDTO emailDTO) throws Exception {
         try{
-            emailService.enviarCorreo(emailDTO);
+            emailService.enviarEmail(emailDTO);
             return ResponseEntity.ok().body(
                     new MensajeDTO<>(false, "email enviado"));
         }

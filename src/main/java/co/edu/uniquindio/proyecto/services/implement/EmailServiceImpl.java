@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
 
-    public void enviarCorreo(EmailDTO emailDTO) throws Exception{
+    public void enviarEmail(EmailDTO emailDTO) throws Exception{
 
 
         Email email = EmailBuilder.startingBlank()

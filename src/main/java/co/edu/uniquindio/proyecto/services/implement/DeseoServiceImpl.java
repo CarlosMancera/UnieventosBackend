@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -132,7 +131,7 @@ public class DeseoServiceImpl implements DeseoService {
             String cuerpo = "El evento " + evento.getNombre() + " está próximo a realizarse.";
 
             EmailDTO emailDTO = new EmailDTO(cuenta.getEmail(), asunto, cuerpo);
-            emailService.enviarCorreo(new EmailDTO(asunto, cuerpo, cuenta.getEmail()));
+            emailService.enviarEmail(new EmailDTO(asunto, cuerpo, cuenta.getEmail()));
         }
     }
 }

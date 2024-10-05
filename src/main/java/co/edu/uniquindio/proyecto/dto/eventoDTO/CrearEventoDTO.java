@@ -11,6 +11,7 @@ import java.util.List;
 public record CrearEventoDTO(
         @NotBlank @Length(max = 50)
         String nombre,
+        @NotBlank
         String artista,
         @NotBlank @Length(max = 100)
         String descripcion,

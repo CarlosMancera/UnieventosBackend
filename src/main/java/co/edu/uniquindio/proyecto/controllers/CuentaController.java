@@ -8,9 +8,7 @@ import co.edu.uniquindio.proyecto.dto.cuentaDTO.CrearCuentaDTO;
 import co.edu.uniquindio.proyecto.dto.cuentaDTO.EditarCuentaDTO;
 import co.edu.uniquindio.proyecto.dto.cuentaDTO.InformacionCuentaDTO;
 import co.edu.uniquindio.proyecto.dto.cuentaDTO.ItemCuentaDTO;
-import co.edu.uniquindio.proyecto.dto.emailDTO.EmailDTO;
 import co.edu.uniquindio.proyecto.services.interfaces.CuentaService;
-import co.edu.uniquindio.proyecto.services.interfaces.EmailService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +25,7 @@ public class CuentaController {
 
     @Autowired
     private final CuentaService cuentaService;
+
     @PostMapping("/crear-cuenta")
     public void crearCuenta(@Valid @RequestBody CrearCuentaDTO cuenta) throws Exception{
         cuentaService.crearCuenta(cuenta);
@@ -37,12 +36,12 @@ public class CuentaController {
         cuentaService.editarCuenta(cuenta);
     }
 
-    @DeleteMapping("/eliminar/{id}")
+    @DeleteMapping("/eliminar-cuenta/{id}")
     public void eliminarCuenta(@PathVariable String id) throws Exception{
         cuentaService.eliminarCuenta(id);
     }
 
-    @GetMapping("/obtener/{id}")
+    @GetMapping("/obtener-info-cuenta/{id}")
     public InformacionCuentaDTO obtenerInformacionCuenta(@PathVariable String id) throws Exception{
         return cuentaService.obtenerInformacionCuenta(id);
     }

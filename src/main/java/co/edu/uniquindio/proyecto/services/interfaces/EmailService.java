@@ -5,5 +5,5 @@ import org.springframework.stereotype.Service;
 
 public interface EmailService {
 
-    void enviarCorreo(EmailDTO emailDTO) throws Exception;
+    void enviarEmail(EmailDTO emailDTO) throws Exception;
 }
