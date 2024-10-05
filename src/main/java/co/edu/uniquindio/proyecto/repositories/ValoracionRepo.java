@@ -13,8 +13,6 @@ public interface ValoracionRepo extends MongoRepository<Valoracion,String> {
     List<Valoracion> listarValoracionByUsuario(String usuario);
 
     void crearValoracion(Valoracion valoracion) ;
-    @Query("{ 'usuarioId' : ?0 }")
-    List<Valoracion> obtenerValoracionByUsuarioID(String usuarioId) ;
 
     void eliminarValoracionByUsuarioId(String usuarioId, Valoracion valoracion) ;
 }

@@ -28,14 +28,9 @@ public class ValoracionServiceImpl implements ValoracionService {
         valoracionRepo.save(valoracion);
     }
 
-    @Override
-    public List<Valoracion> obtenerValoracionByUsuarioID(String usuarioId) throws Exception {
-        List<Valoracion> listaValoraciones =valoracionRepo.listarValoracionByUsuario(usuarioId);
-        return listaValoraciones;
-    }
 
     @Override
     public void eliminarValoracionByUsuarioId(String usuarioId, Valoracion valoracion) throws Exception{
-        valoracionRepo.eliminarValoracionByUsuarioId(usuarioId,valoracion.getCodigo().toString());
+        valoracionRepo.eliminarValoracionByUsuarioId(usuarioId,valoracion);
     }
 }

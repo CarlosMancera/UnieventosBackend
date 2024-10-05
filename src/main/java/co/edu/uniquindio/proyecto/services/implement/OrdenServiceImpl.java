@@ -5,6 +5,7 @@ import co.edu.uniquindio.proyecto.dto.cuponDTO.ResumenCuponDTO;
 import co.edu.uniquindio.proyecto.dto.emailDTO.EmailDTO;
 import co.edu.uniquindio.proyecto.dto.ordenDTO.*;
 import co.edu.uniquindio.proyecto.model.docs.*;
+import co.edu.uniquindio.proyecto.model.enums.EstadoOrden;
 import co.edu.uniquindio.proyecto.model.vo.DetalleCarrito;
 import co.edu.uniquindio.proyecto.model.vo.DetalleOrden;
 import co.edu.uniquindio.proyecto.model.vo.Localidad;
@@ -125,10 +126,10 @@ public class OrdenServiceImpl implements OrdenService{
         Carrito carrito = carritoOptional.get();
 
         OrdenCompra orden = new OrdenCompra();
-        orden.setCuenta(idCuenta);
-        orden.setEntradas(carrito.getEntradas());
-        orden.setFechaCreacion(LocalDateTime.now());
-        orden.setEstado(EstadoOrden.PENDIENTE);
+        orden.setCliente(idCuenta);
+        orden.setItems(carrito.getItems());
+        orden.setFecha(LocalDateTime.now());
+        orden.set(EstadoOrden.PENDIENTE);
 
         orden = ordenRepo.save(orden);
         carritoRepo.delete(carrito);
@@ -357,13 +358,26 @@ public class OrdenServiceImpl implements OrdenService{
 
     //_-----------------------AUX------------------------
 
-    private double calcularDescuento(OrdenCompra orden) {
-        // Implementar lógica para calcular el descuento
-        return 0.0;
+    private double calcularDescuento(OrdenCompra ordenCompra) {
+        double descuento = 0.0;
+
+        // Si la orden tiene un cupón de descuento
+        if (orden.getCupon() != null) {
+            double porcentajeDescuento = ordenCompra.getCupon().getDescuento(); // Porcentaje de descuento del cupón
+            double subtotal = calcularSubtotal(orden);  // Calcula el subtotal de la orden
+            descuento = subtotal * (porcentajeDescuento / 100.0);  // Aplica el descuento
+        }
+
+        return descuento;
+    }
+    private double calcularSubtotal(OrdenCompra ordenCompra) {
+        return ordenCompra.getItems().stream()
+                .mapToDouble(item -> item.getPrecioUnitario() * item.getCantidad())  // Multiplica precio por cantidad
+                .sum();  // Suma los subtotales de cada ítem
     }
 
-    private double calcularTotal(OrdenCompra orden) {
-        return calcularSubtotal(orden) - calcularDescuento(orden);
+    private double calcularTotal(OrdenCompra ordenCompra) {
+        return calcularSubtotal(ordenCompra) - calcularDescuento(ordenCompra);
     }
 
     private String generarCodigoConfirmacion() {
@@ -378,8 +392,12 @@ public class OrdenServiceImpl implements OrdenService{
 
     private void aplicarDescuentoPrimeraCompra(OrdenCompra orden) {
         // Implementar lógica para aplicar el descuento del 15% por primera compra
+        if (esPrimeraCompra(orden.getCuenta().getId())) {
         double descuentoAdicional = calcularSubtotal(orden) * 0.15;
         // Actualizar el total de la orden con el descuento adicional
+            double nuevoTotal = calcularTotal(orden) - descuentoAdicional;
+            orden.setTotal(nuevoTotal);
+        }
     }
 
     private boolean esPrimeraCompra(ObjectId idCuenta) {
