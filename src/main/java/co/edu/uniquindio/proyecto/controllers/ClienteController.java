@@ -112,11 +112,17 @@ public class ClienteController {
         return ResponseEntity.ok(new MensajeDTO<>(false, "Notificaciones enviadas exitosamente"));
     }
 
-    @PostMapping("/realizar-pago/{idOrden}")
+   /* @PostMapping("/realizar-pago/{idOrden}")
     public ResponseEntity<MensajeDTO<Preference>> realizarPago(@PathVariable String idOrden) throws Exception {
         Preference preference = ordenService.realizarPago(idOrden);
         return ResponseEntity.ok(new MensajeDTO<>(false, preference));
+    } */
+    @PostMapping("/realizar-pago")
+    public ResponseEntity<MensajeDTO<Preference>> realizarPago(@RequestParam("idOrden") String idOrden) throws Exception{
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, ordenService.realizarPago(idOrden)));
     }
+
+
 
     @PostMapping("/aplicar-descuento/{idCuenta}")
     public ResponseEntity<MensajeDTO<ResumenOrdenDTO>> aplicarDescuento(@PathVariable ObjectId idCuenta, @RequestParam String codigoDescuento) throws Exception {
@@ -147,6 +153,10 @@ public class ClienteController {
         ordenService.recibirNotificacionMercadoPago(request);
         return ResponseEntity.ok(new MensajeDTO<>(false, "Notificación recibida exitosamente"));
     }
+   /* @PostMapping("/notificacion-pago")
+    public void recibirNotificacionMercadoPago(@RequestBody Map<String, Object> requestBody) {
+        ordenService.recibirNotificacionMercadoPago(requestBody);
+    } */
 
 
     @GetMapping("/listar-valoracion/{nombre}")

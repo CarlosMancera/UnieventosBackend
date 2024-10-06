@@ -373,7 +373,7 @@ public class OrdenServiceImpl implements OrdenService{
 
     private void enviarCodigoConfirmacion(ObjectId idCuenta, String codigoConfirmacion) throws Exception {
         Cuenta cuenta = cuentaRepo.findById(idCuenta.toString()).orElseThrow();
-        emailService.enviarCorreo(new EmailDTO("Código de confirmación", "Su código de confirmación es: " + codigoConfirmacion, cuenta.getEmail()));
+        emailService.enviarEmail(new EmailDTO("Código de confirmación", "Su código de confirmación es: " + codigoConfirmacion, cuenta.getEmail()));
     }
 
     private void aplicarDescuentoPrimeraCompra(OrdenCompra orden) {
