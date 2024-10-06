@@ -6,7 +6,7 @@ import org.hibernate.validator.constraints.Length;
 
 public record CambiarPasswordDTO(
         @NotBlank @Length(max = 40) @Email
-        String correo,
+        String email,
         String codigoVerificacion,
         @NotBlank @Length(max = 40) @Email
         String passwordNuevaT

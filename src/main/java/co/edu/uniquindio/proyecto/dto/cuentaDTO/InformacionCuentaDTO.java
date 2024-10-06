@@ -7,6 +7,6 @@ public record InformacionCuentaDTO(
         String nombre,
         String telefono,
         String direccion,
-        String correo
+        String email
 ) {
 }

@@ -18,7 +18,7 @@ public record CrearCuentaDTO(
         @Length(max = 80)
         String direccion,
         @NotBlank @Length(max = 40) @Email
-        String correo,
+        String email,
         @NotBlank @Length(min = 7, max = 20)
         String password
 

@@ -8,7 +8,7 @@ public record ResumenCuponDTO(
 
         String codigo,
         double descuento,
-        LocalDateTime fecha_Vencimiento,
+        LocalDateTime fechaVencimiento,
         EstadoCupon estadoCupon
 ) {
 }

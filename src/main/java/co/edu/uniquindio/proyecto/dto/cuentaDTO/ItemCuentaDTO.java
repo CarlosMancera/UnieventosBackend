@@ -4,7 +4,7 @@ public record ItemCuentaDTO(
 
         String id,
         String nombre,
-        String email,
+        String correo,
         String telefono
 
 ) {

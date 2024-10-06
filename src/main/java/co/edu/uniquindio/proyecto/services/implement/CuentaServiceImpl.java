@@ -35,8 +35,8 @@ public class CuentaServiceImpl implements CuentaService {   //con la inicializac
     @Override
     public String crearCuenta(CrearCuentaDTO cuenta) throws Exception {
 
-        if(existeEmail(cuenta.correo())){
-            throw new Exception("Ya existe una cuenta con el correo " + cuenta.correo());
+        if(existeEmail(cuenta.email())){
+            throw new Exception("Ya existe una cuenta con el correo " + cuenta.email());
         }
 
         if(existeCedula(cuenta.cedula())){
@@ -48,7 +48,7 @@ public class CuentaServiceImpl implements CuentaService {   //con la inicializac
         //Invocación al método de generación
 
         Cuenta nuevaCuenta = new Cuenta();
-        nuevaCuenta.setEmail(cuenta.correo());
+        nuevaCuenta.setEmail(cuenta.email());
         nuevaCuenta.setPassword(cuenta.password());
         nuevaCuenta.setTipoUsuario(TipoUsuario.CLIENTE);
         nuevaCuenta.setFechaRegistro(LocalDateTime.now());
@@ -130,12 +130,12 @@ public class CuentaServiceImpl implements CuentaService {   //con la inicializac
     }
 
     @Override
-    public String enviarCodigoRecuperacionPassword(String correo) throws Exception {
+    public String enviarCodigoRecuperacionPassword(String email) throws Exception {
 
-        Optional<Cuenta> optionalCuenta = cuentaRepo.findByEmail(correo);
+        Optional<Cuenta> optionalCuenta = cuentaRepo.findByEmail(email);
 
         if (optionalCuenta.isEmpty()) {
-            throw new Exception("No existe una cuenta con el correo " + correo);
+            throw new Exception("No existe una cuenta con el email " + email);
         }
 
         Cuenta cuenta = optionalCuenta.get();
@@ -160,10 +160,10 @@ public class CuentaServiceImpl implements CuentaService {   //con la inicializac
 
     @Override
     public String cambiarPassword(CambiarPasswordDTO cambiarPasswordDTO) throws Exception {
-        Optional<Cuenta> optionalCuenta = cuentaRepo.findByEmail(cambiarPasswordDTO.correo());
+        Optional<Cuenta> optionalCuenta = cuentaRepo.findByEmail(cambiarPasswordDTO.email());
 
         if (optionalCuenta.isEmpty()) {
-            throw new Exception("No existe una cuenta con el correo " + cambiarPasswordDTO.correo());
+            throw new Exception("No existe una cuenta con el email " + cambiarPasswordDTO.email());
         }
 
         Cuenta cuenta = optionalCuenta.get();

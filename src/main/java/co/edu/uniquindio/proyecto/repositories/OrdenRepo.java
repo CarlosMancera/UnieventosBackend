@@ -14,6 +14,5 @@ public interface OrdenRepo extends MongoRepository<OrdenCompra,String> {
     //   List<Cupon> findByUsuariosUsadosContaining(String idUsuario);
     @Query(value = "{ 'cuenta' : ?0 }", count = true)
     int countByCuenta (String idUsuario);
-
     Optional<OrdenCompra> findById (ObjectId id);
 }

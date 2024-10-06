@@ -3,7 +3,6 @@ package co.edu.uniquindio.proyecto.test;
 import co.edu.uniquindio.proyecto.model.docs.Evento;
 import co.edu.uniquindio.proyecto.model.enums.EstadoEvento;
 import co.edu.uniquindio.proyecto.model.enums.TipoEvento;
-import co.edu.uniquindio.proyecto.model.vo.Imagen;
 import co.edu.uniquindio.proyecto.model.vo.Localidad;
 import co.edu.uniquindio.proyecto.repositories.EventoRepo;
 import org.bson.types.ObjectId;
@@ -39,7 +38,7 @@ public class EventoTest {
                 .ciudad("Armenia")
                 .descripcion("Un evento de rock dentro de la universidad del Quindío")
                 .tipoEvento(TipoEvento.CONCIERTO)
-                .imagenes(imagenes)
+                .imagenes("imagen")
                 .fecha(LocalDateTime.now())
                 .localidades(localidades)
                 .estadoEvento(EstadoEvento.ACTIVO)
