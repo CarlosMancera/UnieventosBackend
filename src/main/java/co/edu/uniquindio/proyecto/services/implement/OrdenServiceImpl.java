@@ -46,41 +46,6 @@ public class OrdenServiceImpl implements OrdenService{
     private final EventoService eventoService;
 
 
-  /*
-    public List<ResumenCarritoDTO> listarCarrito(ObjectId idCuenta) throws Exception {
-        Carrito carrito = carritoRepo.findByCuenta(idCuenta)
-                .orElseThrow(() -> new Exception("Carrito no encontrado"));
-
-
-    }*/
-     @Override
-    @Transactional(readOnly = true)
-    public List<ResumenCarritoDTO> listarCarrito(ObjectId idCuenta) throws Exception {
-        Carrito carrito = carritoRepo.findByCuenta(idCuenta)
-                .orElseThrow(() -> new Exception("Carrito no encontrado"));
-
-        List<ResumenCarritoDTO> resumenCarritoList = new ArrayList<>();
-
-        for (DetalleCarrito item : carrito.getItems()) {
-            ResumenCarritoDTO resumen = convertirAResumenCarritoDTO(item);  // Método personalizado para la conversión
-            resumenCarritoList.add(resumen);
-        }
-
-        return resumenCarritoList;
-    }
-
-    private ResumenCarritoDTO convertirAResumenCarritoDTO(DetalleCarrito item) {
-        // Lógica de conversión del item al DTO
-        return new ResumenCarritoDTO(
-                eventoRepo.findById(item.getIdEvento()).get().getNombre(),
-                item.getNombreLocalidad(),
-                item.getCantidad() * item.getPrecioUnitario(),
-
-
-                // otros campos...
-        );
-    }
-
     @Override
     @Transactional
     public ResumenOrdenDTO aplicarDescuento(ObjectId idCuenta, String codigoDescuento) throws Exception {

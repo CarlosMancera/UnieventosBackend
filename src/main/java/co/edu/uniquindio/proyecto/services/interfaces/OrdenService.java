@@ -15,8 +15,6 @@ public interface OrdenService {
 
     Preference realizarPago(String idOrden) throws Exception;
 
-    List<ResumenCarritoDTO> listarCarrito(ObjectId idCuenta) throws Exception;
-
     ResumenOrdenDTO aplicarDescuento(ObjectId idCuenta, String codigoDescuento) throws Exception;
 
     OrdenCompraDTO generarOrdenCompra(ObjectId idCuenta) throws Exception;

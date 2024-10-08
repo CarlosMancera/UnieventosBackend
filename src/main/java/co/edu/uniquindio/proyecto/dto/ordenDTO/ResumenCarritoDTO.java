@@ -5,10 +5,11 @@ import org.bson.types.ObjectId;
 import java.time.LocalDateTime;
 
 public record ResumenCarritoDTO(
-        ObjectId id,
+
         String nombreEvento,
         LocalDateTime fechaEvento,
-        String localidad, int cantidad,
+        String localidad,
+        int cantidad,
         double precioUnitario
 ) {
 }

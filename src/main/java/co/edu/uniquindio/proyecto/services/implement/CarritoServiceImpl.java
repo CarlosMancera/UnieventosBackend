@@ -9,8 +9,10 @@ import co.edu.uniquindio.proyecto.model.vo.DetalleCarrito;
 import co.edu.uniquindio.proyecto.model.vo.Localidad;
 import co.edu.uniquindio.proyecto.repositories.CarritoRepo;
 import co.edu.uniquindio.proyecto.repositories.CuentaRepo;
+import co.edu.uniquindio.proyecto.repositories.CuponRepo;
 import co.edu.uniquindio.proyecto.repositories.EventoRepo;
 import co.edu.uniquindio.proyecto.services.interfaces.CarritoService;
+import jdk.jfr.Event;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,7 @@ public class CarritoServiceImpl implements CarritoService {
     private final CarritoRepo carritoRepo;
     private final CuentaRepo cuentaRepo;
     private final EventoRepo eventoRepo;
+    private final CuponRepo cuponRepo;
 
 
     //TODO
@@ -81,8 +84,19 @@ public class CarritoServiceImpl implements CarritoService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ResumenCarritoDTO> listarCarrito(ObjectId idCuenta) throws Exception {
-        return List.of();
+        Carrito carrito = carritoRepo.findByCuenta(idCuenta)
+                .orElseThrow(() -> new Exception("Carrito no encontrado"));
+
+        List<ResumenCarritoDTO> resumenCarritoList = new ArrayList<>();
+
+        for (DetalleCarrito item : carrito.getItems()) {
+            ResumenCarritoDTO resumen = convertirAResumenCarritoDTO(item);  // Método personalizado para la conversión
+            resumenCarritoList.add(resumen);
+        }
+
+        return resumenCarritoList;
     }
 
     //----------------------AUX-----------------------
@@ -98,23 +112,26 @@ public class CarritoServiceImpl implements CarritoService {
         );
     }*/
 
-    private ResumenCarritoDTO crearResumenCarritoDTO(DetalleCarrito detalle) {
-        Evento evento = eventoRepo.findById(detalle.getIdEvento()).orElseThrow();
-        return new ResumenCarritoDTO(
-                detalle.getIdEvento(),
-                evento.getNombre(),
-                evento.getFecha(),
-                detalle.getNombreLocalidad(),
-                detalle.getCantidad(),
-                detalle.getPrecioUnitario()
-        );
-    }
-
     private double calcularSubtotal(Carrito carrito) {
         return carrito.getItems().stream()
                 .mapToDouble(e -> e.getPrecioUnitario() * e.getCantidad())
                 .sum();
 
 
+    }
+
+    private ResumenCarritoDTO convertirAResumenCarritoDTO(DetalleCarrito item) {
+        // Lógica de conversión del item al DTO
+
+        Evento evento = eventoRepo.findById(item.getIdEvento()).orElseThrow();
+        return new ResumenCarritoDTO(
+                evento.getNombre(),
+                evento.getFecha(),
+                item.getNombreLocalidad(),
+                item.getCantidad(),
+                item.getPrecioUnitario()
+
+
+        );
     }
 }
