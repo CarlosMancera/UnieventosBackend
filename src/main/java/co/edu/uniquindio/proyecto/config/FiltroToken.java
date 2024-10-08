@@ -1,7 +1,7 @@
 package co.edu.uniquindio.proyecto.config;
 
 import co.edu.uniquindio.proyecto.dto.MensajeDTO;
-import co.edu.uniquindio.proyecto.model.enums.Rol;
+import co.edu.uniquindio.proyecto.model.enums.TipoUsuario;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -55,11 +55,11 @@ public class FiltroToken extends OncePerRequestFilter {
 
                 //Si la petición es para la ruta /api/cliente se verifica que el token exista y que el rol sea CLIENTE
                 if (requestURI.startsWith("/api/cliente")) {
-                    error = validarToken(token, Rol.CLIENTE);
+                    error = validarToken(token, TipoUsuario.CLIENTE);
                 }
                 //Si la petición es para la ruta /api/administrador se verifica que el token exista y que el rol sea ADMINISTRADOR
                 else if (requestURI.startsWith("/api/administrador")) {
-                    error = validarToken(token, Rol.ADMINISTRADOR);
+                    error = validarToken(token, TipoUsuario.ADMINISTRADOR);
 
                 } else {
                     error = false;
@@ -106,11 +106,11 @@ public class FiltroToken extends OncePerRequestFilter {
     }
 
 
-    private boolean validarToken(String token, Rol rol){
+    private boolean validarToken(String token, TipoUsuario rol){
         boolean error = true;
         if (token != null) {
             Jws<Claims> jws = jwtUtils.parseJwt(token);
-            if (Rol.valueOf(jws.getPayload().get("rol").toString()) == rol) {
+            if (TipoUsuario.valueOf(jws.getPayload().get("rol").toString()) == rol) {
                 error = false;
             }
         }
