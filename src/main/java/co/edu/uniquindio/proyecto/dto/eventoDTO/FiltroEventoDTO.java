@@ -6,11 +6,7 @@ import java.time.LocalDateTime;
 public record FiltroEventoDTO(
         String nombre,
         String ciudad,
-        TipoEvento tipoEvento,
-        LocalDateTime fechaInicio,
-        LocalDateTime fechaFin,
-        Double precioMin,
-        Double precioMax
+        TipoEvento tipoEvento
 ){
 
 

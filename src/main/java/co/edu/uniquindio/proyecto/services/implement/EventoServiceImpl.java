@@ -121,12 +121,14 @@ public class EventoServiceImpl implements EventoService {
 
     @Override
     public List<ResumenEventoDTO> filtrarEventos(FiltroEventoDTO filtroDTO) throws Exception {
+
         return List.of();
     }
 
     @Override
     public List<ResumenEventoDTO> buscarEventosPorNombre(String nombre) {
         return List.of();
+        
     }
 
     @Override

@@ -215,11 +215,11 @@ public class OrdenServiceImpl implements OrdenService{
 
 
 
-    private double calcularSubtotal(OrdenCompra orden) {
+    private double calcularSubtotal(Carrito carrito) {
         double subtotal = 0.0;
-        List<DetalleOrden> detalles = orden.getItems();
+        List<DetalleCarrito> detalles = carrito.getItems();
 
-        for (DetalleOrden detalle : detalles) {
+        for (DetalleCarrito detalle : detalles) {
             double precioUnitario = detalle.getPrecioUnitario();
             int cantidad = detalle.getCantidad();
             subtotal += precioUnitario * cantidad;
@@ -297,7 +297,7 @@ public class OrdenServiceImpl implements OrdenService{
         );
     }*/
 
-    private OrdenCompraDTO mapToOrdenCompraDTO(OrdenCompra orden) {
+    private OrdenCompraDTO mapToOrdenCompraDTO(OrdenCompra orden) throws Exception{
         String id = orden.getId();
         LocalDateTime fechaCreacion = orden.getFecha();
         List<DetalleOrden> items = orden.getItems();
@@ -322,12 +322,17 @@ public class OrdenServiceImpl implements OrdenService{
         );
     }
 
-    private double calcularDescuento(OrdenCompra orden) {
-        // Implementar lógica para calcular el descuento
-        return 0.0;
+    private double calcularDescuento(OrdenCompra orden) throws Exception {
+        Optional<Cupon> cuponOp = cuponRepo.findByCodigo(orden.getCupon().toString());
+        if(cuponOp.isEmpty()){
+            throw new Exception();
+        }
+        Cupon cupon = cuponOp.get();
+        double porcentaje = cupon.getDescuento();
+        return orden.getTotal()*porcentaje/100;
     }
 
-    private double calcularTotal(OrdenCompra orden) {
+    private double calcularTotal(OrdenCompra orden) throws Exception {
         return calcularSubtotal(orden) - calcularDescuento(orden);
     }
 
