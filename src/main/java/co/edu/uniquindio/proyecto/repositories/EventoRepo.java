@@ -16,4 +16,6 @@ public interface EventoRepo extends MongoRepository<Evento,String> {
 
     //Find by nombre, ciudad, tipoEvento
 
+    List<Evento> findByNombreAndCiudadAndEstado(String nombre, String ciudad, String tipoEvento);
+
 }

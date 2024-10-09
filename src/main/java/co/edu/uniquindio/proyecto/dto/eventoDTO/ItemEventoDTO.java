@@ -1,13 +1,13 @@
 package co.edu.uniquindio.proyecto.dto.eventoDTO;
 
+import co.edu.uniquindio.proyecto.model.enums.EstadoEvento;
+
 import java.time.LocalDateTime;
 
 public record ItemEventoDTO(
-        String url,
-        LocalDateTime fecha,
         String nombre,
-        String direccion,
-        boolean disponibilidad
+        LocalDateTime fecha,
+        EstadoEvento estadoEvento
 
 ) {
 }

@@ -261,8 +261,6 @@ public class CuentaServiceImpl implements CuentaService {   //con la inicializac
 
     // Método auxiliar para generar un código de recuperación
     private String generarCodigoRecuperacion() {
-        // Implementar la lógica para generar un código único
-        // Por ejemplo, puedes usar UUID o algún otro método de generación de códigos únicos
         return UUID.randomUUID().toString().substring(0, 6).toUpperCase();
     }
 

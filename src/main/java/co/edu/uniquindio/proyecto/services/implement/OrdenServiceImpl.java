@@ -21,6 +21,7 @@ import com.mercadopago.client.preference.PreferenceItemRequest;
 import com.mercadopago.client.preference.PreferenceRequest;
 import com.mercadopago.resources.payment.Payment;
 import com.mercadopago.resources.preference.Preference;
+import jdk.jfr.Event;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
@@ -228,6 +229,20 @@ public class OrdenServiceImpl implements OrdenService{
         return subtotal;
     }
 
+    private double calcularSubtotal(OrdenCompra orden) {
+        double subtotal = 0.0;
+        List<DetalleOrden> detalles = orden.getItems();
+
+        for (DetalleOrden detalle : detalles) {
+            double precioUnitario = detalle.getPrecioUnitario();
+            int cantidad = detalle.getCantidad();
+            subtotal += precioUnitario * cantidad;
+        }
+
+        return subtotal;
+    }
+
+
     @Override
     public void recibirNotificacionMercadoPago(Map<String, Object> request) throws Exception {
         try {
@@ -286,17 +301,6 @@ public class OrdenServiceImpl implements OrdenService{
 
     //_-----------------------AUX------------------------
 
-    /* private OrdenCompraDTO mapToOrdenCompraDTO(Orden orden) {
-        return new OrdenCompraDTO(
-                orden.getId(),
-                orden.getFechaCreacion(),
-                orden.getEntradas().stream().map(this::mapToResumenCarritoDTO).collect(Collectors.toList()),
-                calcularSubtotal(orden),
-                calcularDescuento(orden),
-                calcularTotal(orden)
-        );
-    }*/
-
     private OrdenCompraDTO mapToOrdenCompraDTO(OrdenCompra orden) throws Exception{
         String id = orden.getId();
         LocalDateTime fechaCreacion = orden.getFecha();
@@ -322,6 +326,16 @@ public class OrdenServiceImpl implements OrdenService{
         );
     }
 
+    private ResumenCarritoDTO mapToResumenCarritoDTO(DetalleOrden detalle) throws Exception {
+        Evento evento = eventoRepo.findById(detalle.getIdEvento())
+                .orElseThrow(() -> new Exception("Orden no encontrada"));
+
+        return new ResumenCarritoDTO(evento.getNombre(),evento.getFecha()
+                ,detalle.getNombreLocalidad(),detalle.getCantidad()
+                ,detalle.getPrecioUnitario());
+
+    }
+
     private double calcularDescuento(OrdenCompra orden) throws Exception {
         Optional<Cupon> cuponOp = cuponRepo.findByCodigo(orden.getCupon().toString());
         if(cuponOp.isEmpty()){
@@ -336,18 +350,9 @@ public class OrdenServiceImpl implements OrdenService{
         return calcularSubtotal(orden) - calcularDescuento(orden);
     }
 
-    private String generarCodigoConfirmacion() {
-        // Implementar lógica para generar un código de confirmación único
-        return "CODE" + System.currentTimeMillis();
-    }
-
-    private void enviarCodigoConfirmacion(ObjectId idCuenta, String codigoConfirmacion) throws Exception {
-        Cuenta cuenta = cuentaRepo.findById(idCuenta.toString()).orElseThrow();
-        emailService.enviarEmail(new EmailDTO("Código de confirmación", "Su código de confirmación es: " + codigoConfirmacion, cuenta.getEmail()));
-    }
-
     private void aplicarDescuentoPrimeraCompra(OrdenCompra orden) {
         // Implementar lógica para aplicar el descuento del 15% por primera compra
+
         double descuentoAdicional = calcularSubtotal(orden) * 0.15;
         // Actualizar el total de la orden con el descuento adicional
     }
@@ -372,20 +377,4 @@ public class OrdenServiceImpl implements OrdenService{
         return itemsOrden;
 
     }
-
-    private double getPrecioLocalidad(String localidad) {
-        // Implementar lógica para obtener el precio según la localidad
-        return switch (localidad) {
-            case "VIP" -> 80000.00;
-            case "Platea" -> 60000.00;
-            case "General" -> 50000.00;
-            default -> throw new IllegalArgumentException("Localidad no válida");
-        };
-    }
-
-    /*private double calcularSubtotal(Orden orden) {
-        return orden.getEntradas().stream()
-                .mapToDouble(e -> e.getPrecioUnitario() * e.getCantidad())
-                .sum();
-    }*/
 }
