@@ -2,7 +2,6 @@ package co.edu.uniquindio.proyecto.services.implement;
 
 
 import co.edu.uniquindio.proyecto.dto.cuponDTO.ResumenCuponDTO;
-import co.edu.uniquindio.proyecto.dto.emailDTO.EmailDTO;
 import co.edu.uniquindio.proyecto.dto.ordenDTO.*;
 import co.edu.uniquindio.proyecto.model.docs.*;
 import co.edu.uniquindio.proyecto.model.vo.DetalleCarrito;
@@ -10,8 +9,6 @@ import co.edu.uniquindio.proyecto.model.vo.DetalleOrden;
 import co.edu.uniquindio.proyecto.model.vo.Localidad;
 import co.edu.uniquindio.proyecto.model.vo.Pago;
 import co.edu.uniquindio.proyecto.repositories.*;
-import co.edu.uniquindio.proyecto.services.interfaces.EmailService;
-import co.edu.uniquindio.proyecto.services.interfaces.EventoService;
 import co.edu.uniquindio.proyecto.services.interfaces.OrdenService;
 import com.mercadopago.MercadoPagoConfig;
 import com.mercadopago.client.payment.PaymentClient;
@@ -21,7 +18,6 @@ import com.mercadopago.client.preference.PreferenceItemRequest;
 import com.mercadopago.client.preference.PreferenceRequest;
 import com.mercadopago.resources.payment.Payment;
 import com.mercadopago.resources.preference.Preference;
-import jdk.jfr.Event;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
@@ -39,12 +35,9 @@ import java.util.Optional;
 public class OrdenServiceImpl implements OrdenService{
 
     private final CarritoRepo carritoRepo;
-    private final CuentaRepo cuentaRepo;
     private final EventoRepo eventoRepo;
     private final OrdenRepo ordenRepo;
     private final CuponRepo cuponRepo;
-    private final EmailService emailService;
-    private final EventoService eventoService;
 
 
     @Override
@@ -62,25 +55,6 @@ public class OrdenServiceImpl implements OrdenService{
 
         return new ResumenOrdenDTO(subtotal, descuento, total);
     }
-
-    /*@Override
-    @Transactional
-    public OrdenCompraDTO generarOrdenCompra(ObjectId idCuenta) throws Exception {
-        Carrito carrito = carritoRepo.findByCuenta(idCuenta)
-                .orElseThrow(() -> new Exception("Carrito no encontrado"));
-
-        Orden orden = Orden.builder()
-                .cuenta(idCuenta)
-                .entradas(carrito.getEntradas())
-                .fechaCreacion(LocalDateTime.now())
-                .estado(EstadoOrden.PENDIENTE)
-                .build();
-
-        orden = ordenRepo.save(orden);
-        carritoRepo.delete(carrito);
-
-        return mapToOrdenCompraDTO(orden);
-    }*/
 
     @Override
     @Transactional
@@ -205,15 +179,6 @@ public class OrdenServiceImpl implements OrdenService{
     public List<ResumenCuponDTO> buscarCuponesUtilizadosPorUsuario(String idUsuario) throws Exception {
         return List.of();
     }
-
-
-
-    // Métodos auxiliares
-
-
-
-
-
 
 
     private double calcularSubtotal(Carrito carrito) {
