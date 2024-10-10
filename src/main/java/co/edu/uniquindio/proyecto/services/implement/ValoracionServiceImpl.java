@@ -4,6 +4,7 @@ import co.edu.uniquindio.proyecto.model.docs.Valoracion;
 import co.edu.uniquindio.proyecto.repositories.ValoracionRepo;
 import co.edu.uniquindio.proyecto.services.interfaces.ValoracionService;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 
@@ -36,6 +37,6 @@ public class ValoracionServiceImpl implements ValoracionService {
 
     @Override
     public void eliminarValoracionByUsuarioId(String usuarioId, Valoracion valoracion) {
-        valoracionRepo.eliminarValoracionByUsuarioId(usuarioId,valoracion.getId()); //Query en el repo
+        valoracionRepo.eliminarValoracionByUsuarioId(new ObjectId(usuarioId),valoracion.getId()); //Query en el repo
     }
 }
