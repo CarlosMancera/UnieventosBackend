@@ -159,17 +159,9 @@ public class EventoServiceImpl implements EventoService {
         evento.setEstado(nuevoEstado);
         eventoRepo.save(evento);
 
-
     }
 
-   /* @Override
-    @Transactional(readOnly = true)
-    public List<ResumenEventoDTO> buscarEventosPorNombre(String nombre) {
-        List<Evento> eventos = eventoRepo.findByNombreContainingIgnoreCase(nombre);
-        return eventos.stream()
-                .map(this::mapToResumenEventoDTO)
-                .toList();
-    }*/
+
 
     //TODO
     @Override
