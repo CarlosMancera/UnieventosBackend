@@ -28,9 +28,9 @@ public class CuentaTest {
                 .email("usuario@gmail.com")
                 .tipoUsuario(TipoUsuario.CLIENTE)
                 .estadoCuenta(EstadoCuenta.ACTIVO)
-                .codigoValidacionPassword(new CodigoValidacion("666", LocalDateTime.now()))
+                .codigoValidacionPassword(new CodigoValidacion("666", LocalDateTime.now(), LocalDateTime.now().plusMinutes(15)))
                 .password("666")
-                .codigoValidacionRegistro(new CodigoValidacion("666",LocalDateTime.now()))
+                .codigoValidacionRegistro(new CodigoValidacion("666",LocalDateTime.now(), LocalDateTime.now().plusMinutes(15)))
                 .build();
 
         List<LocalDateTime> historialConexion = new ArrayList<>();

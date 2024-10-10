@@ -24,7 +24,7 @@ public class CarritoTest {
     public void registrarTest(){
 
         List<DetalleCarrito> items = new ArrayList<>();
-        items.add(new DetalleCarrito("Platea", 5, new ObjectId("66d655cb6cab961e099b1fc4")));
+        items.add(new DetalleCarrito("Platea", 5, new ObjectId("66d655cb6cab961e099b1fc4"), 99000));
 
         Carrito carrito = Carrito.builder()
                 .fecha(LocalDateTime.now())
