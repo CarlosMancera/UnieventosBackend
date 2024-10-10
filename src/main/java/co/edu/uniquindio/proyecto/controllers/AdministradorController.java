@@ -8,11 +8,7 @@ import co.edu.uniquindio.proyecto.dto.cuponDTO.CrearCuponDTO;
 import co.edu.uniquindio.proyecto.dto.cuponDTO.EditarCuponDTO;
 import co.edu.uniquindio.proyecto.dto.cuponDTO.InformacionCuponDTO;
 import co.edu.uniquindio.proyecto.dto.cuponDTO.ResumenCuponDTO;
-import co.edu.uniquindio.proyecto.dto.eventoDTO.CrearEventoDTO;
-import co.edu.uniquindio.proyecto.dto.eventoDTO.EditarEventoDTO;
-import co.edu.uniquindio.proyecto.dto.eventoDTO.FiltroEventoDTO;
-import co.edu.uniquindio.proyecto.dto.eventoDTO.ResumenEventoDTO;
-import co.edu.uniquindio.proyecto.dto.eventoDTO.InformacionEventoDTO;
+import co.edu.uniquindio.proyecto.dto.eventoDTO.*;
 import co.edu.uniquindio.proyecto.model.enums.EstadoEvento;
 import co.edu.uniquindio.proyecto.services.interfaces.ArtistaService;
 import co.edu.uniquindio.proyecto.services.interfaces.CuponService;
@@ -147,8 +143,8 @@ public class AdministradorController {
     }
 
     @PostMapping("/filtrar")
-    public ResponseEntity<MensajeDTO<List<ResumenEventoDTO>>> filtrarEventos(@Valid @RequestBody FiltroEventoDTO filtroDTO) throws Exception {
-        List<ResumenEventoDTO> lista = eventoService.filtrarEventos(filtroDTO);
+    public ResponseEntity<MensajeDTO<List<ItemEventoDTO>>> filtrarEventos(@Valid @RequestBody FiltroEventoDTO filtroDTO) throws Exception {
+        List<ItemEventoDTO> lista = eventoService.filtrarEventos(filtroDTO);
         return ResponseEntity.ok(new MensajeDTO<>(false, lista));
     }
 

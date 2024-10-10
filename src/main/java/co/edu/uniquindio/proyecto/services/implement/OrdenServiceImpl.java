@@ -2,7 +2,6 @@ package co.edu.uniquindio.proyecto.services.implement;
 
 
 import co.edu.uniquindio.proyecto.dto.cuponDTO.ResumenCuponDTO;
-import co.edu.uniquindio.proyecto.dto.emailDTO.EmailDTO;
 import co.edu.uniquindio.proyecto.dto.ordenDTO.*;
 import co.edu.uniquindio.proyecto.model.docs.*;
 import co.edu.uniquindio.proyecto.model.vo.DetalleCarrito;
@@ -10,8 +9,6 @@ import co.edu.uniquindio.proyecto.model.vo.DetalleOrden;
 import co.edu.uniquindio.proyecto.model.vo.Localidad;
 import co.edu.uniquindio.proyecto.model.vo.Pago;
 import co.edu.uniquindio.proyecto.repositories.*;
-import co.edu.uniquindio.proyecto.services.interfaces.EmailService;
-import co.edu.uniquindio.proyecto.services.interfaces.EventoService;
 import co.edu.uniquindio.proyecto.services.interfaces.OrdenService;
 import com.mercadopago.MercadoPagoConfig;
 import com.mercadopago.client.payment.PaymentClient;
@@ -38,12 +35,9 @@ import java.util.Optional;
 public class OrdenServiceImpl implements OrdenService{
 
     private final CarritoRepo carritoRepo;
-    private final CuentaRepo cuentaRepo;
     private final EventoRepo eventoRepo;
     private final OrdenRepo ordenRepo;
     private final CuponRepo cuponRepo;
-    private final EmailService emailService;
-    private final EventoService eventoService;
 
 
     @Override
@@ -61,25 +55,6 @@ public class OrdenServiceImpl implements OrdenService{
 
         return new ResumenOrdenDTO(subtotal, descuento, total);
     }
-
-    /*@Override
-    @Transactional
-    public OrdenCompraDTO generarOrdenCompra(ObjectId idCuenta) throws Exception {
-        Carrito carrito = carritoRepo.findByCuenta(idCuenta)
-                .orElseThrow(() -> new Exception("Carrito no encontrado"));
-
-        Orden orden = Orden.builder()
-                .cuenta(idCuenta)
-                .entradas(carrito.getEntradas())
-                .fechaCreacion(LocalDateTime.now())
-                .estado(EstadoOrden.PENDIENTE)
-                .build();
-
-        orden = ordenRepo.save(orden);
-        carritoRepo.delete(carrito);
-
-        return mapToOrdenCompraDTO(orden);
-    }*/
 
     @Override
     @Transactional
@@ -206,14 +181,18 @@ public class OrdenServiceImpl implements OrdenService{
     }
 
 
+    private double calcularSubtotal(Carrito carrito) {
+        double subtotal = 0.0;
+        List<DetalleCarrito> detalles = carrito.getItems();
 
-    // Métodos auxiliares
+        for (DetalleCarrito detalle : detalles) {
+            double precioUnitario = detalle.getPrecioUnitario();
+            int cantidad = detalle.getCantidad();
+            subtotal += precioUnitario * cantidad;
+        }
 
-
-
-
-
-
+        return subtotal;
+    }
 
     private double calcularSubtotal(OrdenCompra orden) {
         double subtotal = 0.0;
@@ -227,6 +206,7 @@ public class OrdenServiceImpl implements OrdenService{
 
         return subtotal;
     }
+
 
     @Override
     public void recibirNotificacionMercadoPago(Map<String, Object> request) throws Exception {
@@ -286,18 +266,7 @@ public class OrdenServiceImpl implements OrdenService{
 
     //_-----------------------AUX------------------------
 
-    /* private OrdenCompraDTO mapToOrdenCompraDTO(Orden orden) {
-        return new OrdenCompraDTO(
-                orden.getId(),
-                orden.getFechaCreacion(),
-                orden.getEntradas().stream().map(this::mapToResumenCarritoDTO).collect(Collectors.toList()),
-                calcularSubtotal(orden),
-                calcularDescuento(orden),
-                calcularTotal(orden)
-        );
-    }*/
-
-    private OrdenCompraDTO mapToOrdenCompraDTO(OrdenCompra orden) {
+    private OrdenCompraDTO mapToOrdenCompraDTO(OrdenCompra orden) throws Exception{
         String id = orden.getId();
         LocalDateTime fechaCreacion = orden.getFecha();
         List<DetalleOrden> items = orden.getItems();
@@ -322,27 +291,33 @@ public class OrdenServiceImpl implements OrdenService{
         );
     }
 
-    private double calcularDescuento(OrdenCompra orden) {
-        // Implementar lógica para calcular el descuento
-        return 0.0;
+    private ResumenCarritoDTO mapToResumenCarritoDTO(DetalleOrden detalle) throws Exception {
+        Evento evento = eventoRepo.findById(detalle.getIdEvento())
+                .orElseThrow(() -> new Exception("Orden no encontrada"));
+
+        return new ResumenCarritoDTO(evento.getNombre(),evento.getFecha()
+                ,detalle.getNombreLocalidad(),detalle.getCantidad()
+                ,detalle.getPrecioUnitario());
+
     }
 
-    private double calcularTotal(OrdenCompra orden) {
+    private double calcularDescuento(OrdenCompra orden) throws Exception {
+        Optional<Cupon> cuponOp = cuponRepo.findByCodigo(orden.getCupon().toString());
+        if(cuponOp.isEmpty()){
+            throw new Exception();
+        }
+        Cupon cupon = cuponOp.get();
+        double porcentaje = cupon.getDescuento();
+        return orden.getTotal()*porcentaje/100;
+    }
+
+    private double calcularTotal(OrdenCompra orden) throws Exception {
         return calcularSubtotal(orden) - calcularDescuento(orden);
-    }
-
-    private String generarCodigoConfirmacion() {
-        // Implementar lógica para generar un código de confirmación único
-        return "CODE" + System.currentTimeMillis();
-    }
-
-    private void enviarCodigoConfirmacion(ObjectId idCuenta, String codigoConfirmacion) throws Exception {
-        Cuenta cuenta = cuentaRepo.findById(idCuenta.toString()).orElseThrow();
-        emailService.enviarEmail(new EmailDTO("Código de confirmación", "Su código de confirmación es: " + codigoConfirmacion, cuenta.getEmail()));
     }
 
     private void aplicarDescuentoPrimeraCompra(OrdenCompra orden) {
         // Implementar lógica para aplicar el descuento del 15% por primera compra
+
         double descuentoAdicional = calcularSubtotal(orden) * 0.15;
         // Actualizar el total de la orden con el descuento adicional
     }
@@ -367,20 +342,4 @@ public class OrdenServiceImpl implements OrdenService{
         return itemsOrden;
 
     }
-
-    private double getPrecioLocalidad(String localidad) {
-        // Implementar lógica para obtener el precio según la localidad
-        return switch (localidad) {
-            case "VIP" -> 80000.00;
-            case "Platea" -> 60000.00;
-            case "General" -> 50000.00;
-            default -> throw new IllegalArgumentException("Localidad no válida");
-        };
-    }
-
-    /*private double calcularSubtotal(Orden orden) {
-        return orden.getEntradas().stream()
-                .mapToDouble(e -> e.getPrecioUnitario() * e.getCantidad())
-                .sum();
-    }*/
 }

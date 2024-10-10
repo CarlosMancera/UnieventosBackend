@@ -6,6 +6,7 @@ import co.edu.uniquindio.proyecto.dto.deseoDTO.AgregarDeseoDTO;
 import co.edu.uniquindio.proyecto.dto.deseoDTO.ResumenDeseoDTO;
 import co.edu.uniquindio.proyecto.dto.eventoDTO.FiltroEventoDTO;
 import co.edu.uniquindio.proyecto.dto.eventoDTO.InformacionEventoDTO;
+import co.edu.uniquindio.proyecto.dto.eventoDTO.ItemEventoDTO;
 import co.edu.uniquindio.proyecto.dto.eventoDTO.ResumenEventoDTO;
 import co.edu.uniquindio.proyecto.dto.ordenDTO.AgregarAlCarritoDTO;
 import co.edu.uniquindio.proyecto.dto.ordenDTO.OrdenCompraDTO;
@@ -95,8 +96,8 @@ public class ClienteController {
     }
 
     @PostMapping("/filtrar-eventos")
-    public ResponseEntity<MensajeDTO<List<ResumenEventoDTO>>> filtrarEventos(@Valid @RequestBody FiltroEventoDTO filtroDTO) throws Exception {
-        List<ResumenEventoDTO> lista = eventoService.filtrarEventos(filtroDTO);
+    public ResponseEntity<MensajeDTO<List<ItemEventoDTO>>> filtrarEventos(@Valid @RequestBody FiltroEventoDTO filtroDTO) throws Exception {
+        List<ItemEventoDTO> lista = eventoService.filtrarEventos(filtroDTO);
         return ResponseEntity.ok(new MensajeDTO<>(false, lista));
     }
 

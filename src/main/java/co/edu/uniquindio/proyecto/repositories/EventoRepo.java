@@ -11,6 +11,11 @@ import java.util.List;
 public interface EventoRepo extends MongoRepository<Evento,String> {
 
     List<Evento> findByNombreContainingIgnoreCase(String nombre);
+
     Optional<Evento> findById(ObjectId id);
+
+    //Find by nombre, ciudad, tipoEvento
+
+    List<Evento> findByNombreAndCiudadAndEstado(String nombre, String ciudad, String tipoEvento);
 
 }

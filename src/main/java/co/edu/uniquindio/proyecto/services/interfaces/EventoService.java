@@ -18,7 +18,7 @@ public interface EventoService {
 
     List<ResumenEventoDTO> listarEventos() throws Exception;
 
-    List<ResumenEventoDTO> filtrarEventos(FiltroEventoDTO filtroDTO) throws Exception;
+    List<ItemEventoDTO> filtrarEventos(FiltroEventoDTO filtroDTO) throws Exception;
 
     void cambiarEstadoEvento(String id, EstadoEvento nuevoEstado) throws Exception;
 

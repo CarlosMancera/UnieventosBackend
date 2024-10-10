@@ -5,7 +5,6 @@ import co.edu.uniquindio.proyecto.dto.eventoDTO.*;
 import co.edu.uniquindio.proyecto.model.docs.Evento;
 import co.edu.uniquindio.proyecto.model.enums.EstadoEvento;
 import co.edu.uniquindio.proyecto.repositories.EventoRepo;
-import co.edu.uniquindio.proyecto.services.interfaces.ArchivoService;
 import co.edu.uniquindio.proyecto.services.interfaces.EventoService;
 import co.edu.uniquindio.proyecto.services.interfaces.ImagenesService;
 import lombok.RequiredArgsConstructor;
@@ -105,7 +104,6 @@ public class EventoServiceImpl implements EventoService {
 
         for (Evento evento : eventos) {                          //Recorremos la lista de eventos y por cada uno
             items.add( new ResumenEventoDTO(                        //creamos un DTO y lo agregamos a la lista
-                    evento.getId(),
                     evento.getNombre(),
                     evento.getFecha(),
                     evento.getDireccion(),
@@ -119,18 +117,48 @@ public class EventoServiceImpl implements EventoService {
 
     }
 
+    //TODO
     @Override
-    public List<ResumenEventoDTO> filtrarEventos(FiltroEventoDTO filtroDTO) throws Exception {
-        return List.of();
+    public List<ItemEventoDTO> filtrarEventos(FiltroEventoDTO filtroDTO) throws Exception {
+
+        List<Evento> listaEventos = eventoRepo.findByNombreAndCiudadAndEstado(filtroDTO.nombre(),filtroDTO.ciudad(),String.valueOf(filtroDTO.tipoEvento()));
+        ArrayList<ItemEventoDTO> items = new ArrayList<>();
+        for (Evento evento : listaEventos){
+
+            items.add( new ItemEventoDTO(evento.getNombre(),evento.getFecha(),evento.getEstadoEvento()));
+
+        }
+
+        return items;
     }
 
     @Override
     public List<ResumenEventoDTO> buscarEventosPorNombre(String nombre) {
-        return List.of();
+
+        List<Evento> listaEventos = eventoRepo.findByNombreContainingIgnoreCase(nombre);
+        List<ResumenEventoDTO> resumenEventos = new ArrayList<>();
+        for (Evento evento : listaEventos){
+
+            resumenEventos.add(new ResumenEventoDTO( evento.getNombre(), evento.getFecha(),
+                    evento.getDireccion(), evento.getCapacidad(), evento.getTipoEvento(), evento.getEstadoEvento()));
+
+        }
+
+        return resumenEventos;
+
     }
 
     @Override
     public void cambiarEstadoEvento(String id, EstadoEvento nuevoEstado) throws Exception {
+
+        Optional<Evento> eventoOp = eventoRepo.findById(id);
+        if(eventoOp.isEmpty()) throw new Exception();
+
+        Evento evento = eventoOp.get();
+
+        evento.setEstado(nuevoEstado);
+        eventoRepo.save(evento);
+
 
     }
 
