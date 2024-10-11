@@ -9,6 +9,7 @@ import co.edu.uniquindio.proyecto.dto.cuentaDTO.EditarCuentaDTO;
 import co.edu.uniquindio.proyecto.dto.cuentaDTO.InformacionCuentaDTO;
 import co.edu.uniquindio.proyecto.dto.cuentaDTO.ItemCuentaDTO;
 import co.edu.uniquindio.proyecto.services.interfaces.CuentaService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/cuenta")
+@SecurityRequirement(name = "bearerAuth")
 public class CuentaController {
 
     @Autowired

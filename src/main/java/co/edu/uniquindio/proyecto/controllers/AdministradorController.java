@@ -14,6 +14,7 @@ import co.edu.uniquindio.proyecto.services.interfaces.ArtistaService;
 import co.edu.uniquindio.proyecto.services.interfaces.CuponService;
 import co.edu.uniquindio.proyecto.services.interfaces.EventoService;
 import co.edu.uniquindio.proyecto.services.interfaces.ImagenesService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/administrador")
+@SecurityRequirement(name = "bearerAuth")
 public class AdministradorController {
 
     @Autowired

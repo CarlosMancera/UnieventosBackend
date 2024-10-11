@@ -15,6 +15,7 @@ import co.edu.uniquindio.proyecto.dto.ordenDTO.ResumenOrdenDTO;
 import co.edu.uniquindio.proyecto.model.docs.Valoracion;
 import co.edu.uniquindio.proyecto.services.interfaces.*;
 import com.mercadopago.resources.preference.Preference;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
@@ -28,6 +29,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/cliente")
+@SecurityRequirement(name = "bearerAuth")
 public class ClienteController {
 
     @Autowired
