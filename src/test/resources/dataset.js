@@ -1,3 +1,5 @@
+
+db = connect('mongodb://localhost:27017/proyecto');
 db.artistas.insertMany([
 {
   "nombre": "CURA METAL",
@@ -38,7 +40,7 @@ db.artistas.insertMany([
   "telefono": "7452011",
   "estado": "DISPONIBLE",
   "_class": "co.edu.uniquindio.proyecto.model.docs.Artista"
-})]
+}])
 
 db.carritos.insertMany([
   {
