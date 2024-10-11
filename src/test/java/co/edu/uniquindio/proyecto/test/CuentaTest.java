@@ -6,7 +6,6 @@ import co.edu.uniquindio.proyecto.model.enums.TipoUsuario;
 import co.edu.uniquindio.proyecto.model.vo.CodigoValidacion;
 import co.edu.uniquindio.proyecto.model.vo.Usuario;
 import co.edu.uniquindio.proyecto.repositories.CuentaRepo;
-import co.edu.uniquindio.proyecto.services.implement.CuentaServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
