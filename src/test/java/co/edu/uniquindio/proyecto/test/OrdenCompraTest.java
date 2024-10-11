@@ -27,16 +27,17 @@ public class OrdenCompraTest {
 
 
         List<DetalleOrden> items = new ArrayList<>();
-        items.add(new DetalleOrden("Platea", 5,new ObjectId("66d655cb6cab961e099b1fc4"),10000));
+        items.add(new DetalleOrden("Platea", 5,new ObjectId("67085b8a76fafb320689e149"),10000));
 
         OrdenCompra ordenCompra = OrdenCompra.builder()
                 .codigo("666")
-                .cliente(new ObjectId("66d651c3054efe107386b4a8"))
+                .cliente(new ObjectId("670854d36e334608369450c8"))
                 .items(items)
                 .cupon(null)
                 .total(50000)
                 .fecha(LocalDateTime.now())
                 .pago(new Pago("666","efectivo","pagado",50000,LocalDateTime.now()))
+                .codigo("dasfhusidjgaeg6465")
                 .build();
 
         OrdenCompra ordenRegistro = ordenRepo.save(ordenCompra);

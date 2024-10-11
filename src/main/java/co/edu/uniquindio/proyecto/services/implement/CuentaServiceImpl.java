@@ -49,7 +49,7 @@ public class CuentaServiceImpl implements CuentaService {   //con la inicializac
 
         Cuenta nuevaCuenta = new Cuenta();
         nuevaCuenta.setEmail(cuenta.email());
-        nuevaCuenta.setPassword(cuenta.password());
+        nuevaCuenta.setPassword(encriptarPassword(cuenta.password()));
         nuevaCuenta.setTipoUsuario(TipoUsuario.CLIENTE);
         nuevaCuenta.setFechaRegistro(LocalDateTime.now());
         nuevaCuenta.setUsuario(new Usuario(cuenta.cedula(), cuenta.nombre(),

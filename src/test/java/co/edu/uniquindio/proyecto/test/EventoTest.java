@@ -27,8 +27,9 @@ public class EventoTest {
 
         String imagen = "imagen1.com";
         List<Localidad> localidades = new ArrayList<>();
-        localidades.add(new Localidad("Unica",10000,500,300,true,"La única localidad que existe","imagen2.com"));
-        ObjectId artista = new ObjectId("66d26dba608dd86ee6c4955d");
+        localidades.add(new Localidad("Platea",10000,500,300,true,"De las mejorcitas","imagenLocal1.com"));
+        localidades.add(new Localidad("Palco",5000,600,400,true,"De las mejorcitas","imagenLocal2.com"));
+        ObjectId artista = new ObjectId("670859e75d9e140c90a3aae0");
 
 
         Evento evento = Evento.builder()
@@ -37,8 +38,8 @@ public class EventoTest {
                 .ciudad("Armenia")
                 .descripcion("Un evento de rock dentro de la universidad del Quindío")
                 .tipoEvento(TipoEvento.CONCIERTO)
-                .imagenes(imagen)
-                .fecha(LocalDateTime.now())
+                .imagen(imagen)
+                .fecha(LocalDateTime.now().plusMonths(12))
                 .localidades(localidades)
                 .estadoEvento(EstadoEvento.ACTIVO)
                 .artista(artista)

@@ -36,14 +36,14 @@ public class Evento {
     private EstadoEvento estado;
 
     @Builder
-    public Evento(String nombre, String direccion, String ciudad, String descripcion, TipoEvento tipoEvento, String imagenes, LocalDateTime fecha, List<Localidad> localidades, EstadoEvento estadoEvento, ObjectId artista) {
+    public Evento(String nombre, String direccion, String ciudad, String descripcion, TipoEvento tipoEvento, String imagen, LocalDateTime fecha, List<Localidad> localidades, EstadoEvento estadoEvento, ObjectId artista) {
 
         this.nombre = nombre;
         this.direccion = direccion;
         this.ciudad = ciudad;
         this.descripcion = descripcion;
         this.tipoEvento = tipoEvento;
-        this.imagen = imagenes;
+        this.imagen = imagen;
         this.fecha = fecha;
         this.localidades = localidades;
         this.estadoEvento = estadoEvento;

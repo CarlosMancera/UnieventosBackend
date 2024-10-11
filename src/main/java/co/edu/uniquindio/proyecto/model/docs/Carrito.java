@@ -29,10 +29,13 @@ public class Carrito {
     private String cupon;
 
     @Builder
-    public Carrito(LocalDateTime fecha, List<DetalleCarrito> items, ObjectId idUsuario) {
+    public Carrito(LocalDateTime fecha, List<DetalleCarrito> items, ObjectId idUsuario, double total, double subTotal, String cupon) {
         this.fecha = fecha;
         this.items = items;
         this.idUsuario = idUsuario;
+        this.total = total;
+        this.subTotal = subTotal;
+        this.cupon = cupon;
     }
 }
 

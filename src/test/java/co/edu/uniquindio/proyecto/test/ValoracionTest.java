@@ -21,8 +21,8 @@ public class ValoracionTest {
     public void registrarTest(){
 
         Valoracion valoracion = Valoracion.builder()
-                .evento(new ObjectId("66d655cb6cab961e099b1fc4"))
-                .usuario(new ObjectId("66d651c3054efe107386b4a8"))
+                .evento(new ObjectId("67085b8a76fafb320689e149"))
+                .usuario(new ObjectId("670854d36e334608369450c8"))
                 .puntuacion(5)
                 .comentario("Muy bueno, la cerveza y la banda")
                 .fecha(LocalDateTime.now())

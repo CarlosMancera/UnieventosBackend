@@ -24,12 +24,15 @@ public class CarritoTest {
     public void registrarTest(){
 
         List<DetalleCarrito> items = new ArrayList<>();
-        items.add(new DetalleCarrito("Platea", 5, new ObjectId("66d655cb6cab961e099b1fc4"), 99000));
+        items.add(new DetalleCarrito("Platea", 5, new ObjectId("67085b8a76fafb320689e149"), 99000));
 
         Carrito carrito = Carrito.builder()
                 .fecha(LocalDateTime.now())
                 .items(items)
-                .idUsuario(new ObjectId("66d651c3054efe107386b4a8"))
+                .idUsuario(new ObjectId("670854d36e334608369450c8"))
+                .total(495000)
+                .subTotal(346500)
+                .cupon("This is halloween")
                 .build();
 
         Carrito carritoRegistro = carritoRepo.save(carrito);

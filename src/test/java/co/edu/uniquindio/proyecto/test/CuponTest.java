@@ -22,12 +22,14 @@ public class CuponTest {
     public void registrarTest(){
 
         Cupon cupon = Cupon.builder()
-                .codigo("666")
+                .codigo("This is halloween")
                 .descuento(0.3)
                 .fechaVencimiento(LocalDateTime.of(2024,10,31,23,59))
                 .tipoCupon(TipoCupon.MULTIPLE)
                 .estado(EstadoCupon.ACTIVO)
                 .esEspecial(true)
+                .limiteUso(50)
+                .cantidadUsados(25)
                 .build();
 
         Cupon cuponRegistro = cuponRepo.save(cupon);

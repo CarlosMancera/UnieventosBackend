@@ -9,7 +9,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Document("cuentas")
 @Setter
@@ -32,7 +31,6 @@ public class Cuenta {
     private LocalDateTime fechaRegistro;
     private String password;
     private CodigoValidacion codigoValidacionRegistro;
-    private List<LocalDateTime> historialConexion;
 
     @Builder
     public Cuenta(String email, TipoUsuario tipoUsuario, EstadoCuenta estadoCuenta, CodigoValidacion codigoValidacionPassword, Usuario usuario, LocalDateTime fechaRegistro, String password, CodigoValidacion codigoValidacionRegistro) {
