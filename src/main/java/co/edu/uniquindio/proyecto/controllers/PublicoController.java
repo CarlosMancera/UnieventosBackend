@@ -6,6 +6,7 @@ import co.edu.uniquindio.proyecto.dto.eventoDTO.InformacionEventoDTO;
 import co.edu.uniquindio.proyecto.dto.eventoDTO.ItemEventoDTO;
 import co.edu.uniquindio.proyecto.dto.eventoDTO.ResumenEventoDTO;
 import co.edu.uniquindio.proyecto.services.interfaces.EventoService;
+import co.edu.uniquindio.proyecto.services.interfaces.OrdenService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,6 +23,8 @@ public class PublicoController {
 
     @Autowired
     private EventoService eventoService;
+    @Autowired
+    private OrdenService ordenService;
 
     @GetMapping("/obtener-info-evento/{id}")
     public ResponseEntity<MensajeDTO<InformacionEventoDTO>> obtenerInformacionEvento(@PathVariable String id) throws Exception {
@@ -44,6 +48,11 @@ public class PublicoController {
     public ResponseEntity<MensajeDTO<List<ResumenEventoDTO>>> buscarEventosPorNombre(@PathVariable String nombre) {
         List<ResumenEventoDTO> lista = eventoService.buscarEventosPorNombre(nombre);
         return ResponseEntity.ok(new MensajeDTO<>(false, lista));
+    }
+
+    @PostMapping("/orden/recibir-notificacion")
+    public void recibirNotificacionMercadoPago(@RequestBody Map<String, Object>) request throws Exception {
+        ordenService.recibirNotificacionMercadoPago (request);
     }
 
 
