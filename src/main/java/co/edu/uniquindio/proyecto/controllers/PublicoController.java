@@ -51,7 +51,7 @@ public class PublicoController {
     }
 
     @PostMapping("/orden/recibir-notificacion")
-    public void recibirNotificacionMercadoPago(@RequestBody Map<String, Object>) request throws Exception {
+    public void recibirNotificacionMercadoPago(@RequestBody Map<String, Object> request ) throws Exception {
         ordenService.recibirNotificacionMercadoPago (request);
     }
 
