@@ -10,9 +10,7 @@ public record EditarCuentaDTO(
         @NotBlank @Length(max = 10)
         String telefono,
         @Length(max = 80)
-        String direccion,
-        @NotBlank @Length(min = 7, max = 20)
-        String password
+        String direccion
 
 ) {
 }

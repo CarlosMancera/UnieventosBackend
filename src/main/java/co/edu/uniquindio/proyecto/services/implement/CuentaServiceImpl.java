@@ -86,7 +86,7 @@ public class CuentaServiceImpl implements CuentaService {   //con la inicializac
         cuentaModificada.getUsuario().setNombreCompleto( cuenta.nombre() );
         cuentaModificada.getUsuario().setTelefono( cuenta.telefono() );
         cuentaModificada.getUsuario().setDireccion( cuenta.direccion() );
-        cuentaModificada.setPassword( cuenta.password() );
+        //cuentaModificada.setPassword( encriptarPassword(cuenta.password()));
 
                                                                         //Como el objeto cuenta ya tiene
         cuentaRepo.save(cuentaModificada);                              //un id, el save() no crea un nuevo
@@ -149,7 +149,7 @@ public class CuentaServiceImpl implements CuentaService {   //con la inicializac
         Cuenta cuenta = optionalCuenta.get();
 
         // Generar un código de recuperación único
-        String codigoRecuperacion = generarCodigoRecuperacion(); // Implementar este método
+        String codigoRecuperacion = generarCodigoRecuperacion();
 
         // Actualizar la cuenta con el nuevo código de recuperación
         cuenta.setCodigoValidacionPassword(new CodigoValidacion(
