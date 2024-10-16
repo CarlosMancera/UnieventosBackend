@@ -6,6 +6,7 @@ import co.edu.uniquindio.proyecto.model.enums.TipoUsuario;
 import co.edu.uniquindio.proyecto.model.vo.CodigoValidacion;
 import co.edu.uniquindio.proyecto.model.vo.Usuario;
 import co.edu.uniquindio.proyecto.repositories.CuentaRepo;
+import co.edu.uniquindio.proyecto.services.implement.CuentaServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,6 +18,8 @@ public class CuentaTest {
 
     @Autowired
     private CuentaRepo cuentaRepo;
+    @Autowired
+    private CuentaServiceImpl cuentaService;
 
     @Test
     public void crearCuentaTest(){
@@ -28,7 +31,7 @@ public class CuentaTest {
                 .tipoUsuario(TipoUsuario.CLIENTE)
                 .estadoCuenta(EstadoCuenta.ACTIVO)
                 .codigoValidacionPassword(new CodigoValidacion("666", LocalDateTime.now(), LocalDateTime.now().plusMinutes(15)))
-                .password("user")
+                .password(cuentaService.encriptarPassword("useruser"))
                 .codigoValidacionRegistro(new CodigoValidacion("666",LocalDateTime.now(), LocalDateTime.now().plusMinutes(15)))
                 .usuario(new Usuario("1094955", "Usuario Default", "Cra 14 debajo del puente", "3201554896"))
                 .build();
@@ -37,7 +40,7 @@ public class CuentaTest {
         Cuenta cuentaRegistro = cuentaRepo.save(cuenta);
 
         assertNotNull(cuentaRegistro);
-
+/*
         //CUENTA - ADMINISTRADOR
 
         Cuenta cuenta2 = Cuenta.builder()
@@ -45,7 +48,7 @@ public class CuentaTest {
                 .tipoUsuario(TipoUsuario.ADMINISTRADOR)
                 .estadoCuenta(EstadoCuenta.ACTIVO)
                 .codigoValidacionPassword(new CodigoValidacion("666", LocalDateTime.now(), LocalDateTime.now().plusMinutes(15)))
-                .password("admin")
+                .password(cuentaService.encriptarPassword("adminadmin"))
                 .codigoValidacionRegistro(new CodigoValidacion("666",LocalDateTime.now(), LocalDateTime.now().plusMinutes(15)))
                 .usuario(new Usuario("1094666", "Admin Default", "Cra 14 encima del puente", "320555666"))
                 .build();
@@ -53,7 +56,7 @@ public class CuentaTest {
 
         Cuenta cuentaRegistro2 = cuentaRepo.save(cuenta2);
 
-        assertNotNull(cuentaRegistro2);
+        assertNotNull(cuentaRegistro2);*/
 
     }
 

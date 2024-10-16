@@ -99,19 +99,6 @@ public class CarritoServiceImpl implements CarritoService {
         return resumenCarritoList;
     }
 
-    //----------------------AUX-----------------------
-   /* private ResumenCarritoDTO mapToResumenCarritoDTO(Entrada entrada) {
-        Evento evento =
-        return new ResumenCarritoDTO(
-                entrada.getId(),
-                evento.getNombre(),
-                evento.getFecha(),
-                entrada.getLocalidad(),
-                entrada.getCantidad(),
-                entrada.getPrecioUnitario()
-        );
-    }*/
-
     private double calcularSubtotal(Carrito carrito) {
         return carrito.getItems().stream()
                 .mapToDouble(e -> e.getPrecioUnitario() * e.getCantidad())

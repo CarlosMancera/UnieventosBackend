@@ -6,6 +6,7 @@ import co.edu.uniquindio.proyecto.dto.cuentaDTO.CrearCuentaDTO;
 import co.edu.uniquindio.proyecto.dto.cuentaDTO.EditarCuentaDTO;
 import co.edu.uniquindio.proyecto.dto.cuentaDTO.InformacionCuentaDTO;
 import co.edu.uniquindio.proyecto.dto.cuentaDTO.ItemCuentaDTO;
+import co.edu.uniquindio.proyecto.dto.emailDTO.EmailDTO;
 import co.edu.uniquindio.proyecto.model.docs.Cuenta;
 import co.edu.uniquindio.proyecto.model.enums.EstadoCuenta;
 import co.edu.uniquindio.proyecto.model.enums.TipoUsuario;
@@ -30,6 +31,7 @@ public class CuentaServiceImpl implements CuentaService {   //con la inicializac
 
     private final CuentaRepo cuentaRepo;
     private final JWTUtils jwtUtils;
+    private final EmailServiceImpl emailService;
 
 
     @Override
@@ -65,7 +67,7 @@ public class CuentaServiceImpl implements CuentaService {   //con la inicializac
 
         //TODO Enviar un email al usuario con el código de validación
 
-        return cuentaCreada.getId().toString();                         //Por ahora digamos que está bien
+        return cuentaCreada.getId();                         //Por ahora digamos que está bien
     }                                                                   //retornar retornar el ID
 
 
@@ -153,7 +155,7 @@ public class CuentaServiceImpl implements CuentaService {   //con la inicializac
 
         cuentaRepo.save(cuenta);
 
-        // TODO: Enviar un email al usuario con el código de recuperación
+        emailService.enviarEmail(new EmailDTO(email, "Codigo de recuperacion", generarCodigoRecuperacion()));
 
         return "Se ha enviado un código de recuperación a su correo electrónico";
     }
@@ -264,7 +266,7 @@ public class CuentaServiceImpl implements CuentaService {   //con la inicializac
         return UUID.randomUUID().toString().substring(0, 6).toUpperCase();
     }
 
-    private String encriptarPassword(String password){
+    public String encriptarPassword(String password){
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder.encode( password );
     }

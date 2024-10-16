@@ -121,11 +121,11 @@ public class EventoServiceImpl implements EventoService {
     @Override
     public List<ItemEventoDTO> filtrarEventos(FiltroEventoDTO filtroDTO) throws Exception {
 
-        List<Evento> listaEventos = eventoRepo.findByNombreAndCiudadAndEstado(filtroDTO.nombre(),filtroDTO.ciudad(),String.valueOf(filtroDTO.tipoEvento()));
+        List<Evento> listaEventos = eventoRepo.findByNombreAndCiudadAndTipoEvento(filtroDTO.nombre(),filtroDTO.ciudad(),filtroDTO.tipoEvento());
         ArrayList<ItemEventoDTO> items = new ArrayList<>();
         for (Evento evento : listaEventos){
 
-            items.add( new ItemEventoDTO(evento.getNombre(),evento.getFecha(),evento.getEstadoEvento()));
+            items.add( new ItemEventoDTO(evento.getNombre(),evento.getFecha(),evento.getTipoEvento()));
 
         }
 

@@ -22,7 +22,6 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/cuenta")
-@SecurityRequirement(name = "bearerAuth")
 public class CuentaController {
 
     @Autowired
@@ -33,25 +32,25 @@ public class CuentaController {
         cuentaService.crearCuenta(cuenta);
     }
 
+    @SecurityRequirement(name = "bearerAuth")
     @PutMapping("/editar-perfil")
     public void editarCuenta(@Valid @RequestBody EditarCuentaDTO cuenta) throws Exception{
         cuentaService.editarCuenta(cuenta);
     }
 
+    @SecurityRequirement(name = "bearerAuth")
     @DeleteMapping("/eliminar-cuenta/{id}")
     public void eliminarCuenta(@PathVariable String id) throws Exception{
         cuentaService.eliminarCuenta(id);
     }
 
+    @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/obtener-info-cuenta/{id}")
     public InformacionCuentaDTO obtenerInformacionCuenta(@PathVariable String id) throws Exception{
         return cuentaService.obtenerInformacionCuenta(id);
     }
 
-    @GetMapping("/listar-todo")
-    public List<ItemCuentaDTO> listarCuentas() throws Exception{
-        return cuentaService.listarCuentas();
-    }
+    @SecurityRequirement(name = "bearerAuth")
     @PostMapping("/recuperar-password")
     public ResponseEntity<MensajeDTO<String>> enviarCodigoRecuperacionPassword(@RequestParam String correo) throws Exception {
         String mensaje = cuentaService.enviarCodigoRecuperacionPassword(correo);
@@ -59,12 +58,14 @@ public class CuentaController {
     }
 
     //Cuando olvida contraseña, y permite crear una nueva
+    @SecurityRequirement(name = "bearerAuth")
     @PutMapping("/cambiar-password")
     public ResponseEntity<MensajeDTO<String>> cambiarPassword(@Valid @RequestBody CambiarPasswordDTO cambiarPasswordDTO) throws Exception {
         String mensaje = cuentaService.cambiarPassword(cambiarPasswordDTO);
         return ResponseEntity.ok(new MensajeDTO<>(false, mensaje));
     }
 
+    @SecurityRequirement(name = "bearerAuth")
     @PostMapping("/iniciar-sesion")
     public ResponseEntity<MensajeDTO<TokenDTO>> iniciarSesion(@Valid @RequestBody LoginDTO loginDTO) throws Exception {
         TokenDTO token = cuentaService.iniciarSesion(loginDTO);

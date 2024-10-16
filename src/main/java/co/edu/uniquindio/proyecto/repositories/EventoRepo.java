@@ -1,6 +1,8 @@
 package co.edu.uniquindio.proyecto.repositories;
 
 import co.edu.uniquindio.proyecto.model.docs.Evento;
+import co.edu.uniquindio.proyecto.model.enums.EstadoEvento;
+import co.edu.uniquindio.proyecto.model.enums.TipoEvento;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
@@ -16,6 +18,6 @@ public interface EventoRepo extends MongoRepository<Evento,String> {
 
     //Find by nombre, ciudad, tipoEvento
 
-    List<Evento> findByNombreAndCiudadAndEstado(String nombre, String ciudad, String tipoEvento);
+    List<Evento> findByNombreAndCiudadAndTipoEvento(String nombre, String ciudad, TipoEvento estadoEvento);
 
 }
