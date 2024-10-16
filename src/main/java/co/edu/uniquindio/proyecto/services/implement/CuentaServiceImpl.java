@@ -78,6 +78,9 @@ public class CuentaServiceImpl implements CuentaService {   //con la inicializac
                                                                             //Buscamos la cuenta del
         Optional<Cuenta> optionalCuenta = getCuenta(cuenta.id());           //usuario que se quiere actualizar
 
+        if (optionalCuenta.isEmpty()) {
+            throw new Exception("No existe una cuenta con el id " + cuenta.id());
+        }
                                                                             //Obtenemos la cuenta del
         Cuenta cuentaModificada = optionalCuenta.get();                     //usuario a modificar y actualizamos sus datos
         cuentaModificada.getUsuario().setNombreCompleto( cuenta.nombre() );
@@ -98,6 +101,9 @@ public class CuentaServiceImpl implements CuentaService {   //con la inicializac
                                                             //Buscamos la cuenta del usuario
         Optional<Cuenta> optionalCuenta = getCuenta(id);    //que se quiere eliminar
 
+        if (optionalCuenta.isEmpty()) {
+            throw new Exception("No existe una cuenta con el id " + id);
+        }
                                                             //Obtenemos la cuenta del usuario que
         Cuenta cuenta = optionalCuenta.get();               //se quiere eliminar y le asignamos el estado eliminado
         cuenta.setEstadoCuenta(EstadoCuenta.ELIMINADO);
