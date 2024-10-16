@@ -139,7 +139,7 @@ public class OrdenServiceImpl implements OrdenService{
                 .backUrls(backUrls)
                 .items(itemsPasarela)
                 .metadata(Map.of("id_orden", ordenGuardada.getCodigo()))
-                .notificationUrl("URL NOTIFICACION")
+                .notificationUrl("https://bd19-189-50-209-152.ngrok-free.app/api/public/orden/recibir-notificacion")
                 .build();
 
 
