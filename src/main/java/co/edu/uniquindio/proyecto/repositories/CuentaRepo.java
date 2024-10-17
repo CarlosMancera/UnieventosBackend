@@ -13,7 +13,7 @@ public interface CuentaRepo extends MongoRepository<Cuenta,String> {
    // @Query(value = "{email: email}")                     //{email:?0} -> primer argumento del método
     Optional<Cuenta> findByEmail(String email);          //Optional es el patrón que usa Java para este objeto
 
-   @Query("{usuario.cedula : ?0 }")
+   @Query("{'usuario.cedula' : ?0 }")
     Optional<Cuenta> findByCedula(String cedula);
 
     @Query("{email : ?0, password: ?1 }")

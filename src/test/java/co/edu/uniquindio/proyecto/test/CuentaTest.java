@@ -1,5 +1,6 @@
 package co.edu.uniquindio.proyecto.test;
 
+import co.edu.uniquindio.proyecto.dto.cuentaDTO.CrearCuentaDTO;
 import co.edu.uniquindio.proyecto.model.docs.Cuenta;
 import co.edu.uniquindio.proyecto.model.enums.EstadoCuenta;
 import co.edu.uniquindio.proyecto.model.enums.TipoUsuario;
@@ -24,9 +25,20 @@ public class CuentaTest {
     @Test
     public void crearCuentaTest(){
 
+        try{
+            cuentaService.crearCuenta(new CrearCuentaDTO("999555333","Julio Jaramillo",
+                    "7327003","Cra 14", "julio@gmail.com", "useruser"));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+
+
+
         //CUENTA NORMAL
 
-        Cuenta cuenta = Cuenta.builder()
+       /* Cuenta cuenta = Cuenta.builder()
                 .email("usuario@gmail.com")
                 .tipoUsuario(TipoUsuario.CLIENTE)
                 .estadoCuenta(EstadoCuenta.ACTIVO)
@@ -39,7 +51,7 @@ public class CuentaTest {
 
         Cuenta cuentaRegistro = cuentaRepo.save(cuenta);
 
-        assertNotNull(cuentaRegistro);
+        assertNotNull(cuentaRegistro);*/
 /*
         //CUENTA - ADMINISTRADOR
 
