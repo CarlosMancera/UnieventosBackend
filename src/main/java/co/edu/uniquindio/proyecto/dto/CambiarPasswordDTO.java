@@ -8,7 +8,7 @@ public record CambiarPasswordDTO(
         @NotBlank @Length(max = 40) @Email
         String email,
         String codigoVerificacion,
-        @NotBlank @Length(max = 40) @Email
+        @NotBlank @Length(max = 40)
         String passwordNuevaT
 ) {
 }

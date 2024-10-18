@@ -10,7 +10,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 
-//@Configuration
+@Configuration
 public class FireBaseConfig {
 
 
@@ -23,7 +23,7 @@ public class FireBaseConfig {
 
         FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                .setStorageBucket("NOMBRE_BUCKET")
+                .setStorageBucket("unieventos-20242-12566.appspot.com ")
                 .build();
 
 

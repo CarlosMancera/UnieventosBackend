@@ -149,19 +149,19 @@ public class CuentaServiceImpl implements CuentaService {   //con la inicializac
         Cuenta cuenta = optionalCuenta.get();
 
         // Generar un código de recuperación único
-        String codigoRecuperacion = generarCodigoRecuperacion();
+        String codigoRecuperacion = generarCodigoRecuperacion();   //666
 
         // Actualizar la cuenta con el nuevo código de recuperación
         cuenta.setCodigoValidacionPassword(new CodigoValidacion(
                 codigoRecuperacion,
                 LocalDateTime.now(),
-                LocalDateTime.now().plusMinutes(15L) // El código expira en 1 hora
+                LocalDateTime.now().plusMinutes(15L) // El código expira en 15 mins
 
         ));
 
         cuentaRepo.save(cuenta);
 
-        emailService.enviarEmail(new EmailDTO(email, "Codigo de recuperacion", generarCodigoRecuperacion()));
+        emailService.enviarEmail(new EmailDTO(email, "Codigo de recuperacion", codigoRecuperacion));
 
         return "Se ha enviado un código de recuperación a su correo electrónico";
     }
