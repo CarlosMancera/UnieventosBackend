@@ -49,6 +49,18 @@ public class OrdenServiceImpl implements OrdenService{
         Cupon cupon = cuponRepo.findByCodigo(codigoDescuento)
                 .orElseThrow(() -> new Exception("Cupón no válido"));
 
+        //METODO PARA VALIDAR USO DEL CUPON
+        if(cupon.getCantidadUsados()>cupon.getLimiteUso()){
+
+            throw new Exception("El cupón ha superado su límite de uso");
+
+        } else if (cupon.getFechaVencimiento().isBefore(LocalDateTime.now())) {
+            throw new Exception("El cupón ha excedido la fecha de vencimiento");
+        }
+
+        //Se suma la cantidad de cupones usados en 1
+        cupon.setCantidadUsados(cupon.getCantidadUsados()+1);
+
         double subtotal = calcularSubtotal(carrito);
         double descuento = subtotal * (cupon.getDescuento() / 100.0);
         double total = subtotal - descuento;
