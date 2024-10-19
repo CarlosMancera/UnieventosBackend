@@ -71,7 +71,7 @@ public class OrdenServiceImpl implements OrdenService{
         orden.setCliente(idCuenta);
         orden.setItems(convertirADetalleOrden(carrito.getItems()));
         orden.setFecha(LocalDateTime.now());
-        orden.getPago().setEstado("PENDIENTE");  //AQUÍ SE PONDRÍA UN SET PARA EL OBJETO PAGO?
+        orden.getPago().setEstado("PENDIENTE");
 
         orden = ordenRepo.save(orden);
         carritoRepo.delete(carrito);
