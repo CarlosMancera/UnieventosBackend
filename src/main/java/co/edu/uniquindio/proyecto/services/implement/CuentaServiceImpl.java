@@ -200,7 +200,7 @@ public class CuentaServiceImpl implements CuentaService {   //con la inicializac
         Optional<Cuenta> cuentaOpcional = cuentaRepo.findByEmail(loginDTO.email());
 
         if(cuentaOpcional.isEmpty()) {
-            throw new Exception("No existe una cuenta con ese correo electrónico");
+            throw new Exception("OJO No existe una cuenta con ese correo electrónico");
         }
 
         Cuenta cuenta = cuentaOpcional.get();

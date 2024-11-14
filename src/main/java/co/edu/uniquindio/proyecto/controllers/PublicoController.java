@@ -5,6 +5,7 @@ import co.edu.uniquindio.proyecto.dto.eventoDTO.FiltroEventoDTO;
 import co.edu.uniquindio.proyecto.dto.eventoDTO.InformacionEventoDTO;
 import co.edu.uniquindio.proyecto.dto.eventoDTO.ItemEventoDTO;
 import co.edu.uniquindio.proyecto.dto.eventoDTO.ResumenEventoDTO;
+import co.edu.uniquindio.proyecto.model.enums.TipoEvento;
 import co.edu.uniquindio.proyecto.services.interfaces.EventoService;
 import co.edu.uniquindio.proyecto.services.interfaces.OrdenService;
 import jakarta.validation.Valid;
@@ -55,5 +56,9 @@ public class PublicoController {
         ordenService.recibirNotificacionMercadoPago (request);
     }
 
+    @GetMapping("/evento/listar-tipos")
+    public ResponseEntity<MensajeDTO<List<TipoEvento>>> recibirNotificacionMercadoPago() {
+        return ResponseEntity.ok(new MensajeDTO<>(false, List.of(TipoEvento.values())));
+    }
 
 }

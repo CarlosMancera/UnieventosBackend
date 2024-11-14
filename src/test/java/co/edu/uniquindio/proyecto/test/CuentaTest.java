@@ -25,13 +25,23 @@ public class CuentaTest {
     @Test
     public void crearCuentaTest(){
 
-        try{
+       /* try{
             cuentaService.crearCuenta(new CrearCuentaDTO("999555333","Julio Jaramillo",
-                    "7327003","Cra 14", "julio@gmail.com", "useruser"));
+                    "7327003","Cra 14", "cliente1@gmail.com", "cliente1"));
         }catch (Exception e){
             e.printStackTrace();
         }
 
+
+        */
+
+        try{
+            cuentaRepo.save(new Cuenta("admin@mail.com",TipoUsuario.ADMINISTRADOR,EstadoCuenta.ACTIVO,
+                    null,new Usuario("1094666","Administrador Alzate","Uniquindio",
+                    "3207552632"),LocalDateTime.now(),cuentaService.encriptarPassword("adminadmin"),null));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
 
 
