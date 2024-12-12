@@ -14,4 +14,4 @@ Este proyecto es de naturaleza académica. Consiste en el desarrollo de una apli
 ## Características
 * Gestión de usuarios: registro, login, perfil de usuario
 * Gestión de productos: creación, edición, eliminación de productos
-* Gestión de pedidos: creación, edición, eliminación de pedidos
+* Gestión de pedidos: creación, edición, eliminación de pedidos.
