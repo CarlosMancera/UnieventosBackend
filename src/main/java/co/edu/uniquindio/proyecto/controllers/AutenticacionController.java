@@ -23,6 +23,7 @@ public class AutenticacionController {
 
     @PostMapping("/iniciar-sesion")
     public ResponseEntity<MensajeDTO<TokenDTO>> iniciarSesion(@Valid @RequestBody LoginDTO loginDTO) throws Exception{
+        System.out.print("Entro aca 1");
         TokenDTO token = cuentaService.iniciarSesion(loginDTO);
         return ResponseEntity.ok(new MensajeDTO<>(false, token));
     }

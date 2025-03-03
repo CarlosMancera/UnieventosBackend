@@ -35,14 +35,14 @@ public class CuentaTest {
 
         */
 
-        try{
-            cuentaRepo.save(new Cuenta("admin@mail.com",TipoUsuario.ADMINISTRADOR,EstadoCuenta.ACTIVO,
-                    null,new Usuario("1094666","Administrador Alzate","Uniquindio",
-                    "3207552632"),LocalDateTime.now(),cuentaService.encriptarPassword("adminadmin"),null));
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
+//        try{
+//            cuentaRepo.save(new Cuenta("admin@mail.com",TipoUsuario.ADMINISTRADOR,EstadoCuenta.ACTIVO,
+//                    null,new Usuario("1094666","Administrador Alzate","Uniquindio",
+//                    "3207552632"),LocalDateTime.now(),cuentaService.encriptarPassword("adminadmin"),null));
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+//
 
 
 
@@ -62,12 +62,12 @@ public class CuentaTest {
         Cuenta cuentaRegistro = cuentaRepo.save(cuenta);
 
         assertNotNull(cuentaRegistro);*/
-/*
+
         //CUENTA - ADMINISTRADOR
 
         Cuenta cuenta2 = Cuenta.builder()
-                .email("admin@gmail.com")
-                .tipoUsuario(TipoUsuario.ADMINISTRADOR)
+                .email("admin9@gmail.com")
+                .tipoUsuario(TipoUsuario.CLIENTE)
                 .estadoCuenta(EstadoCuenta.ACTIVO)
                 .codigoValidacionPassword(new CodigoValidacion("666", LocalDateTime.now(), LocalDateTime.now().plusMinutes(15)))
                 .password(cuentaService.encriptarPassword("adminadmin"))
@@ -78,7 +78,7 @@ public class CuentaTest {
 
         Cuenta cuentaRegistro2 = cuentaRepo.save(cuenta2);
 
-        assertNotNull(cuentaRegistro2);*/
+        assertNotNull(cuentaRegistro2);
 
     }
 
