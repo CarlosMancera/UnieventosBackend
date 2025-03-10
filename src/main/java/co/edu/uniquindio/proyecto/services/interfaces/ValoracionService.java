@@ -1,6 +1,6 @@
 package co.edu.uniquindio.proyecto.services.interfaces;
 
-import co.edu.uniquindio.proyecto.model.docs.Valoracion;
+import co.edu.uniquindio.proyecto.model.entities.Valoracion;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ public interface ValoracionService {
 
     void crearValoracion(Valoracion valoracion);
 
-    List<Valoracion> obtenerValoracionByUsuarioID(String usuarioId);
+    List<Valoracion> obtenerValoracionByUsuarioID(Long usuarioId);
 
-    void eliminarValoracionByUsuarioId(String usuarioId, Valoracion valoracion);
+    void eliminarValoracionByUsuarioId(Long usuarioId, Valoracion valoracion);
 }

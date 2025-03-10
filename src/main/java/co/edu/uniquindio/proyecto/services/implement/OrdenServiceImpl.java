@@ -3,10 +3,8 @@ package co.edu.uniquindio.proyecto.services.implement;
 
 import co.edu.uniquindio.proyecto.dto.cuponDTO.ResumenCuponDTO;
 import co.edu.uniquindio.proyecto.dto.ordenDTO.*;
-import co.edu.uniquindio.proyecto.model.docs.*;
+import co.edu.uniquindio.proyecto.model.entities.*;
 import co.edu.uniquindio.proyecto.model.vo.DetalleCarrito;
-import co.edu.uniquindio.proyecto.model.vo.DetalleOrden;
-import co.edu.uniquindio.proyecto.model.vo.Localidad;
 import co.edu.uniquindio.proyecto.model.vo.Pago;
 import co.edu.uniquindio.proyecto.repositories.*;
 import co.edu.uniquindio.proyecto.services.interfaces.OrdenService;
@@ -19,7 +17,6 @@ import com.mercadopago.client.preference.PreferenceRequest;
 import com.mercadopago.resources.payment.Payment;
 import com.mercadopago.resources.preference.Preference;
 import lombok.RequiredArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,8 +39,10 @@ public class OrdenServiceImpl implements OrdenService{
 
     @Override
     @Transactional
-    public ResumenOrdenDTO aplicarDescuento(ObjectId idCuenta, String codigoDescuento) throws Exception {
-        Carrito carrito = carritoRepo.findByCuenta(idCuenta)
+    public ResumenOrdenDTO aplicarDescuento(Long idCuenta, String codigoDescuento) throws Exception {
+        Cuenta cuenta=new Cuenta();
+
+        Carrito carrito = (Carrito) carritoRepo.findByCuenta(cuenta)
                 .orElseThrow(() -> new Exception("Carrito no encontrado"));
 
         Cupon cupon = cuponRepo.findByCodigo(codigoDescuento)
@@ -70,17 +69,19 @@ public class OrdenServiceImpl implements OrdenService{
 
     @Override
     @Transactional
-    public OrdenCompraDTO generarOrdenCompra(ObjectId idCuenta) throws Exception {
-        Optional<Carrito> carritoOptional = carritoRepo.findByCuenta(idCuenta);
+    public OrdenCompraDTO generarOrdenCompra(Long idCuenta) throws Exception {
+        Cuenta cuenta=new Cuenta();
+
+        Optional<Object> carritoOptional = Optional.ofNullable(carritoRepo.findByCuenta(cuenta));
 
         if (carritoOptional.isEmpty()) {
             throw new Exception("Carrito no encontrado");
         }
-
-        Carrito carrito = carritoOptional.get();
+        Cuenta cliente=new Cuenta();
+        Carrito carrito = (Carrito) carritoOptional.get();
 
         OrdenCompra orden = new OrdenCompra();
-        orden.setCliente(idCuenta);
+        orden.setCliente(cliente);
         orden.setItems(convertirADetalleOrden(carrito.getItems()));
         orden.setFecha(LocalDateTime.now());
         orden.getPago().setEstado("PENDIENTE");
@@ -92,7 +93,7 @@ public class OrdenServiceImpl implements OrdenService{
     }
 
     @Override
-    public Preference realizarPago(String idOrden) throws Exception {
+    public Preference realizarPago(Long idOrden) throws Exception {
 
         // Obtener la orden guardada en la base de datos y los ítems de la orden
         Optional<OrdenCompra> optionalOrdenCompra = ordenRepo.findById(idOrden);
@@ -108,19 +109,19 @@ public class OrdenServiceImpl implements OrdenService{
         for (DetalleOrden item : ordenGuardada.getItems()) {
 
             // Obtener el evento y la localidad del ítem
-            Optional<Evento> eventOptional = eventoRepo.findById(item.getIdEvento());
+            Optional<Evento> eventOptional = eventoRepo.findById(item.getEvento().getId());
 
             if (eventOptional.isEmpty()) {
                 throw new Exception("Carrito no encontrado");
             }
             Evento evento = eventOptional.get();
-            Localidad localidad = evento.getLocalidad(item.getNombreLocalidad());
+            Localidad localidad = evento.getLocalidades().get(0);
 
 
             // Crear el item de la pasarela
             PreferenceItemRequest itemRequest =
                     PreferenceItemRequest.builder()
-                            .id(evento.getId())
+                            .id(evento.getId().toString())
                             .title(evento.getNombre())
                             .pictureUrl(evento.getImagen())
                             .categoryId(evento.getTipoEvento().name())
@@ -170,7 +171,7 @@ public class OrdenServiceImpl implements OrdenService{
 
     @Override
     @Transactional
-    public void confirmarPago(ObjectId idOrden, String codigoConfirmacion) throws Exception {
+    public void confirmarPago(Long idOrden, String codigoConfirmacion) throws Exception {
         OrdenCompra orden = ordenRepo.findById(idOrden)
                 .orElseThrow(() -> new Exception("Orden no encontrada"));
 
@@ -182,13 +183,13 @@ public class OrdenServiceImpl implements OrdenService{
         ordenRepo.save(orden);
 
         // Aplicar descuento adicional si es la primera compra
-        if (esPrimeraCompra(orden.getCliente())) {
+        if (esPrimeraCompra(orden.getCliente().getId())) {
             aplicarDescuentoPrimeraCompra(orden);
         }
     }
 
     @Override
-    public List<ResumenCuponDTO> buscarCuponesUtilizadosPorUsuario(String idUsuario) throws Exception {
+    public List<ResumenCuponDTO> buscarCuponesUtilizadosPorUsuario(Long idUsuario) throws Exception {
         return List.of();
     }
 
@@ -251,7 +252,7 @@ public class OrdenServiceImpl implements OrdenService{
 
 
                 // Se obtiene la orden guardada en la base de datos y se le asigna el pago
-                OrdenCompra orden = ordenRepo.findById(idOrden)
+                OrdenCompra orden = ordenRepo.findById(1L)
                         .orElseThrow(() -> new Exception("Orden no encontrada"));
                 Pago pago = crearPago(payment);
                 orden.setPago(pago);
@@ -268,7 +269,7 @@ public class OrdenServiceImpl implements OrdenService{
     private Pago crearPago(Payment payment) {
         Pago pago = new Pago();
         pago.setCodigoAutorizacion(payment.getId().toString());
-        pago.setFecha( payment.getDateCreated().toLocalDateTime() );
+        pago.setFechaPago( payment.getDateCreated().toLocalDateTime() );
         pago.setEstado(payment.getStatus());
         pago.setCodigoAutorizacion(payment.getAuthorizationCode());
         pago.setValorTransaccion(payment.getTransactionAmount().floatValue());
@@ -279,7 +280,7 @@ public class OrdenServiceImpl implements OrdenService{
     //_-----------------------AUX------------------------
 
     private OrdenCompraDTO mapToOrdenCompraDTO(OrdenCompra orden) throws Exception{
-        String id = orden.getId();
+        String id = String.valueOf(orden.getId());
         LocalDateTime fechaCreacion = orden.getFecha();
         List<DetalleOrden> items = orden.getItems();
         List<ResumenCarritoDTO> resumenItems = new ArrayList<>();
@@ -304,7 +305,7 @@ public class OrdenServiceImpl implements OrdenService{
     }
 
     private ResumenCarritoDTO mapToResumenCarritoDTO(DetalleOrden detalle) throws Exception {
-        Evento evento = eventoRepo.findById(detalle.getIdEvento())
+        Evento evento = eventoRepo.findById(detalle.getEvento().getId())
                 .orElseThrow(() -> new Exception("Orden no encontrada"));
 
         return new ResumenCarritoDTO(evento.getNombre(),evento.getFecha()
@@ -334,15 +335,16 @@ public class OrdenServiceImpl implements OrdenService{
         // Actualizar el total de la orden con el descuento adicional
     }
 
-    private boolean esPrimeraCompra(ObjectId idCuenta) {
+    private boolean esPrimeraCompra(Long idCuenta) {
         // Implementar lógica para verificar si es la primera compra del usuario
-        return ordenRepo.countByCuenta(idCuenta.toString()) == 1;
+        return true;
     }
 
     private List<DetalleOrden> convertirADetalleOrden(List<DetalleCarrito> items) {
 
         ArrayList<DetalleOrden> itemsOrden = new ArrayList<>();
 
+/*
         for (DetalleCarrito item : items) {
 
             DetalleOrden itemOrden = DetalleOrden.builder().nombreLocalidad(item.getNombreLocalidad())
@@ -350,6 +352,7 @@ public class OrdenServiceImpl implements OrdenService{
             itemsOrden.add(itemOrden);
 
         }
+*/
 
         return itemsOrden;
 

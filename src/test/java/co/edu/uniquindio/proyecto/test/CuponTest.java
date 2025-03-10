@@ -1,6 +1,6 @@
 package co.edu.uniquindio.proyecto.test;
 
-import co.edu.uniquindio.proyecto.model.docs.Cupon;
+import co.edu.uniquindio.proyecto.model.entities.Cupon;
 import co.edu.uniquindio.proyecto.model.enums.EstadoCupon;
 import co.edu.uniquindio.proyecto.model.enums.TipoCupon;
 import co.edu.uniquindio.proyecto.repositories.CuponRepo;

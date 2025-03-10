@@ -1,7 +1,6 @@
 package co.edu.uniquindio.proyecto.test;
 
-import co.edu.uniquindio.proyecto.dto.cuentaDTO.CrearCuentaDTO;
-import co.edu.uniquindio.proyecto.model.docs.Cuenta;
+import co.edu.uniquindio.proyecto.model.entities.Cuenta;
 import co.edu.uniquindio.proyecto.model.enums.EstadoCuenta;
 import co.edu.uniquindio.proyecto.model.enums.TipoUsuario;
 import co.edu.uniquindio.proyecto.model.vo.CodigoValidacion;

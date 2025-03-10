@@ -4,11 +4,9 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
 
-import java.util.List;
-
 public record EditarArtistaDTO(
 
-        String id,
+        Long id,
         @NotBlank @Length(max = 50)
         String nombre,
         @NotBlank @Length (max = 20)

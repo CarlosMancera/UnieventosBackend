@@ -14,27 +14,24 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
 
-    public void enviarEmail(EmailDTO emailDTO) throws Exception{
-
-
+    public void enviarEmail(EmailDTO emailDTO) throws Exception {
+        // Construir el email con el remitente correcto
         Email email = EmailBuilder.startingBlank()
-                .from("unieventos20242@gmail.com")
+                .from("unieventos20242@gmail.com") // ✅ Remitente correcto
                 .to(emailDTO.destinatario())
                 .withSubject(emailDTO.asunto())
                 .withPlainText(emailDTO.cuerpo())
                 .buildEmail();
 
         try (Mailer mailer = MailerBuilder
-                .withSMTPServer("smtp.gmail.com", 587, "unieventos20242@gmail.com", "agnv ejjt kzqx neoz")
+                .withSMTPServer("smtp.gmail.com", 587, "unieventos20242@gmail.com", "cwqp yoxa xrlf ndmt") // 🔥 Nueva contraseña
                 .withTransportStrategy(TransportStrategy.SMTP_TLS)
-                .withDebugLogging(true)
+                .withSessionTimeout(10_000) // Aumenta tiempo de espera
+                .withDebugLogging(true) // Activa logs de depuración
                 .buildMailer()) {
-
 
             mailer.sendMail(email);
         }
 
-
     }
-
 }

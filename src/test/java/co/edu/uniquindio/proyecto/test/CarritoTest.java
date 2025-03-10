@@ -1,6 +1,6 @@
 package co.edu.uniquindio.proyecto.test;
 
-import co.edu.uniquindio.proyecto.model.docs.Carrito;
+import co.edu.uniquindio.proyecto.model.entities.Carrito;
 import co.edu.uniquindio.proyecto.model.vo.DetalleCarrito;
 import co.edu.uniquindio.proyecto.repositories.CarritoRepo;
 import org.bson.types.ObjectId;

@@ -12,13 +12,12 @@ import co.edu.uniquindio.proyecto.dto.ordenDTO.AgregarAlCarritoDTO;
 import co.edu.uniquindio.proyecto.dto.ordenDTO.OrdenCompraDTO;
 import co.edu.uniquindio.proyecto.dto.ordenDTO.ResumenCarritoDTO;
 import co.edu.uniquindio.proyecto.dto.ordenDTO.ResumenOrdenDTO;
-import co.edu.uniquindio.proyecto.model.docs.Valoracion;
+import co.edu.uniquindio.proyecto.model.entities.Valoracion;
 import co.edu.uniquindio.proyecto.services.interfaces.*;
 import com.mercadopago.resources.preference.Preference;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -45,18 +44,18 @@ public class ClienteController {
 
     @PostMapping("/agregar-carrito")
     public ResponseEntity<MensajeDTO<String>> agregarAlCarrito(@Valid @RequestBody AgregarAlCarritoDTO agregarAlCarritoDTO) throws Exception {
-        String mensaje = carritoService.agregarAlCarrito(agregarAlCarritoDTO);
+        String mensaje = String.valueOf(carritoService.agregarAlCarrito(agregarAlCarritoDTO));
         return ResponseEntity.ok(new MensajeDTO<>(false, mensaje));
     }
 
     @DeleteMapping("/eliminar-carrito/{idCuenta}/{idEntrada}")
-    public ResponseEntity<MensajeDTO<String>> eliminarDelCarrito(@PathVariable ObjectId idCuenta, @PathVariable ObjectId idEntrada) throws Exception {
+    public ResponseEntity<MensajeDTO<String>> eliminarDelCarrito(@PathVariable Long idCuenta, @PathVariable Long idEntrada) throws Exception {
         carritoService.eliminarDelCarrito(idCuenta, idEntrada);
         return ResponseEntity.ok(new MensajeDTO<>(false, "Ítem eliminado del carrito exitosamente"));
     }
 
     @GetMapping("/listar-carrito/{idCuenta}")
-    public ResponseEntity<MensajeDTO<List<ResumenCarritoDTO>>> listarCarrito(@PathVariable ObjectId idCuenta) throws Exception {
+    public ResponseEntity<MensajeDTO<List<ResumenCarritoDTO>>> listarCarrito(@PathVariable Long idCuenta) throws Exception {
         List<ResumenCarritoDTO> lista = carritoService.listarCarrito(idCuenta);
         return ResponseEntity.ok(new MensajeDTO<>(false, lista));
     }
@@ -69,24 +68,24 @@ public class ClienteController {
     }
 
     @DeleteMapping("/eliminar-deseo/{idCuenta}/{idEvento}")
-    public ResponseEntity<MensajeDTO<String>> eliminarDeseo(@PathVariable ObjectId idCuenta, @PathVariable ObjectId idEvento) throws Exception {
+    public ResponseEntity<MensajeDTO<String>> eliminarDeseo(@PathVariable Long idCuenta, @PathVariable Long idEvento) throws Exception {
         deseoService.eliminarDeseo(idCuenta, idEvento);
         return ResponseEntity.ok(new MensajeDTO<>(false, "Deseo eliminado exitosamente"));
     }
 
     @GetMapping("/listar-deseo/{idCuenta}")
-    public ResponseEntity<MensajeDTO<List<ResumenDeseoDTO>>> listarDeseos(@PathVariable ObjectId idCuenta) throws Exception {
+    public ResponseEntity<MensajeDTO<List<ResumenDeseoDTO>>> listarDeseos(@PathVariable Long idCuenta) throws Exception {
         List<ResumenDeseoDTO> lista = deseoService.listarDeseos(idCuenta);
         return ResponseEntity.ok(new MensajeDTO<>(false, lista));
     }
 
     @GetMapping("/buscar-deseo/{idCuenta}/{nombreEvento}")
-    public ResponseEntity<MensajeDTO<List<ResumenDeseoDTO>>> buscarDeseos(@PathVariable ObjectId idCuenta, @PathVariable String nombreEvento) throws Exception {
+    public ResponseEntity<MensajeDTO<List<ResumenDeseoDTO>>> buscarDeseos(@PathVariable Long idCuenta, @PathVariable String nombreEvento) throws Exception {
         List<ResumenDeseoDTO> lista = deseoService.buscarDeseos(idCuenta, nombreEvento);
         return ResponseEntity.ok(new MensajeDTO<>(false, lista));
     }
     @GetMapping("/obtener-info-evento/{id}")
-    public ResponseEntity<MensajeDTO<InformacionEventoDTO>> obtenerInformacionEvento(@PathVariable String id) throws Exception {
+    public ResponseEntity<MensajeDTO<InformacionEventoDTO>> obtenerInformacionEvento(@PathVariable Long id) throws Exception {
         InformacionEventoDTO info = eventoService.obtenerInformacionEvento(id);
         return ResponseEntity.ok(new MensajeDTO<>(false, info));
     }
@@ -122,32 +121,32 @@ public class ClienteController {
     } */
     @PostMapping("/realizar-pago")
     public ResponseEntity<MensajeDTO<Preference>> realizarPago(@RequestParam("idOrden") String idOrden) throws Exception{
-        return ResponseEntity.ok().body(new MensajeDTO<>(false, ordenService.realizarPago(idOrden)));
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, ordenService.realizarPago(Long.valueOf(idOrden))));
     }
 
 
 
     @PostMapping("/aplicar-descuento/{idCuenta}")
-    public ResponseEntity<MensajeDTO<ResumenOrdenDTO>> aplicarDescuento(@PathVariable ObjectId idCuenta, @RequestParam String codigoDescuento) throws Exception {
+    public ResponseEntity<MensajeDTO<ResumenOrdenDTO>> aplicarDescuento(@PathVariable Long idCuenta, @RequestParam String codigoDescuento) throws Exception {
         ResumenOrdenDTO resumen = ordenService.aplicarDescuento(idCuenta, codigoDescuento);
         return ResponseEntity.ok(new MensajeDTO<>(false, resumen));
     }
 
     @PostMapping("/generar-orden/{idCuenta}")
-    public ResponseEntity<MensajeDTO<OrdenCompraDTO>> generarOrdenCompra(@PathVariable ObjectId idCuenta) throws Exception {
+    public ResponseEntity<MensajeDTO<OrdenCompraDTO>> generarOrdenCompra(@PathVariable Long idCuenta) throws Exception {
         OrdenCompraDTO orden = ordenService.generarOrdenCompra(idCuenta);
         return ResponseEntity.ok(new MensajeDTO<>(false, orden));
     }
 
     @PostMapping("/confirmar-pago/{idOrden}")
-    public ResponseEntity<MensajeDTO<String>> confirmarPago(@PathVariable ObjectId idOrden, @RequestParam String codigoConfirmacion) throws Exception {
+    public ResponseEntity<MensajeDTO<String>> confirmarPago(@PathVariable Long idOrden, @RequestParam String codigoConfirmacion) throws Exception {
         ordenService.confirmarPago(idOrden, codigoConfirmacion);
         return ResponseEntity.ok(new MensajeDTO<>(false, "Pago confirmado exitosamente"));
     }
 
     @GetMapping("/cupones-utilizados/{idUsuario}")
     public ResponseEntity<MensajeDTO<List<ResumenCuponDTO>>> buscarCuponesUtilizadosPorUsuario(@PathVariable String idUsuario) throws Exception {
-        List<ResumenCuponDTO> cupones = ordenService.buscarCuponesUtilizadosPorUsuario(idUsuario);
+        List<ResumenCuponDTO> cupones = ordenService.buscarCuponesUtilizadosPorUsuario(Long.valueOf(idUsuario));
         return ResponseEntity.ok(new MensajeDTO<>(false, cupones));
     }
 
@@ -175,7 +174,7 @@ public class ClienteController {
     }
 
     @GetMapping("/obtener-valoracion/{usuarioId}")
-    public ResponseEntity<MensajeDTO<List<Valoracion>>> obtenerValoracionByUsuarioID(@PathVariable String usuarioId) {
+    public ResponseEntity<MensajeDTO<List<Valoracion>>> obtenerValoracionByUsuarioID(@PathVariable Long usuarioId) {
         List<Valoracion> valoraciones = valoracionService.obtenerValoracionByUsuarioID(usuarioId);
         return ResponseEntity.ok(new MensajeDTO<>(false, valoraciones));
     }

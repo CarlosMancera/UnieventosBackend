@@ -1,22 +1,19 @@
 package co.edu.uniquindio.proyecto.repositories;
 
-import co.edu.uniquindio.proyecto.model.docs.Valoracion;
-import org.bson.types.ObjectId;
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
+import co.edu.uniquindio.proyecto.model.entities.Cuenta;
+import co.edu.uniquindio.proyecto.model.entities.Valoracion;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface ValoracionRepo extends MongoRepository<Valoracion,String> {
-    @Query("{ 'usuario' : ?0 }")
-    List<Valoracion> listarValoracionByUsuario(String usuario);
+public interface ValoracionRepo extends JpaRepository<Valoracion, Long> {
 
-    void deleteByUsuario(String usuario);  //OJO CON ESTE MÉTODO
+    List<Valoracion> findByUsuario(Cuenta usuario);
 
-    @Query("{ usuario: ?0, _id: ?1 }")
-    void eliminarValoracionByUsuarioId (ObjectId usuarioId, String idValoracion);
+    void deleteByUsuario(Cuenta usuario);
 
+    void deleteByUsuarioAndId(Cuenta usuario, Long id);
 
 }

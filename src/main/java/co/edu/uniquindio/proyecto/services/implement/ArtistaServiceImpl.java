@@ -3,7 +3,7 @@ package co.edu.uniquindio.proyecto.services.implement;
 import co.edu.uniquindio.proyecto.dto.artistasDTO.CrearArtistaDTO;
 import co.edu.uniquindio.proyecto.dto.artistasDTO.EditarArtistaDTO;
 import co.edu.uniquindio.proyecto.dto.artistasDTO.InformacionArtistaDTO;
-import co.edu.uniquindio.proyecto.model.docs.Artista;
+import co.edu.uniquindio.proyecto.model.entities.Artista;
 import co.edu.uniquindio.proyecto.model.enums.EstadoArtista;
 import co.edu.uniquindio.proyecto.repositories.ArtistaRepo;
 import co.edu.uniquindio.proyecto.services.interfaces.ArtistaService;
@@ -11,10 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,42 +24,27 @@ public class ArtistaServiceImpl implements ArtistaService {
     @Override
     @Transactional(readOnly = true)
     public List<InformacionArtistaDTO> listarArtistas() {
-
-
-        List<Artista> artistas = artistaRepo.findAll();
-        //usuarios de la base de datos
-
-        List<InformacionArtistaDTO> items = new ArrayList<>();
-
-
-        for (Artista artista : artistas) {
-            items.add( new InformacionArtistaDTO(
-                    artista.getNombre(),
-                    artista.getGenero(),
-                    artista.getEmail(),
-                    artista.getTelefono()
-            ));
-        }
-
-        return items;
+        return artistaRepo.findAll().stream()
+                .map(artista -> new InformacionArtistaDTO(
+                        artista.getNombre(),
+                        artista.getGenero(),
+                        artista.getEmail(),
+                        artista.getTelefono()
+                ))
+                .collect(Collectors.toList());
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<InformacionArtistaDTO> buscarArtistasPorNombre(String nombre) {
-        List<Artista> artistas = artistaRepo.findByNombreContainingIgnoreCase(nombre);
-        List<InformacionArtistaDTO> resultado = new ArrayList<>();
-
-        for (Artista artista : artistas) {
-            resultado.add( new InformacionArtistaDTO(
-                    artista.getNombre(),
-                    artista.getGenero(),
-                    artista.getEmail(),
-                    artista.getTelefono()
-            ));
-        }
-
-        return resultado;
+        return artistaRepo.findByNombreContainingIgnoreCase(nombre).stream()
+                .map(artista -> new InformacionArtistaDTO(
+                        artista.getNombre(),
+                        artista.getGenero(),
+                        artista.getEmail(),
+                        artista.getTelefono()
+                ))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -69,52 +53,40 @@ public class ArtistaServiceImpl implements ArtistaService {
             throw new Exception("Ya existe un artista con el nombre " + artista.nombre());
         }
 
-        Artista nuevoArtista = new Artista();
-        nuevoArtista.setNombre(artista.nombre());
-        nuevoArtista.setGenero(artista.genero());
-        nuevoArtista.setEmail(artista.email());
-        nuevoArtista.setTelefono(artista.telefono());
-        nuevoArtista.setEstado(EstadoArtista.DISPONIBLE);
+        Artista nuevoArtista = Artista.builder()
+                .nombre(artista.nombre())
+                .genero(artista.genero())
+                .email(artista.email())
+                .telefono(artista.telefono())
+                .estado(EstadoArtista.DISPONIBLE)
+                .build();
 
-        Artista artistaCreado = artistaRepo.save(nuevoArtista);
-
-        return artistaCreado.getId().toString();
+        return artistaRepo.save(nuevoArtista).getId().toString();
     }
 
     @Override
     public String editarArtista(EditarArtistaDTO artista) throws Exception {
-        Optional<Artista> optionalArtista = getArtista(artista.id());
+        Artista artistaModificado = getArtista(artista.id());
 
-        Artista artistaModificado = optionalArtista.get();
         artistaModificado.setNombre(artista.nombre());
         artistaModificado.setGenero(artista.genero());
         artistaModificado.setEmail(artista.email());
         artistaModificado.setTelefono(artista.telefono());
 
-        artistaRepo.save(artistaModificado);
-
-        return artistaModificado.getId();
+        return artistaRepo.save(artistaModificado).getId().toString();
     }
 
     @Override
-    public String eliminarArtista(String id) throws Exception {
-        Optional<Artista> optionalArtista = getArtista(id);
-
-        Artista artista = optionalArtista.get();
+    public String eliminarArtista(Long id) throws Exception {
+        Artista artista = getArtista(id);
         artista.setEstado(EstadoArtista.ELIMINADO);
-
-        artistaRepo.save(artista);
-
-        return artista.getId();
+        return artistaRepo.save(artista).getId().toString();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public InformacionArtistaDTO obtenerInformacionArtista(String id) throws Exception {
-        Optional<Artista> optionalArtista = getArtista(id);
-
-        Artista artista = optionalArtista.get();
-
+    public InformacionArtistaDTO obtenerInformacionArtista(Long id) throws Exception {
+        Artista artista = getArtista(id);
         return new InformacionArtistaDTO(
                 artista.getNombre(),
                 artista.getGenero(),
@@ -123,19 +95,13 @@ public class ArtistaServiceImpl implements ArtistaService {
         );
     }
 
-    private Optional<Artista> getArtista(String id) throws Exception {
-        Optional<Artista> optionalArtista = artistaRepo.findById(id);
-
-        if (optionalArtista.isEmpty()) {
-            throw new Exception("No existe un artista con el id " + id);
-        }
-
-        return optionalArtista;
+    private Artista getArtista(Long id) throws Exception {
+        return artistaRepo.findById(id)
+                .orElseThrow(() -> new Exception("No existe un artista con el id " + id));
     }
 
     private boolean existeNombre(String nombre) {
         return artistaRepo.findByNombre(nombre).isPresent();
     }
-
 
 }

@@ -1,12 +1,11 @@
 package co.edu.uniquindio.proyecto.services.implement;
 
-import co.edu.uniquindio.proyecto.model.docs.Valoracion;
+import co.edu.uniquindio.proyecto.model.entities.Cuenta;
+import co.edu.uniquindio.proyecto.model.entities.Valoracion;
 import co.edu.uniquindio.proyecto.repositories.ValoracionRepo;
 import co.edu.uniquindio.proyecto.services.interfaces.ValoracionService;
 import lombok.RequiredArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
-import java.util.Optional;
 
 import java.util.List;
 @Service
@@ -20,7 +19,8 @@ public class ValoracionServiceImpl implements ValoracionService {
 
     @Override
     public List<Valoracion> listarValoracionByNombre(String nombre) {
-        List<Valoracion> listarValoraciones =valoracionRepo.listarValoracionByUsuario(nombre);
+        Cuenta cuenta=new Cuenta();
+        List<Valoracion> listarValoraciones =valoracionRepo.findByUsuario(cuenta);
         return listarValoraciones;
     }
 
@@ -30,13 +30,15 @@ public class ValoracionServiceImpl implements ValoracionService {
     }
 
     @Override
-    public List<Valoracion> obtenerValoracionByUsuarioID(String usuarioId) {
-        List<Valoracion> listaValoraciones =valoracionRepo.listarValoracionByUsuario(usuarioId);
+    public List<Valoracion> obtenerValoracionByUsuarioID(Long usuarioId) {
+        Cuenta cuenta=new Cuenta();
+        List<Valoracion> listaValoraciones =valoracionRepo.findByUsuario(cuenta);
         return listaValoraciones;
     }
 
     @Override
-    public void eliminarValoracionByUsuarioId(String usuarioId, Valoracion valoracion) {
-        valoracionRepo.eliminarValoracionByUsuarioId(new ObjectId(usuarioId),valoracion.getId()); //Query en el repo
+    public void eliminarValoracionByUsuarioId(Long usuarioId, Valoracion valoracion) {
+        Cuenta cuenta=new Cuenta();
+        valoracionRepo.deleteByUsuarioAndId(cuenta,valoracion.getId());
     }
 }

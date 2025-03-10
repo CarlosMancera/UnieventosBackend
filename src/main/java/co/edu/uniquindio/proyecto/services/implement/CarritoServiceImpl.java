@@ -2,19 +2,17 @@ package co.edu.uniquindio.proyecto.services.implement;
 
 import co.edu.uniquindio.proyecto.dto.ordenDTO.AgregarAlCarritoDTO;
 import co.edu.uniquindio.proyecto.dto.ordenDTO.ResumenCarritoDTO;
-import co.edu.uniquindio.proyecto.model.docs.Carrito;
-import co.edu.uniquindio.proyecto.model.docs.Cuenta;
-import co.edu.uniquindio.proyecto.model.docs.Evento;
+import co.edu.uniquindio.proyecto.model.entities.Carrito;
+import co.edu.uniquindio.proyecto.model.entities.Cuenta;
+import co.edu.uniquindio.proyecto.model.entities.Evento;
+import co.edu.uniquindio.proyecto.model.entities.Localidad;
 import co.edu.uniquindio.proyecto.model.vo.DetalleCarrito;
-import co.edu.uniquindio.proyecto.model.vo.Localidad;
 import co.edu.uniquindio.proyecto.repositories.CarritoRepo;
 import co.edu.uniquindio.proyecto.repositories.CuentaRepo;
 import co.edu.uniquindio.proyecto.repositories.CuponRepo;
 import co.edu.uniquindio.proyecto.repositories.EventoRepo;
 import co.edu.uniquindio.proyecto.services.interfaces.CarritoService;
-import jdk.jfr.Event;
 import lombok.RequiredArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,11 +33,11 @@ public class CarritoServiceImpl implements CarritoService {
     //TODO
     @Override
     @Transactional
-    public String agregarAlCarrito(AgregarAlCarritoDTO agregarAlCarritoDTO) throws Exception {
+    public Long agregarAlCarrito(AgregarAlCarritoDTO agregarAlCarritoDTO) throws Exception {
         Cuenta cuenta = cuentaRepo.findById(agregarAlCarritoDTO.idCuenta())
                 .orElseThrow(() -> new Exception("Cuenta no encontrada"));
 
-        Evento evento = eventoRepo.findById(agregarAlCarritoDTO.idEvento().toString())
+        Evento evento = eventoRepo.findById(Long.valueOf(agregarAlCarritoDTO.idEvento().toString()))
                 .orElseThrow(() -> new Exception("Evento no encontrado"));
 
         double precioUnitario = 0;
@@ -52,16 +50,15 @@ public class CarritoServiceImpl implements CarritoService {
         }
 
         DetalleCarrito detalle = DetalleCarrito.builder()
-                .idEvento(new ObjectId(evento.getId()))
+                .idEvento(evento.getId())
                 .nombreLocalidad(agregarAlCarritoDTO.localidad())
                 .cantidad(agregarAlCarritoDTO.cantidad())
                 .precioUnitario(precioUnitario)
                 .build();
-
-        Carrito carrito = carritoRepo.findByIdUsuario(new ObjectId(cuenta.getId()))
+        Carrito carrito = carritoRepo.findByCuenta(cuenta)
                 .orElse(
                         Carrito.builder()
-                                .idUsuario(new ObjectId(cuenta.getId()))
+                                .cuenta(cuenta)
                                 .fecha(LocalDateTime.now())
                                 .items(new ArrayList<>())
                                 .build()
@@ -75,8 +72,9 @@ public class CarritoServiceImpl implements CarritoService {
 
     @Override
     @Transactional
-    public void eliminarDelCarrito(ObjectId idCuenta, ObjectId idEvento) throws Exception {
-        Carrito carrito = carritoRepo.findByIdUsuario(idCuenta)
+    public void eliminarDelCarrito(Long idCuenta, Long idEvento) throws Exception {
+        Cuenta cuenta=new Cuenta();
+        Carrito carrito = carritoRepo.findByCuenta(cuenta)
                 .orElseThrow(() -> new Exception("Carrito no encontrado"));
 
         carrito.getItems().removeIf(e -> e.getIdEvento().equals(idEvento));
@@ -85,10 +83,10 @@ public class CarritoServiceImpl implements CarritoService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ResumenCarritoDTO> listarCarrito(ObjectId idCuenta) throws Exception {
-        Carrito carrito = carritoRepo.findByCuenta(idCuenta)
+    public List<ResumenCarritoDTO> listarCarrito(Long idCuenta) throws Exception {
+        Cuenta cuenta=new Cuenta();
+        Carrito carrito = (Carrito) carritoRepo.findByCuenta(cuenta)
                 .orElseThrow(() -> new Exception("Carrito no encontrado"));
-
         List<ResumenCarritoDTO> resumenCarritoList = new ArrayList<>();
 
         for (DetalleCarrito item : carrito.getItems()) {

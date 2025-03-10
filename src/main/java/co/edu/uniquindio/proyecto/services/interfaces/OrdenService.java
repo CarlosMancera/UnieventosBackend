@@ -3,25 +3,23 @@ package co.edu.uniquindio.proyecto.services.interfaces;
 import co.edu.uniquindio.proyecto.dto.cuponDTO.ResumenCuponDTO;
 import co.edu.uniquindio.proyecto.dto.ordenDTO.OrdenCompraDTO;
 import co.edu.uniquindio.proyecto.dto.ordenDTO.PagoDTO;
-import co.edu.uniquindio.proyecto.dto.ordenDTO.ResumenCarritoDTO;
 import co.edu.uniquindio.proyecto.dto.ordenDTO.ResumenOrdenDTO;
 import com.mercadopago.resources.preference.Preference;
-import org.bson.types.ObjectId;
 
 import java.util.List;
 import java.util.Map;
 
 public interface OrdenService {
 
-    Preference realizarPago(String idOrden) throws Exception;
+    Preference realizarPago(Long idOrden) throws Exception;
 
-    ResumenOrdenDTO aplicarDescuento(ObjectId idCuenta, String codigoDescuento) throws Exception;
+    ResumenOrdenDTO aplicarDescuento(Long idCuenta, String codigoDescuento) throws Exception;
 
-    OrdenCompraDTO generarOrdenCompra(ObjectId idCuenta) throws Exception;
+    OrdenCompraDTO generarOrdenCompra(Long idCuenta) throws Exception;
 
-    void confirmarPago(ObjectId idOrden, String codigoConfirmacion) throws Exception;
+    void confirmarPago(Long idOrden, String codigoConfirmacion) throws Exception;
 
-    List<ResumenCuponDTO> buscarCuponesUtilizadosPorUsuario(String idUsuario) throws Exception;
+    List<ResumenCuponDTO> buscarCuponesUtilizadosPorUsuario(Long idUsuario) throws Exception;
 
     void recibirNotificacionMercadoPago(Map<String, Object> request) throws Exception;
 }

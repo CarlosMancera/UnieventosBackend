@@ -1,6 +1,6 @@
 package co.edu.uniquindio.proyecto.test;
 
-import co.edu.uniquindio.proyecto.model.docs.Artista;
+import co.edu.uniquindio.proyecto.model.entities.Artista;
 import co.edu.uniquindio.proyecto.model.enums.EstadoArtista;
 import co.edu.uniquindio.proyecto.repositories.ArtistaRepo;
 import org.junit.jupiter.api.Test;

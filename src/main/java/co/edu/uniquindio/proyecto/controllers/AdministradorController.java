@@ -55,13 +55,13 @@ public class AdministradorController {
 
     @GetMapping("/obtener-artista/{id}")
     public ResponseEntity<MensajeDTO<InformacionArtistaDTO>> obtenerInformacionArtista(@PathVariable String id) throws Exception {
-        InformacionArtistaDTO info = artistaService.obtenerInformacionArtista(id);
+        InformacionArtistaDTO info = artistaService.obtenerInformacionArtista(Long.valueOf(id));
         return ResponseEntity.ok(new MensajeDTO<>(false, info));
     }
 
     @DeleteMapping("/eliminar-artista/{id}")
     public ResponseEntity<MensajeDTO<String>> eliminarArtista(@PathVariable String id) throws Exception {
-        String mensaje = artistaService.eliminarArtista(id);
+        String mensaje = artistaService.eliminarArtista(Long.valueOf(id));
         return ResponseEntity.ok(new MensajeDTO<>(false, mensaje));
     }
 
@@ -79,24 +79,24 @@ public class AdministradorController {
 
     @PostMapping("/crear-cupon")
     public ResponseEntity<MensajeDTO<String>> crearCupon(@Valid @RequestBody CrearCuponDTO cuponDTO) throws Exception {
-        String mensaje = cuponService.crearCupon(cuponDTO);
+        String mensaje = String.valueOf(cuponService.crearCupon(cuponDTO));
         return ResponseEntity.ok(new MensajeDTO<>(false, mensaje));
     }
 
     @PutMapping("/editar-cupon")
     public ResponseEntity<MensajeDTO<String>> editarCupon(@Valid @RequestBody EditarCuponDTO cuponDTO) throws Exception {
-        String mensaje = cuponService.editarCupon(cuponDTO);
+        String mensaje = String.valueOf(cuponService.editarCupon(cuponDTO));
         return ResponseEntity.ok(new MensajeDTO<>(false, mensaje));
     }
 
     @DeleteMapping("/eliminar-cupon/{id}")
-    public ResponseEntity<MensajeDTO<String>> eliminarCupon(@PathVariable String id) throws Exception {
-        String mensaje = cuponService.eliminarCupon(id);
+    public ResponseEntity<MensajeDTO<String>> eliminarCupon(@PathVariable Long id) throws Exception {
+        String mensaje = String.valueOf(cuponService.eliminarCupon(id));
         return ResponseEntity.ok(new MensajeDTO<>(false, mensaje));
     }
 
     @GetMapping("/obtener-cupon/{id}")
-    public ResponseEntity<MensajeDTO<InformacionCuponDTO>> obtenerInformacionCupon(@PathVariable String id) throws Exception {
+    public ResponseEntity<MensajeDTO<InformacionCuponDTO>> obtenerInformacionCupon(@PathVariable Long id) throws Exception {
         InformacionCuponDTO info = cuponService.obtenerInformacionCupon(id);
         return ResponseEntity.ok(new MensajeDTO<>(false, info));
     }
@@ -122,18 +122,18 @@ public class AdministradorController {
 
     @PutMapping("/editar-evento")
     public ResponseEntity<MensajeDTO<String>> editarEvento(@Valid @RequestBody EditarEventoDTO editarEventoDTO) throws Exception {
-        String mensaje = eventoService.editarEvento(editarEventoDTO);
+        String mensaje = String.valueOf(eventoService.editarEvento(editarEventoDTO));
         return ResponseEntity.ok(new MensajeDTO<>(false, mensaje));
     }
 
     @DeleteMapping("/eliminar-evento/{id}")
-    public ResponseEntity<MensajeDTO<String>> eliminarEvento(@PathVariable String id) throws Exception {
-        String mensaje = eventoService.eliminarEvento(id);
+    public ResponseEntity<MensajeDTO<String>> eliminarEvento(@PathVariable Long id) throws Exception {
+        String mensaje = String.valueOf(eventoService.eliminarEvento(id));
         return ResponseEntity.ok(new MensajeDTO<>(false, mensaje));
     }
 
     @GetMapping("/obtener-info-evento/{id}")
-    public ResponseEntity<MensajeDTO<InformacionEventoDTO>> obtenerInformacionEvento(@PathVariable String id) throws Exception {
+    public ResponseEntity<MensajeDTO<InformacionEventoDTO>> obtenerInformacionEvento(@PathVariable Long id) throws Exception {
         InformacionEventoDTO info = eventoService.obtenerInformacionEvento(id);
         return ResponseEntity.ok(new MensajeDTO<>(false, info));
     }
@@ -151,7 +151,8 @@ public class AdministradorController {
     }
 
     @PutMapping("/cambiar-estado/{id}")
-    public ResponseEntity<MensajeDTO<String>> cambiarEstadoEvento(@PathVariable String id, @RequestParam EstadoEvento nuevoEstado) throws Exception {
+    public ResponseEntity<MensajeDTO<String>> cambiarEstadoEvento(@PathVariable Long id,
+                                                                  @RequestParam EstadoEvento nuevoEstado) throws Exception {
         eventoService.cambiarEstadoEvento(id, nuevoEstado);
         return ResponseEntity.ok(new MensajeDTO<>(false, "Estado del evento cambiado exitosamente"));
     }
@@ -163,13 +164,14 @@ public class AdministradorController {
     }
 
     @PostMapping("/agregar-imagen/{idEvento}")
-    public ResponseEntity<MensajeDTO<String>> agregarImagenEvento(@PathVariable String idEvento, @RequestParam("imagen") MultipartFile imagen) throws Exception {
+    public ResponseEntity<MensajeDTO<String>> agregarImagenEvento(@PathVariable Long idEvento, @RequestParam(
+            "imagen") MultipartFile imagen) throws Exception {
         eventoService.agregarImagenEvento(idEvento, imagen);
         return ResponseEntity.ok(new MensajeDTO<>(false, "Imagen agregada exitosamente"));
     }
 
     @PostMapping("/agregar-imagen-localidad/{idEvento}/{nombreLocalidad}")
-    public ResponseEntity<MensajeDTO<String>> agregarImagenLocalidad(@PathVariable String idEvento, @PathVariable String nombreLocalidad, @RequestParam("imagen") MultipartFile imagen) throws Exception {
+    public ResponseEntity<MensajeDTO<String>> agregarImagenLocalidad(@PathVariable Long idEvento, @PathVariable String nombreLocalidad, @RequestParam("imagen") MultipartFile imagen) throws Exception {
         eventoService.agregarImagenLocalidad(idEvento, nombreLocalidad, imagen);
         return ResponseEntity.ok(new MensajeDTO<>(false, "Imagen de localidad agregada exitosamente"));
     }
@@ -184,7 +186,7 @@ public class AdministradorController {
     }
 
     @GetMapping("/reporte-ventas-pdf/{idEvento}")
-    public ResponseEntity<byte[]> generarReporteVentasPDF(@PathVariable String idEvento) throws Exception {
+    public ResponseEntity<byte[]> generarReporteVentasPDF(@PathVariable Long idEvento) throws Exception {
         byte[] reporte = eventoService.generarReporteVentasPDF(idEvento);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=reporte_ventas.pdf")
@@ -193,7 +195,7 @@ public class AdministradorController {
     }
 
     @GetMapping("/reporte-ventas-xml/{idEvento}")
-    public ResponseEntity<byte[]> generarReporteVentasXML(@PathVariable String idEvento) throws Exception {
+    public ResponseEntity<byte[]> generarReporteVentasXML(@PathVariable Long idEvento) throws Exception {
         byte[] reporte = eventoService.generarReporteVentasXML(idEvento);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=reporte_ventas.xml")

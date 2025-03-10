@@ -40,13 +40,13 @@ public class CuentaController {
 
     @SecurityRequirement(name = "bearerAuth")
     @DeleteMapping("/eliminar-cuenta/{id}")
-    public void eliminarCuenta(@PathVariable String id) throws Exception{
+    public void eliminarCuenta(@PathVariable Long id) throws Exception{
         cuentaService.eliminarCuenta(id);
     }
 
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/obtener-info-cuenta/{id}")
-    public InformacionCuentaDTO obtenerInformacionCuenta(@PathVariable String id) throws Exception{
+    public InformacionCuentaDTO obtenerInformacionCuenta(@PathVariable Long id) throws Exception{
         return cuentaService.obtenerInformacionCuenta(id);
     }
 
@@ -57,7 +57,7 @@ public class CuentaController {
         return ResponseEntity.ok(new MensajeDTO<>(false, mensaje));
     }
 
-    //Cuando olvida contraseña, y permite crear una nueva
+    //Cuando olvida contraseña, y permite crear una eva
     @SecurityRequirement(name = "bearerAuth")
     @PutMapping("/cambiar-password")
     public ResponseEntity<MensajeDTO<String>> cambiarPassword(@Valid @RequestBody CambiarPasswordDTO cambiarPasswordDTO) throws Exception {

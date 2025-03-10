@@ -28,7 +28,7 @@ public class PublicoController {
     private OrdenService ordenService;
 
     @GetMapping("/obtener-info-evento/{id}")
-    public ResponseEntity<MensajeDTO<InformacionEventoDTO>> obtenerInformacionEvento(@PathVariable String id) throws Exception {
+    public ResponseEntity<MensajeDTO<InformacionEventoDTO>> obtenerInformacionEvento(@PathVariable Long id) throws Exception {
         InformacionEventoDTO info = eventoService.obtenerInformacionEvento(id);
         return ResponseEntity.ok(new MensajeDTO<>(false, info));
     }

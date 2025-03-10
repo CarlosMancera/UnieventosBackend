@@ -1,6 +1,6 @@
 package co.edu.uniquindio.proyecto.test;
 
-import co.edu.uniquindio.proyecto.model.docs.Valoracion;
+import co.edu.uniquindio.proyecto.model.entities.Valoracion;
 import co.edu.uniquindio.proyecto.repositories.ValoracionRepo;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;

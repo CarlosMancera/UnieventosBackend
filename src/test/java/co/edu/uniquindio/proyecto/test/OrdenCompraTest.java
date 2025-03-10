@@ -1,7 +1,6 @@
 package co.edu.uniquindio.proyecto.test;
 
-import co.edu.uniquindio.proyecto.model.docs.OrdenCompra;
-import co.edu.uniquindio.proyecto.model.vo.DetalleOrden;
+import co.edu.uniquindio.proyecto.model.entities.OrdenCompra;
 import co.edu.uniquindio.proyecto.model.vo.Pago;
 import co.edu.uniquindio.proyecto.repositories.OrdenRepo;
 import org.bson.types.ObjectId;

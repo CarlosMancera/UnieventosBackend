@@ -1,8 +1,12 @@
 package co.edu.uniquindio.proyecto.model.vo;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 import lombok.*;
+
 import java.time.LocalDateTime;
 
+@Embeddable // ✅ Importante para que funcione correctamente en JPA
 @Setter
 @Getter
 @NoArgsConstructor
@@ -17,5 +21,7 @@ public class Pago {
     private String metodo;
     private String estado;
     private double valorTransaccion;
-    private LocalDateTime fecha;
+
+    @Column(name = "fecha_pago") // ✅ Se renombra para evitar conflicto con `OrdenCompra.fecha`
+    private LocalDateTime fechaPago;
 }

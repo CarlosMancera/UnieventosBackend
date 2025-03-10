@@ -1,23 +1,20 @@
 package co.edu.uniquindio.proyecto.repositories;
-import co.edu.uniquindio.proyecto.model.docs.Cuenta;
-import org.bson.types.ObjectId;
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
+
+import co.edu.uniquindio.proyecto.model.entities.Cuenta;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface CuentaRepo extends MongoRepository<Cuenta,String> {
-                                                        //Esto es un db.cuentas.findOne...
-   // @Query(value = "{email: email}")                     //{email:?0} -> primer argumento del método
-    Optional<Cuenta> findByEmail(String email);          //Optional es el patrón que usa Java para este objeto
+public interface CuentaRepo extends JpaRepository<Cuenta, Long> {
 
-   @Query("{'usuario.cedula' : ?0 }")
-    Optional<Cuenta> findByCedula(String cedula);
+    Optional<Cuenta> findByEmail(String email);
 
-    @Query("{email : ?0, password: ?1 }")
-    Optional <Cuenta> validarDatosAutenticacion(String email, String password);
-    //findById
-    Optional<Cuenta> findById(ObjectId id);
+    Optional<Cuenta> findByUsuario_Cedula(String cedula);
+
+    Optional<Cuenta> findByEmailAndPassword(String email, String password);
+
+
+
 }

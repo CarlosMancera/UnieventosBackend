@@ -1,9 +1,8 @@
 package co.edu.uniquindio.proyecto.test;
 
-import co.edu.uniquindio.proyecto.model.docs.Evento;
+import co.edu.uniquindio.proyecto.model.entities.Evento;
 import co.edu.uniquindio.proyecto.model.enums.EstadoEvento;
 import co.edu.uniquindio.proyecto.model.enums.TipoEvento;
-import co.edu.uniquindio.proyecto.model.vo.Localidad;
 import co.edu.uniquindio.proyecto.repositories.EventoRepo;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;

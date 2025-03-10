@@ -7,7 +7,7 @@ import co.edu.uniquindio.proyecto.dto.cuentaDTO.EditarCuentaDTO;
 import co.edu.uniquindio.proyecto.dto.cuentaDTO.InformacionCuentaDTO;
 import co.edu.uniquindio.proyecto.dto.cuentaDTO.ItemCuentaDTO;
 import co.edu.uniquindio.proyecto.dto.emailDTO.EmailDTO;
-import co.edu.uniquindio.proyecto.model.docs.Cuenta;
+import co.edu.uniquindio.proyecto.model.entities.Cuenta;
 import co.edu.uniquindio.proyecto.model.enums.EstadoCuenta;
 import co.edu.uniquindio.proyecto.model.enums.TipoUsuario;
 import co.edu.uniquindio.proyecto.model.vo.CodigoValidacion;
@@ -35,7 +35,7 @@ public class CuentaServiceImpl implements CuentaService {   //con la inicializac
 
 
     @Override
-    public String crearCuenta(CrearCuentaDTO cuenta) throws Exception {
+    public Long crearCuenta(CrearCuentaDTO cuenta) throws Exception {
 
         if(existeEmail(cuenta.email())){
             throw new Exception("Ya existe una cuenta con el correo " + cuenta.email());
@@ -73,17 +73,17 @@ public class CuentaServiceImpl implements CuentaService {   //con la inicializac
 
 
     @Override
-    public String editarCuenta(EditarCuentaDTO cuenta) throws Exception {
+    public Long editarCuenta(EditarCuentaDTO cuenta) throws Exception {
 
                                                                             //Buscamos la cuenta del
-        Optional<Cuenta> optionalCuenta = getCuenta(cuenta.id());           //usuario que se quiere actualizar
+        Optional<Cuenta> optionalCuenta = getCuenta(1L);           //usuario que se quiere actualizar
 
         if (optionalCuenta.isEmpty()) {
             throw new Exception("No existe una cuenta con el id " + cuenta.id());
         }
                                                                             //Obtenemos la cuenta del
         Cuenta cuentaModificada = optionalCuenta.get();                     //usuario a modificar y actualizamos sus datos
-        cuentaModificada.getUsuario().setNombreCompleto( cuenta.nombre() );
+        cuentaModificada.getUsuario().setNombre( cuenta.nombre() );
         cuentaModificada.getUsuario().setTelefono( cuenta.telefono() );
         cuentaModificada.getUsuario().setDireccion( cuenta.direccion() );
         //cuentaModificada.setPassword( encriptarPassword(cuenta.password()));
@@ -96,7 +96,7 @@ public class CuentaServiceImpl implements CuentaService {   //con la inicializac
     }
 
     @Override
-    public String eliminarCuenta(String id) throws Exception {
+    public Long eliminarCuenta(Long id) throws Exception {
 
                                                             //Buscamos la cuenta del usuario
         Optional<Cuenta> optionalCuenta = getCuenta(id);    //que se quiere eliminar
@@ -117,7 +117,7 @@ public class CuentaServiceImpl implements CuentaService {   //con la inicializac
 
     @Override
     @Transactional(readOnly = true)
-    public InformacionCuentaDTO obtenerInformacionCuenta(String id) throws Exception {
+    public InformacionCuentaDTO obtenerInformacionCuenta(Long id) throws Exception {
 
 
         Optional<Cuenta> optionalCuenta = getCuenta(id);            //Buscamos la cuenta del usuario que se quiere obtener
@@ -129,7 +129,7 @@ public class CuentaServiceImpl implements CuentaService {   //con la inicializac
         return new InformacionCuentaDTO(                        //Retornamos la información de la cuenta del usuario
                 cuenta.getId(),
                 cuenta.getUsuario().getCedula(),
-                cuenta.getUsuario().getNombreCompleto(),
+                cuenta.getUsuario().getNombre(),
                 cuenta.getUsuario().getTelefono(),
                 cuenta.getUsuario().getDireccion(),
                 cuenta.getEmail()
@@ -229,7 +229,7 @@ public class CuentaServiceImpl implements CuentaService {   //con la inicializac
         for (Cuenta cuenta : cuentas) {                          //Recorremos la lista de cuentas y por cada uno
             items.add( new ItemCuentaDTO(                        //creamos un DTO y lo agregamos a la lista
                     cuenta.getId(),
-                    cuenta.getUsuario().getNombreCompleto(),
+                    cuenta.getUsuario().getNombre(),
                     cuenta.getEmail(),
                     cuenta.getUsuario().getTelefono()
             ));
@@ -238,14 +238,25 @@ public class CuentaServiceImpl implements CuentaService {   //con la inicializac
         return items;
     }
 
+    @Override
+    public Cuenta enviaCuentaByCorreo(String correo)
+            throws Exception {
+        Cuenta cuenta = cuentaRepo.findByEmail(correo).orElse(null);
+        return cuenta;
+    }
 
+    @Override
+    public Cuenta actualizarCuenta(Cuenta cuenta)
+            throws Exception {
+        return cuentaRepo.save(cuenta);
+    }
 
 
     //------------------------MÉTODOS AUXILIARES----------------------------
 
     private boolean existeCedula(@NotBlank @Length(max = 10) String cedula) {
 
-        return cuentaRepo.findByCedula(cedula).isPresent();
+        return cuentaRepo.findByUsuario_Cedula(cedula).isPresent();
 
     }
 
@@ -255,7 +266,7 @@ public class CuentaServiceImpl implements CuentaService {   //con la inicializac
 
     }
 
-    private Optional<Cuenta> getCuenta(String id) throws Exception {
+    private Optional<Cuenta> getCuenta(Long id) throws Exception {
 
         Optional<Cuenta> optionalCuenta = cuentaRepo.findById(id);                 //Buscamos la cuenta del usuario que se quiere obtener
 
@@ -280,7 +291,7 @@ public class CuentaServiceImpl implements CuentaService {   //con la inicializac
     private Map<String, Object> construirClaims(Cuenta cuenta) {
         return Map.of(
                 "rol", cuenta.getTipoUsuario(),
-                "nombre", cuenta.getUsuario().getNombreCompleto(),
+                "nombre", cuenta.getUsuario().getNombre(),
                 "id", cuenta.getId()
         );
     }

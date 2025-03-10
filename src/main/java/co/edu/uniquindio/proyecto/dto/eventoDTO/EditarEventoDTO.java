@@ -1,5 +1,6 @@
 package co.edu.uniquindio.proyecto.dto.eventoDTO;
 
+import co.edu.uniquindio.proyecto.model.entities.Artista;
 import co.edu.uniquindio.proyecto.model.enums.TipoEvento;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -12,8 +13,7 @@ public record EditarEventoDTO(
         String id,
         @NotBlank @Length(max = 50)
         String nombre,
-        @NotBlank
-        String artista,
+        @NotBlank Artista artista,
         @NotBlank @Length(max = 100)
         String descripcion,
         @NotNull

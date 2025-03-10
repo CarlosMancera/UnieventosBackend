@@ -1,14 +1,14 @@
 package co.edu.uniquindio.proyecto.services.implement;
 
-import co.edu.uniquindio.proyecto.model.vo.Localidad;
 import co.edu.uniquindio.proyecto.dto.eventoDTO.*;
-import co.edu.uniquindio.proyecto.model.docs.Evento;
+import co.edu.uniquindio.proyecto.model.entities.Evento;
+import co.edu.uniquindio.proyecto.model.entities.Localidad;
 import co.edu.uniquindio.proyecto.model.enums.EstadoEvento;
 import co.edu.uniquindio.proyecto.repositories.EventoRepo;
+import co.edu.uniquindio.proyecto.services.interfaces.ArtistaService;
 import co.edu.uniquindio.proyecto.services.interfaces.EventoService;
 import co.edu.uniquindio.proyecto.services.interfaces.ImagenesService;
 import lombok.RequiredArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,39 +24,54 @@ public class EventoServiceImpl implements EventoService {
 
     private final EventoRepo eventoRepo;
     private final ImagenesService archivoService;
+    private final ArtistaService artistaRepo;
 
     @Override
     @Transactional
     public String crearEvento(CrearEventoDTO eventoDTO) throws Exception {
-        Evento nuevoEvento = new Evento();
-        nuevoEvento.setNombre(eventoDTO.nombre());
-        nuevoEvento.setArtista(new ObjectId(eventoDTO.artista()));
-        nuevoEvento.setDescripcion(eventoDTO.descripcion());
-        nuevoEvento.setFecha(eventoDTO.fecha());
-        nuevoEvento.setDireccion(eventoDTO.direccion());
-        nuevoEvento.setCiudad(eventoDTO.ciudad());
-        nuevoEvento.setTipoEvento(eventoDTO.tipoEvento());
-        nuevoEvento.setEstado(EstadoEvento.ACTIVO);
-
-        for (LocalidadEventoDTO localidadDTO : eventoDTO.localidades()) {
-            Localidad localidad = new Localidad();
-            localidad.setNombre(localidadDTO.nombre());
-            localidad.setPrecio(localidadDTO.precio());
-            localidad.setCapacidad(localidadDTO.capacidad());
-            nuevoEvento.getLocalidades().add(localidad);
+        /*// Verificar que el ID del artista no sea nulo
+        if (eventoDTO.artista() == null) {
+            throw new Exception("El ID del artista no puede ser nulo.");
         }
 
-        Evento eventoCreado = eventoRepo.save(nuevoEvento);
-        return eventoCreado.getId();
+        // Buscar el artista en la base de datos usando su ID
+        Artista artista = artistaRepo.findById(eventoDTO.artista())
+                .orElseThrow(() -> new Exception("No existe un artista con el ID: " + eventoDTO.artista()));
+
+        // Validar que el evento tenga al menos una localidad
+        if (eventoDTO.localidades() == null || eventoDTO.localidades().isEmpty()) {
+            throw new Exception("El evento debe tener al menos una localidad.");
+        }
+
+        // Crear el evento
+        Evento nuevoEvento = Evento.builder()
+                .nombre(eventoDTO.nombre())
+                .artista(artista)  // Se asigna la entidad `Artista`, no un ID
+                .descripcion(eventoDTO.descripcion())
+                .fecha(eventoDTO.fecha())
+                .direccion(eventoDTO.direccion())
+                .ciudad(eventoDTO.ciudad())
+                .tipoEvento(eventoDTO.tipoEvento())
+                .estado(EstadoEvento.ACTIVO)
+                .localidades(eventoDTO.localidades().stream()
+                        .map(localidadDTO -> new Localidad(localidadDTO.nombre(), localidadDTO.precio(), localidadDTO.capacidad()))
+                        .toList())  // Convertir las localidades
+                .build();
+
+        // Guardar el evento en la base de datos
+        Evento eventoCreado = eventoRepo.save(nuevoEvento);*/
+        return null;
     }
+
 
     @Override
     @Transactional
-    public String editarEvento(EditarEventoDTO eventoDTO) throws Exception {
-        Evento evento = getEvento(eventoDTO.id());
+    public Long editarEvento(EditarEventoDTO eventoDTO) throws Exception {
+
+        Evento evento = getEvento(1L);
 
         evento.setNombre(eventoDTO.nombre());
-        evento.setArtista(new ObjectId(eventoDTO.artista()));
+        evento.setArtista(eventoDTO.artista());
         evento.setDescripcion(eventoDTO.descripcion());
         evento.setFecha(eventoDTO.fecha());
         evento.setDireccion(eventoDTO.direccion());
@@ -78,16 +93,16 @@ public class EventoServiceImpl implements EventoService {
 
     @Override
     @Transactional
-    public String eliminarEvento(String id) throws Exception {
+    public Long eliminarEvento(Long id) throws Exception {
         Evento evento = getEvento(id);
-        evento.setEstado(EstadoEvento.INACTIVO);
+        evento.setEstadoEvento(EstadoEvento.INACTIVO);
         eventoRepo.save(evento);
         return id;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public InformacionEventoDTO obtenerInformacionEvento(String id) throws Exception {
+    public InformacionEventoDTO obtenerInformacionEvento(Long id) throws Exception {
         Evento evento = getEvento(id);
         return mapToInformacionEventoDTO(evento);
     }
@@ -107,7 +122,7 @@ public class EventoServiceImpl implements EventoService {
                     evento.getNombre(),
                     evento.getFecha(),
                     evento.getDireccion(),
-                    evento.getCapacidad(),
+                    evento.getCantidadLocalidades(),
                     evento.getTipoEvento(),
                     evento.getEstadoEvento()
             ));
@@ -140,7 +155,7 @@ public class EventoServiceImpl implements EventoService {
         for (Evento evento : listaEventos){
 
             resumenEventos.add(new ResumenEventoDTO( evento.getNombre(), evento.getFecha(),
-                    evento.getDireccion(), evento.getCapacidad(), evento.getTipoEvento(), evento.getEstadoEvento()));
+                    evento.getDireccion(), evento.getCantidadLocalidades(), evento.getTipoEvento(), evento.getEstadoEvento()));
 
         }
 
@@ -149,14 +164,14 @@ public class EventoServiceImpl implements EventoService {
     }
 
     @Override
-    public void cambiarEstadoEvento(String id, EstadoEvento nuevoEstado) throws Exception {
+    public void cambiarEstadoEvento(Long id, EstadoEvento nuevoEstado) throws Exception {
 
         Optional<Evento> eventoOp = eventoRepo.findById(id);
         if(eventoOp.isEmpty()) throw new Exception();
 
         Evento evento = eventoOp.get();
 
-        evento.setEstado(nuevoEstado);
+        evento.setEstadoEvento(nuevoEstado);
         eventoRepo.save(evento);
 
     }
@@ -166,7 +181,7 @@ public class EventoServiceImpl implements EventoService {
     //TODO
     @Override
     @Transactional
-    public void agregarImagenEvento(String idEvento, MultipartFile imagen) throws Exception {
+    public void agregarImagenEvento(Long idEvento, MultipartFile imagen) throws Exception {
         Evento evento = getEvento(idEvento);
         String rutaImagen = archivoService.subirImagen(imagen);
         evento.setImagen(rutaImagen);
@@ -175,7 +190,7 @@ public class EventoServiceImpl implements EventoService {
 
     @Override
     @Transactional
-    public void agregarImagenLocalidad(String idEvento, String nombreLocalidad, MultipartFile imagen) throws Exception {
+    public void agregarImagenLocalidad(Long idEvento, String nombreLocalidad, MultipartFile imagen) throws Exception {
         Evento evento = getEvento(idEvento);
         Optional<Localidad> optionalLocalidad = evento.getLocalidades().stream()
                 .filter(l -> l.getNombre().equals(nombreLocalidad))
@@ -198,13 +213,13 @@ public class EventoServiceImpl implements EventoService {
     }
 
     @Override
-    public byte[] generarReporteVentasPDF(String idEvento) throws Exception {
+    public byte[] generarReporteVentasPDF(Long idEvento) throws Exception {
         // Implementación para generar el reporte PDF
         return new byte[0];
     }
 
     @Override
-    public byte[] generarReporteVentasXML(String idEvento) throws Exception {
+    public byte[] generarReporteVentasXML(Long idEvento) throws Exception {
         return new byte[0];
     }
 
@@ -218,7 +233,7 @@ public class EventoServiceImpl implements EventoService {
                 evento.getDireccion(),
                 evento.getCiudad(),
                 evento.getTipoEvento(),
-                evento.getEstado(),
+                evento.getEstadoEvento(),
                 evento.getLocalidades().stream().map(this::mapToLocalidadEventoDTO).toList(),
                 evento.getImagen()
         );
@@ -233,7 +248,7 @@ public class EventoServiceImpl implements EventoService {
         );
     }
 
-    private Evento getEvento(String id) throws Exception {
+    private Evento getEvento(Long id) throws Exception {
         Optional<Evento> optionalEvento = eventoRepo.findById(id);
         if (optionalEvento.isEmpty()) {
             throw new Exception("No se encontró el evento con el id " + id);

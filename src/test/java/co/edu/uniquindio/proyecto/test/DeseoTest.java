@@ -1,6 +1,6 @@
 package co.edu.uniquindio.proyecto.test;
 
-import co.edu.uniquindio.proyecto.model.docs.Deseo;
+import co.edu.uniquindio.proyecto.model.entities.Deseo;
 import co.edu.uniquindio.proyecto.repositories.DeseoRepo;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;

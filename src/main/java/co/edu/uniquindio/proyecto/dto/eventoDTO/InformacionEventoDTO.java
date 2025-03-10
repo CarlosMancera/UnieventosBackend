@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record InformacionEventoDTO(
-        String id,
+        Long id,
         String nombre,
         String artista,
         String descripcion,
