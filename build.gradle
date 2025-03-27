@@ -6,7 +6,7 @@ plugins {
 
 group = 'co.edu.uniquindio'
 version = '0.0.1-SNAPSHOT'
-description = 'Proyecto Programación Avanzada'
+description = 'unieventos'
 
 java {
     toolchain {

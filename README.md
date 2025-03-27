@@ -1,4 +1,4 @@
-# Proyecto Programación Avanzada
+# Unieventos
 
 Este proyecto es de naturaleza académica. Consiste en el desarrollo de una aplicación empresarial utilizando las tecnologías Spring Boot para el backend y Angular para el frontend. La aplicación está diseñada para demostrar la integración de estas tecnologías y proporcionar una solución empresarial completa.
 ## Objetivos
