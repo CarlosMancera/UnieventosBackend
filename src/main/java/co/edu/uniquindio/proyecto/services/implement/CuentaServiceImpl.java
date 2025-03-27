@@ -74,45 +74,33 @@ public class CuentaServiceImpl implements CuentaService {   //con la inicializac
 
     @Override
     public Long editarCuenta(EditarCuentaDTO cuenta) throws Exception {
-
-                                                                            //Buscamos la cuenta del
-        Optional<Cuenta> optionalCuenta = getCuenta(1L);           //usuario que se quiere actualizar
-
+        Optional<Cuenta> optionalCuenta = getCuenta(Long.parseLong(cuenta.id()));
         if (optionalCuenta.isEmpty()) {
             throw new Exception("No existe una cuenta con el id " + cuenta.id());
         }
-                                                                            //Obtenemos la cuenta del
-        Cuenta cuentaModificada = optionalCuenta.get();                     //usuario a modificar y actualizamos sus datos
-        cuentaModificada.getUsuario().setNombre( cuenta.nombre() );
-        cuentaModificada.getUsuario().setTelefono( cuenta.telefono() );
-        cuentaModificada.getUsuario().setDireccion( cuenta.direccion() );
-        //cuentaModificada.setPassword( encriptarPassword(cuenta.password()));
-
-                                                                        //Como el objeto cuenta ya tiene
-        cuentaRepo.save(cuentaModificada);                              //un id, el save() no crea un nuevo
-                                                                        //registro sino que actualiza el que ya existe
-
+        Cuenta cuentaModificada = optionalCuenta.get();
+        cuentaModificada.getUsuario().setNombre(cuenta.nombre());
+        cuentaModificada.getUsuario().setTelefono(cuenta.telefono());
+        cuentaModificada.getUsuario().setDireccion(cuenta.direccion());
+        if (cuenta.nuevaContrasena() != null && !cuenta.nuevaContrasena().isBlank()) {
+            if (!cuenta.nuevaContrasena().equals(cuenta.confirmarContrasena())) {
+                throw new Exception("Las contraseñas no coinciden.");
+            }
+            cuentaModificada.setPassword(encriptarPassword(cuenta.nuevaContrasena()));
+        }
+        cuentaRepo.save(cuentaModificada);
         return cuentaModificada.getId();
     }
 
+
     @Override
     public Long eliminarCuenta(Long id) throws Exception {
-
-                                                            //Buscamos la cuenta del usuario
         Optional<Cuenta> optionalCuenta = getCuenta(id);    //que se quiere eliminar
-
         if (optionalCuenta.isEmpty()) {
             throw new Exception("No existe una cuenta con el id " + id);
         }
-                                                            //Obtenemos la cuenta del usuario que
-        Cuenta cuenta = optionalCuenta.get();               //se quiere eliminar y le asignamos el estado eliminado
-        cuenta.setEstadoCuenta(EstadoCuenta.ELIMINADO);
-
-                                                            //Como el objeto cuenta ya tiene un id,
-        cuentaRepo.save(cuenta);                            //el save() no crea un nuevo registro sino que actualiza el que ya existe
-
-
-        return cuenta.getId();
+        cuentaRepo.deleteById(id);
+        return id;
     }
 
     @Override

@@ -32,7 +32,6 @@ public class CuentaController {
         cuentaService.crearCuenta(cuenta);
     }
 
-    @SecurityRequirement(name = "bearerAuth")
     @PutMapping("/editar-perfil")
     public void editarCuenta(@Valid @RequestBody EditarCuentaDTO cuenta) throws Exception{
         cuentaService.editarCuenta(cuenta);
