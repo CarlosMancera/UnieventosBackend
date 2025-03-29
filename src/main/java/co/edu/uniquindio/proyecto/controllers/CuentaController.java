@@ -26,7 +26,7 @@ import java.util.List;
 public class CuentaController {
 
     @Autowired
-    private final CuentaService cuentaService;
+    private CuentaService cuentaService;
 
     @PostMapping("/crear-cuenta")
     public ResponseEntity<MensajeDTO> crearCuenta(@Valid @RequestBody CrearCuentaDTO cuenta) {
