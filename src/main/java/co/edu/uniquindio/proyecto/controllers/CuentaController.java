@@ -13,7 +13,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,18 +28,10 @@ public class CuentaController {
     private final CuentaService cuentaService;
 
     @PostMapping("/crear-cuenta")
-    public ResponseEntity<MensajeDTO> crearCuenta(@Valid @RequestBody CrearCuentaDTO cuenta) {
-        try {
-            System.out.println("Llega al servicio con: " + cuenta);
-            cuentaService.crearCuenta(cuenta);
-            return ResponseEntity.ok(new MensajeDTO(false, "Cuenta creada correctamente"));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new MensajeDTO(true, "Error: " + e.getMessage()));
-        }
+    public void crearCuenta(@Valid @RequestBody CrearCuentaDTO cuenta) throws Exception{
+        System.out.println("Llega al servicio con: " + cuenta);
+        cuentaService.crearCuenta(cuenta);
     }
-
 
     @PutMapping("/editar-perfil")
     public void editarCuenta(@Valid @RequestBody EditarCuentaDTO cuenta) throws Exception{
