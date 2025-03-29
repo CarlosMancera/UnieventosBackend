@@ -32,7 +32,6 @@ public class FiltroToken extends OncePerRequestFilter {
 
 
         // Configuración de cabeceras para CORS
-        response.addHeader("Access-Control-Allow-Origin", "*");
         response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         response.addHeader("Access-Control-Allow-Headers", "Origin, Accept, Content-Type, Authorization");
 
