@@ -31,8 +31,8 @@ public class FiltroToken extends OncePerRequestFilter {
             FilterChain filterChain) throws ServletException, IOException {
 
         response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
+        response.setHeader("Access-Control-Allow-Origin", "https://unieventos-site-front.netlify.app");
 
-        // Configuración de cabeceras para CORS
         response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
@@ -41,34 +41,24 @@ public class FiltroToken extends OncePerRequestFilter {
 
         if (request.getMethod().equals("OPTIONS")) {
             response.setStatus(HttpServletResponse.SC_OK);
-            return; // <<< Detiene la ejecución del filtro
         } else {
 
-
-            //Obtener la URI de la petición que se está realizando
             String requestURI = request.getRequestURI();
 
-
-            //Se obtiene el token de la petición del encabezado del mensaje HTTP
             String token = getToken(request);
             boolean error = true;
 
-
             try {
 
-                //Si la petición es para la ruta /api/cliente se verifica que el token exista y que el rol sea CLIENTE
                 if (requestURI.startsWith("/api/cliente")) {
                     error = validarToken(token, TipoUsuario.CLIENTE);
                 }
-                //Si la petición es para la ruta /api/administrador se verifica que el token exista y que el rol sea ADMINISTRADOR
                 else if (requestURI.startsWith("/api/administrador")) {
-                    error = false;//validarToken(token, TipoUsuario.ADMINISTRADOR);
+                    error = false;
 
                 } else {
                     error = false;
                 }
-
-                //Si hay un error se crea una respuesta con el mensaje del error
                 if (error) {
                     crearRespuestaError("No tiene permisos para acceder a este recurso", HttpServletResponse.SC_FORBIDDEN, response);
                 }
@@ -81,9 +71,6 @@ public class FiltroToken extends OncePerRequestFilter {
             } catch (Exception e) {
                 crearRespuestaError(e.getMessage(), HttpServletResponse.SC_INTERNAL_SERVER_ERROR, response);
             }
-
-
-            //Si no hay errores se continúa con la petición
             if (!error) {
                 filterChain.doFilter(request, response);
             }
