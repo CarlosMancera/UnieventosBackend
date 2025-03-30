@@ -30,52 +30,50 @@ public class FiltroToken extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
 
-        response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
-        response.setHeader("Access-Control-Allow-Origin", "https://unieventos-site-front.netlify.app");
+        String origin = request.getHeader("Origin");
 
-        response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
+        if ("http://localhost:4200".equals(origin) || "https://unieventos-site-front.netlify.app".equals(origin)) {
+            response.setHeader("Access-Control-Allow-Origin", origin);
+        }
+
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Origin, Accept, Content-Type, Authorization");
 
-
-        if (request.getMethod().equals("OPTIONS")) {
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             response.setStatus(HttpServletResponse.SC_OK);
-        } else {
-
-            String requestURI = request.getRequestURI();
-
-            String token = getToken(request);
-            boolean error = true;
-
-            try {
-
-                if (requestURI.startsWith("/api/cliente")) {
-                    error = validarToken(token, TipoUsuario.CLIENTE);
-                }
-                else if (requestURI.startsWith("/api/administrador")) {
-                    error = false;
-
-                } else {
-                    error = false;
-                }
-                if (error) {
-                    crearRespuestaError("No tiene permisos para acceder a este recurso", HttpServletResponse.SC_FORBIDDEN, response);
-                }
-
-
-            } catch (MalformedJwtException | SignatureException e) {
-                crearRespuestaError("El token es incorrecto", HttpServletResponse.SC_INTERNAL_SERVER_ERROR, response);
-            } catch (ExpiredJwtException e) {
-                crearRespuestaError("El token está vencido", HttpServletResponse.SC_INTERNAL_SERVER_ERROR, response);
-            } catch (Exception e) {
-                crearRespuestaError(e.getMessage(), HttpServletResponse.SC_INTERNAL_SERVER_ERROR, response);
-            }
-            if (!error) {
-                filterChain.doFilter(request, response);
-            }
+            return;
         }
 
+        // Lógica del filtro (validación del token)
+        String requestURI = request.getRequestURI();
+        String token = getToken(request);
+        boolean error = true;
+
+        try {
+            if (requestURI.startsWith("/api/cliente")) {
+                error = validarToken(token, TipoUsuario.CLIENTE);
+            } else if (requestURI.startsWith("/api/administrador")) {
+                error = validarToken(token, TipoUsuario.ADMINISTRADOR);
+            } else {
+                error = false;
+            }
+
+            if (error) {
+                crearRespuestaError("No tiene permisos para acceder a este recurso", HttpServletResponse.SC_FORBIDDEN, response);
+            }
+
+        } catch (MalformedJwtException | SignatureException e) {
+            crearRespuestaError("El token es incorrecto", HttpServletResponse.SC_INTERNAL_SERVER_ERROR, response);
+        } catch (ExpiredJwtException e) {
+            crearRespuestaError("El token está vencido", HttpServletResponse.SC_INTERNAL_SERVER_ERROR, response);
+        } catch (Exception e) {
+            crearRespuestaError(e.getMessage(), HttpServletResponse.SC_INTERNAL_SERVER_ERROR, response);
+        }
+
+        if (!error) {
+            filterChain.doFilter(request, response);
+        }
     }
 
     private String getToken(HttpServletRequest req) {
