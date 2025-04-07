@@ -18,5 +18,6 @@ public record CrearArtistaDTO(
         @NotBlank @Length (max = 10)
         String telefono
 
+
 ) {
 }

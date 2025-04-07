@@ -1,6 +1,7 @@
 package co.edu.uniquindio.proyecto.services.implement;
 
 import co.edu.uniquindio.proyecto.dto.eventoDTO.*;
+import co.edu.uniquindio.proyecto.model.entities.Artista;
 import co.edu.uniquindio.proyecto.model.entities.Evento;
 import co.edu.uniquindio.proyecto.model.entities.Localidad;
 import co.edu.uniquindio.proyecto.model.enums.EstadoEvento;
@@ -29,39 +30,53 @@ public class EventoServiceImpl implements EventoService {
     @Override
     @Transactional
     public String crearEvento(CrearEventoDTO eventoDTO) throws Exception {
-        /*// Verificar que el ID del artista no sea nulo
-        if (eventoDTO.artista() == null) {
-            throw new Exception("El ID del artista no puede ser nulo.");
+        if (eventoDTO.artista() == null || eventoDTO.artista().isBlank()) {
+            throw new Exception("El ID del artista no puede ser nulo o vacío.");
         }
 
-        // Buscar el artista en la base de datos usando su ID
-        Artista artista = artistaRepo.findById(eventoDTO.artista())
-                .orElseThrow(() -> new Exception("No existe un artista con el ID: " + eventoDTO.artista()));
+        Long artistaId;
+        try {
+            artistaId = Long.valueOf(eventoDTO.artista());
+        } catch (NumberFormatException e) {
+            throw new Exception("El ID del artista debe ser un número válido.");
+        }
 
-        // Validar que el evento tenga al menos una localidad
+        Artista artista = artistaRepo.findById(artistaId);
+
         if (eventoDTO.localidades() == null || eventoDTO.localidades().isEmpty()) {
             throw new Exception("El evento debe tener al menos una localidad.");
         }
 
-        // Crear el evento
+        List<Localidad> localidades = eventoDTO.localidades().stream()
+                .map(localidadDTO -> Localidad.builder()
+                        .nombre(localidadDTO.nombre())
+                        .precio(localidadDTO.precio())
+                        .capacidad(localidadDTO.capacidad())
+                        .descripcion(localidadDTO.descripcion())
+                        .imagen(localidadDTO.imagen())
+                        .entradasVendidas(0)
+                        .disponibilidad(true)
+                        .build())
+                .toList();
+
         Evento nuevoEvento = Evento.builder()
                 .nombre(eventoDTO.nombre())
-                .artista(artista)  // Se asigna la entidad `Artista`, no un ID
                 .descripcion(eventoDTO.descripcion())
-                .fecha(eventoDTO.fecha())
                 .direccion(eventoDTO.direccion())
                 .ciudad(eventoDTO.ciudad())
+                .fecha(eventoDTO.fecha())
                 .tipoEvento(eventoDTO.tipoEvento())
-                .estado(EstadoEvento.ACTIVO)
-                .localidades(eventoDTO.localidades().stream()
-                        .map(localidadDTO -> new Localidad(localidadDTO.nombre(), localidadDTO.precio(), localidadDTO.capacidad()))
-                        .toList())  // Convertir las localidades
+                .estadoEvento(EstadoEvento.ACTIVO)
+                .artista(artista)
+                .localidades(localidades)
+                .imagenPortada(eventoDTO.imagenPortada())
+                .imagenLocalidades(eventoDTO.imagenLocalidades())
                 .build();
 
-        // Guardar el evento en la base de datos
-        Evento eventoCreado = eventoRepo.save(nuevoEvento);*/
-        return null;
+        Evento eventoGuardado = eventoRepo.save(nuevoEvento);
+        return eventoGuardado.getId().toString();
     }
+
 
 
     @Override
@@ -244,9 +259,11 @@ public class EventoServiceImpl implements EventoService {
                 localidad.getNombre(),
                 localidad.getPrecio(),
                 localidad.getCapacidad(),
+                localidad.getDescripcion(),
                 localidad.getImagen()
         );
     }
+
 
     private Evento getEvento(Long id) throws Exception {
         Optional<Evento> optionalEvento = eventoRepo.findById(id);

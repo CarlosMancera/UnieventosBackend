@@ -26,10 +26,12 @@ public class ArtistaServiceImpl implements ArtistaService {
     public List<InformacionArtistaDTO> listarArtistas() {
         return artistaRepo.findAll().stream()
                 .map(artista -> new InformacionArtistaDTO(
+                        artista.getId(),
                         artista.getNombre(),
                         artista.getGenero(),
                         artista.getEmail(),
-                        artista.getTelefono()
+                        artista.getTelefono(),
+                        artista.getEstado().name()
                 ))
                 .collect(Collectors.toList());
     }
@@ -39,10 +41,12 @@ public class ArtistaServiceImpl implements ArtistaService {
     public List<InformacionArtistaDTO> buscarArtistasPorNombre(String nombre) {
         return artistaRepo.findByNombreContainingIgnoreCase(nombre).stream()
                 .map(artista -> new InformacionArtistaDTO(
+                        artista.getId(),
                         artista.getNombre(),
                         artista.getGenero(),
                         artista.getEmail(),
-                        artista.getTelefono()
+                        artista.getTelefono(),
+                        artista.getEstado().name()
                 ))
                 .collect(Collectors.toList());
     }
@@ -65,13 +69,23 @@ public class ArtistaServiceImpl implements ArtistaService {
     }
 
     @Override
+    public Artista findById(Long id) throws Exception {
+        return artistaRepo.findById(id)
+                .orElseThrow(() -> new Exception("No existe un artista con el ID: " + id));
+    }
+
+
+    @Override
     public String editarArtista(EditarArtistaDTO artista) throws Exception {
+
+        System.out.println("Entro acaaaaaa ");
         Artista artistaModificado = getArtista(artista.id());
 
         artistaModificado.setNombre(artista.nombre());
         artistaModificado.setGenero(artista.genero());
         artistaModificado.setEmail(artista.email());
         artistaModificado.setTelefono(artista.telefono());
+        artistaModificado.setEstado(EstadoArtista.valueOf(artista.estado().toUpperCase()));
 
         return artistaRepo.save(artistaModificado).getId().toString();
     }
@@ -88,10 +102,12 @@ public class ArtistaServiceImpl implements ArtistaService {
     public InformacionArtistaDTO obtenerInformacionArtista(Long id) throws Exception {
         Artista artista = getArtista(id);
         return new InformacionArtistaDTO(
+                artista.getId(),
                 artista.getNombre(),
                 artista.getGenero(),
                 artista.getEmail(),
-                artista.getTelefono()
+                artista.getTelefono(),
+                artista.getEstado().name()
         );
     }
 
@@ -103,5 +119,4 @@ public class ArtistaServiceImpl implements ArtistaService {
     private boolean existeNombre(String nombre) {
         return artistaRepo.findByNombre(nombre).isPresent();
     }
-
 }

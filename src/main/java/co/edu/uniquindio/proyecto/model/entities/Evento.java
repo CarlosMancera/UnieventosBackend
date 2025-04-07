@@ -35,8 +35,8 @@ public class Evento {
 
     private LocalDateTime fecha;
 
-    @ElementCollection
-    @CollectionTable(name = "evento_localidades", joinColumns = @JoinColumn(name = "evento_id"))
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "evento_id")
     private List<Localidad> localidades;
 
     @Enumerated(EnumType.STRING)

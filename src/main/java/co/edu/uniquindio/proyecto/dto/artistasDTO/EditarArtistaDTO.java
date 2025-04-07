@@ -14,7 +14,9 @@ public record EditarArtistaDTO(
         @NotBlank @Length(max = 40) @Email
         String email,
         @NotBlank @Length (max = 10)
-        String telefono
+        String telefono,
+        @NotBlank @Length (max = 10)
+        String estado
 
 
 ) {

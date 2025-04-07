@@ -3,8 +3,10 @@ package co.edu.uniquindio.proyecto.services.interfaces;
 import co.edu.uniquindio.proyecto.dto.artistasDTO.CrearArtistaDTO;
 import co.edu.uniquindio.proyecto.dto.artistasDTO.EditarArtistaDTO;
 import co.edu.uniquindio.proyecto.dto.artistasDTO.InformacionArtistaDTO;
+import co.edu.uniquindio.proyecto.model.entities.Artista;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ArtistaService {
 
@@ -19,4 +21,7 @@ public interface ArtistaService {
     String editarArtista(EditarArtistaDTO artista) throws Exception;
 
     String crearArtista(CrearArtistaDTO artista) throws Exception;
+
+
+    Artista findById(Long id) throws Exception;
 }
