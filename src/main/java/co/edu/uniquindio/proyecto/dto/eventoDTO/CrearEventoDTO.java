@@ -31,12 +31,6 @@ public record CrearEventoDTO(
 
         TipoEvento tipoEvento,
 
-        @NotBlank
-        String imagenPortada,
-
-        @NotBlank
-        String imagenLocalidades,
-
         @NotNull
         List<LocalidadEventoDTO> localidades
 

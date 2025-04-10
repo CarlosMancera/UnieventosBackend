@@ -36,16 +36,13 @@ dependencies {
     implementation 'com.mercadopago:sdk-java:2.1.27'
     implementation 'org.simplejavamail:simple-java-mail:8.10.1'
     implementation 'org.simplejavamail:batch-module:8.10.1'
-
-    // PostgreSQL driver
     runtimeOnly 'org.postgresql:postgresql'
-
-    // Eliminé la dependencia de MongoDB
-    // implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
-
-    // JWT y seguridad
     implementation 'io.jsonwebtoken:jjwt:0.12.5'
     implementation 'org.springframework.security:spring-security-crypto:6.3.3'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+    testImplementation 'org.mockito:mockito-core:5.11.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.11.0'
+    testImplementation 'org.assertj:assertj-core:3.24.2'
 }
 
 test {

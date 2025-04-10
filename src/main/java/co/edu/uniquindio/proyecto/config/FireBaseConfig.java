@@ -12,28 +12,24 @@ import java.io.IOException;
 
 @Configuration
 public class FireBaseConfig {
-
-
     @Bean
     public FirebaseApp intializeFirebase() throws IOException {
         FileInputStream serviceAccount = new FileInputStream(
-                "src/main/resources/unieventos-20242-12566-firebase-adminsdk-2dvvh-ece2b08d7c.json"
+                "src/main/resources/unieventos-20242-12566-30927-firebase-adminsdk-fbsvc-c8b9d8d524.json"
         );
-
 
         FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                .setStorageBucket("unieventos-20242-12566.appspot.com")
+                .setStorageBucket("unieventos-20242-12566-30927.appspot.com") // ✅ IMPORTANTE: Que sea exacto
                 .build();
 
-
-        if(FirebaseApp.getApps().isEmpty()) {
+        if (FirebaseApp.getApps().isEmpty()) {
             return FirebaseApp.initializeApp(options);
         }
 
-
-        return null;
+        return FirebaseApp.getInstance(); // en lugar de null, mejor retorna el default
     }
+
 
 
 }

@@ -69,8 +69,6 @@ public class EventoServiceImpl implements EventoService {
                 .estadoEvento(EstadoEvento.ACTIVO)
                 .artista(artista)
                 .localidades(localidades)
-                .imagenPortada(eventoDTO.imagenPortada())
-                .imagenLocalidades(eventoDTO.imagenLocalidades())
                 .build();
 
         Evento eventoGuardado = eventoRepo.save(nuevoEvento);
