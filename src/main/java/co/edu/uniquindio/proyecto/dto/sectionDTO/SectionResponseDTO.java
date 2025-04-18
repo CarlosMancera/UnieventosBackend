@@ -13,6 +13,7 @@ public class SectionResponseDTO {
     private Long id;
     private String nombre;
     private int capacidadTotal;
+    private int capacidadRestante;
     private BigDecimal precio;
     private Long matchId;
 }

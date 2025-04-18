@@ -37,6 +37,7 @@ public class Section {
     private String nombre;
     private int capacidadTotal;
     private BigDecimal precio;
+    private int capacidadRestante;
 
     @OneToMany(mappedBy = "section", cascade = CascadeType.ALL)
     private List<Ticket> tickets;

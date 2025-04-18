@@ -2,6 +2,7 @@ package co.edu.uniquindio.proyecto.services.implement;
 
 import co.edu.uniquindio.proyecto.dto.emailDTO.EmailDTO;
 import co.edu.uniquindio.proyecto.dto.ticketDTO.CrearTicketDTO;
+import co.edu.uniquindio.proyecto.dto.ticketDTO.ItemTicketDTO;
 import co.edu.uniquindio.proyecto.model.entities.Cuenta;
 import co.edu.uniquindio.proyecto.model.entities.Match;
 import co.edu.uniquindio.proyecto.model.entities.Section;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -38,6 +40,13 @@ public class TicketServiceImpl implements TicketService {
 
         Section section = sectionRepository.findById(dto.getSectionId())
                 .orElseThrow(() -> new Exception("Sección no encontrada"));
+
+        if (section.getCapacidadRestante() <= 0) {
+            throw new Exception("No hay boletas disponibles en esta sección.");
+        }
+
+        section.setCapacidadRestante(section.getCapacidadRestante() - 1);
+        sectionRepository.save(section);
 
         Cuenta cuenta = cuentaRepository.findById(dto.getCuentaId())
                 .orElseThrow(() -> new Exception("Cuenta no encontrada"));
@@ -60,10 +69,15 @@ public class TicketServiceImpl implements TicketService {
                 .fechaCompra(LocalDateTime.now())
                 .build();
 
-
         Ticket ticketGuardado = ticketRepository.save(ticket);
 
         byte[] pdfBytes = pdfGeneratorService.generarPdfTicket(ticketGuardado);
+
+        emailService.enviarEmailConAdjunto(
+                new EmailDTO(cuenta.getEmail(), "Tu entrada para el partido de: " + dto.getNombrePortador(), "Adjunto su ticket."),
+                pdfBytes,
+                "ticket-" + ticketGuardado.getCodigo() + ".pdf"
+        );
 
         emailService.enviarEmailConAdjunto(
                 new EmailDTO(dto.getEmailPortador(), "Tu entrada para el partido", "Adjunto tu ticket."),
@@ -73,5 +87,24 @@ public class TicketServiceImpl implements TicketService {
 
         return ticketGuardado.getId();
     }
+
+
+    @Override
+    public List<ItemTicketDTO> listarTicketsPorCuenta(Long cuentaId) {
+        List<Ticket> tickets = ticketRepository.findAllByComprador_Id(cuentaId);
+
+        return tickets.stream().map(t -> ItemTicketDTO.builder()
+                .id(t.getId())
+                .codigo(t.getCodigo())
+                .nombrePortador(t.getPortador().getNombre())
+                .emailPortador(t.getEmailPortador())
+                .nombreMatch(t.getMatch().getEquipoLocal() + " vs " + t.getMatch().getEquipoVisitante())
+                .nombreSeccion(t.getSection().getNombre())
+                .fechaCompra(t.getFechaCompra())
+                .estado(t.getEstado().name())
+                .build()
+        ).toList();
+    }
+
 }
 

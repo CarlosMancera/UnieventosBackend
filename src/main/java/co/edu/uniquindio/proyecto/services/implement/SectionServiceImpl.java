@@ -7,9 +7,12 @@ import co.edu.uniquindio.proyecto.model.entities.Match;
 import co.edu.uniquindio.proyecto.model.entities.Section;
 import co.edu.uniquindio.proyecto.repositories.MatchRepository;
 import co.edu.uniquindio.proyecto.repositories.SectionRepository;
+import co.edu.uniquindio.proyecto.services.exception.CapacidadInvalidaException;
 import co.edu.uniquindio.proyecto.services.interfaces.SectionService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,6 +29,7 @@ public class SectionServiceImpl implements SectionService {
         Section section = Section.builder()
                 .nombre(dto.getNombre())
                 .capacidadTotal(dto.getCapacidadTotal())
+                .capacidadRestante(dto.getCapacidadTotal())
                 .precio(dto.getPrecio())
                 .match(match)
                 .build();
@@ -33,11 +37,27 @@ public class SectionServiceImpl implements SectionService {
     }
 
     @Override
+    @Transactional
     public void actualizarSection(Long id, SectionDTO dto) {
         Section section = sectionRepository.findById(id).orElseThrow();
+
+        int boletasVendidas = section.getTickets() != null ? section.getTickets().size() : 0;
+
+        if (dto.getCapacidadTotal() < boletasVendidas) {
+            throw new CapacidadInvalidaException("No se puede establecer una capacidad total menor a las boletas ya vendidas (" + boletasVendidas + ").");
+        }
+
         section.setNombre(dto.getNombre());
+
+        int diferencia = dto.getCapacidadTotal() - section.getCapacidadTotal();
+
         section.setCapacidadTotal(dto.getCapacidadTotal());
         section.setPrecio(dto.getPrecio());
+
+        if (diferencia != 0) {
+            section.setCapacidadRestante(section.getCapacidadRestante() + diferencia);
+        }
+
         sectionRepository.save(section);
     }
 
@@ -65,6 +85,7 @@ public class SectionServiceImpl implements SectionService {
                 .id(section.getId())
                 .nombre(section.getNombre())
                 .capacidadTotal(section.getCapacidadTotal())
+                .capacidadRestante(section.getCapacidadRestante())
                 .precio(section.getPrecio())
                 .matchId(section.getMatch().getId())
                 .build();
