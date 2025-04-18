@@ -3,11 +3,11 @@ package co.edu.uniquindio.proyecto.model.vo;
 import jakarta.persistence.Embeddable;
 import lombok.*;
 
-@Embeddable // ✅ Debe ser @Embeddable para ser usada dentro de otra entidad
+@Embeddable
 @Getter
 @Setter
-@NoArgsConstructor // ✅ Constructor vacío necesario para JPA
-@AllArgsConstructor // ✅ Constructor con argumentos para crear objetos fácilmente
+@NoArgsConstructor
+@AllArgsConstructor
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Usuario {

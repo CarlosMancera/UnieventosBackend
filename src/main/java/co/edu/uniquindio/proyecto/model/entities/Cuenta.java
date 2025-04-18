@@ -75,7 +75,7 @@ public class Cuenta {
     @Column(name = "en_sesion", nullable = false, columnDefinition = "boolean default false")
     private Boolean enSesion = false;
 
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "comprador")
     private List<Ticket> tickets;
 
 }
