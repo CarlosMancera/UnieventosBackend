@@ -43,6 +43,8 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:5.11.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:5.11.0'
     testImplementation 'org.assertj:assertj-core:3.24.2'
+    implementation 'com.cloudinary:cloudinary-http44:1.36.0'
+
 }
 
 test {
