@@ -29,4 +29,10 @@ public class EmailController {
                     new MensajeDTO<>(true, ex.getMessage()));
         }
     }
+
+    @PostMapping("/codigo-pago")
+    public ResponseEntity<Void> enviarCodigo(@RequestBody EmailDTO emailDTO) throws Exception {
+        emailService.enviarEmail(emailDTO);
+        return ResponseEntity.ok().build();
+    }
 }
