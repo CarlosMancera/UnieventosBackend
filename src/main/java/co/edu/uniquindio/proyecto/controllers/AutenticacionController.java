@@ -28,23 +28,26 @@ public class AutenticacionController {
     private final CuentaService cuentaService;
 
     @PostMapping("/iniciar-sesion")
-    public ResponseEntity<MensajeDTO<TokenDTO>> iniciarSesion(@Valid @RequestBody LoginDTO loginDTO) throws Exception {
+    public ResponseEntity<MensajeDTO<?>> iniciarSesion(@Valid @RequestBody LoginDTO loginDTO) throws Exception {
         var cuenta = cuentaService.enviaCuentaByCorreo(loginDTO.email());
+
+        if (cuenta == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new MensajeDTO<>(true, "❌ El correo ingresado no está registrado."));
+        }
 
         if (Boolean.TRUE.equals(cuenta.getEnSesion())) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(new MensajeDTO<>(true, null));
+                    .body(new MensajeDTO<>(true, "⚠️ El usuario ya tiene una sesión activa."));
         }
 
         TokenDTO token = cuentaService.iniciarSesion(loginDTO);
-        cuenta.setToken(token.token()); 
+        cuenta.setToken(token.token());
         cuenta.setEnSesion(true);
         cuentaService.actualizarCuenta(cuenta);
 
         return ResponseEntity.ok(new MensajeDTO<>(false, token));
     }
-
-
 
     @PostMapping(value = "/close-sesion", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<MensajeDTO<TokenDTO>> cerrarSesion(@Valid @RequestBody String email) throws Exception {
