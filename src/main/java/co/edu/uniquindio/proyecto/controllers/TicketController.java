@@ -1,5 +1,6 @@
 package co.edu.uniquindio.proyecto.controllers;
 
+import co.edu.uniquindio.proyecto.dto.compraDTO.CrearCompraDTO;
 import co.edu.uniquindio.proyecto.dto.ticketDTO.CrearTicketDTO;
 import co.edu.uniquindio.proyecto.dto.ticketDTO.ItemTicketDTO;
 import co.edu.uniquindio.proyecto.services.interfaces.TicketService;
@@ -30,5 +31,12 @@ public class TicketController {
     public ResponseEntity<List<ItemTicketDTO>> listarTicketsPorCuenta(@PathVariable Long cuentaId) {
         return ResponseEntity.ok(ticketService.listarTicketsPorCuenta(cuentaId));
     }
+
+    @PostMapping("/compra")
+    public ResponseEntity<Void> crearCompra(@RequestBody CrearCompraDTO dto) throws Exception {
+        ticketService.crearCompra(dto);
+        return ResponseEntity.ok().build();
+    }
+
 
 }

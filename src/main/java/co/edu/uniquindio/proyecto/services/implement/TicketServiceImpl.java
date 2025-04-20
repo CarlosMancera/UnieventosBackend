@@ -1,5 +1,6 @@
 package co.edu.uniquindio.proyecto.services.implement;
 
+import co.edu.uniquindio.proyecto.dto.compraDTO.CrearCompraDTO;
 import co.edu.uniquindio.proyecto.dto.emailDTO.EmailDTO;
 import co.edu.uniquindio.proyecto.dto.ticketDTO.CrearTicketDTO;
 import co.edu.uniquindio.proyecto.dto.ticketDTO.ItemTicketDTO;
@@ -15,12 +16,16 @@ import co.edu.uniquindio.proyecto.repositories.TicketRepository;
 import co.edu.uniquindio.proyecto.services.interfaces.EmailService;
 import co.edu.uniquindio.proyecto.services.interfaces.PdfGeneratorService;
 import co.edu.uniquindio.proyecto.services.interfaces.TicketService;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -87,6 +92,78 @@ public class TicketServiceImpl implements TicketService {
 
         return ticketGuardado.getId();
     }
+
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void crearCompra(CrearCompraDTO dto) throws Exception {
+        Match match = matchRepository.findById(dto.getMatchId())
+                .orElseThrow(() -> new Exception("Partido no encontrado"));
+
+        Map<Long, Section> seccionesMap = new HashMap<>();
+
+        for (CrearTicketDTO ticketDTO : dto.getTickets()) {
+            Long sectionId = ticketDTO.getSectionId();
+            seccionesMap.putIfAbsent(sectionId,
+                    sectionRepository.findById(sectionId)
+                            .orElseThrow(() -> new Exception("Sección no encontrada: ID " + sectionId)));
+        }
+
+        Map<Long, Long> conteoPorSeccion = dto.getTickets().stream()
+                .collect(Collectors.groupingBy(CrearTicketDTO::getSectionId, Collectors.counting()));
+
+        for (Map.Entry<Long, Long> entry : conteoPorSeccion.entrySet()) {
+            Section s = seccionesMap.get(entry.getKey());
+            if (s.getCapacidadRestante() < entry.getValue()) {
+                throw new Exception("No hay suficientes boletas en la sección: " + s.getNombre());
+            }
+        }
+
+        Cuenta cuenta = cuentaRepository.findById(dto.getCuentaId())
+                .orElseThrow(() -> new Exception("Cuenta no encontrada"));
+
+        for (CrearTicketDTO ticketDTO : dto.getTickets()) {
+            Section s = seccionesMap.get(ticketDTO.getSectionId());
+            s.setCapacidadRestante(s.getCapacidadRestante() - 1);
+
+            Usuario portador = new Usuario(
+                    ticketDTO.getCedulaPortador(),
+                    ticketDTO.getNombrePortador(),
+                    ticketDTO.getDireccionPortador(),
+                    ticketDTO.getTelefonoPortador()
+            );
+
+            Ticket ticket = Ticket.builder()
+                    .codigo(UUID.randomUUID().toString())
+                    .match(match)
+                    .section(s)
+                    .comprador(cuenta)
+                    .portador(portador)
+                    .emailPortador(ticketDTO.getEmailPortador())
+                    .estado(Ticket.EstadoTicket.COMPRADA)
+                    .fechaCompra(LocalDateTime.now())
+                    .build();
+
+            Ticket ticketGuardado = ticketRepository.save(ticket);
+
+            byte[] pdf = pdfGeneratorService.generarPdfTicket(ticketGuardado);
+
+            emailService.enviarEmailConAdjunto(
+                    new EmailDTO(cuenta.getEmail(), "Entrada " + ticketDTO.getNombrePortador(), "Adjunto su ticket."),
+                    pdf,
+                    "ticket-" + ticketGuardado.getCodigo() + ".pdf"
+            );
+
+            emailService.enviarEmailConAdjunto(
+                    new EmailDTO(ticketDTO.getEmailPortador(), "Tu entrada para el partido", "Adjunto tu ticket."),
+                    pdf,
+                    "ticket-" + ticketGuardado.getCodigo() + ".pdf"
+            );
+        }
+
+        sectionRepository.saveAll(seccionesMap.values());
+    }
+
 
 
     @Override
