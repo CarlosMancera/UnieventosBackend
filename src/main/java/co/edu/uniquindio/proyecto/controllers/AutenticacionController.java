@@ -1,12 +1,13 @@
 package co.edu.uniquindio.proyecto.controllers;
 
 import co.edu.uniquindio.proyecto.dto.ActualizarPasswordDTO;
+import co.edu.uniquindio.proyecto.dto.LoginDTO;
 import co.edu.uniquindio.proyecto.dto.MensajeDTO;
 import co.edu.uniquindio.proyecto.dto.TokenDTO;
-import co.edu.uniquindio.proyecto.dto.LoginDTO;
 import co.edu.uniquindio.proyecto.services.interfaces.CuentaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -27,14 +28,23 @@ public class AutenticacionController {
     private final CuentaService cuentaService;
 
     @PostMapping("/iniciar-sesion")
-    public ResponseEntity<MensajeDTO<TokenDTO>> iniciarSesion(@Valid @RequestBody LoginDTO loginDTO) throws Exception{
+    public ResponseEntity<MensajeDTO<TokenDTO>> iniciarSesion(@Valid @RequestBody LoginDTO loginDTO) throws Exception {
+        var cuenta = cuentaService.enviaCuentaByCorreo(loginDTO.email());
+
+        if (Boolean.TRUE.equals(cuenta.getEnSesion())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new MensajeDTO<>(true, null));
+        }
+
         TokenDTO token = cuentaService.iniciarSesion(loginDTO);
-        var cuenta= cuentaService.enviaCuentaByCorreo(loginDTO.email());
-        cuenta.setToken(String.valueOf(token.token()));
+        cuenta.setToken(token.token()); 
         cuenta.setEnSesion(true);
         cuentaService.actualizarCuenta(cuenta);
+
         return ResponseEntity.ok(new MensajeDTO<>(false, token));
     }
+
+
 
     @PostMapping(value = "/close-sesion", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<MensajeDTO<TokenDTO>> cerrarSesion(@Valid @RequestBody String email) throws Exception {
