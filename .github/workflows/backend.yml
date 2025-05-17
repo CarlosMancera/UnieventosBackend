@@ -24,11 +24,11 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
 
       - name: Build and test
-        working-directory: Backend/UnieventosBackend
+        working-directory: .
         run: ./gradlew clean build test
 
       - name: SonarCloud Analysis
-        working-directory: Backend/UnieventosBackend
+        working-directory: .
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: ./gradlew sonarqube \
