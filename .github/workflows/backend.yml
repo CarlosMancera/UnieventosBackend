@@ -23,6 +23,9 @@ jobs:
           path: ~/.gradle
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
 
+      - name: Dar permisos de ejecución al wrapper
+        run: chmod +x ./gradlew
+
       - name: Build and test
         working-directory: .
         run: ./gradlew clean build test
