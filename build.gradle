@@ -49,6 +49,12 @@ dependencies {
     implementation 'com.itextpdf:itext7-core:7.2.5'
 
 }
+configurations {
+    all {
+        exclude group: 'commons-logging', module: 'commons-logging'
+    }
+}
+
 
 test {
     useJUnitPlatform()
