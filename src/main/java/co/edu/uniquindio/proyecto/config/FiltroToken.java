@@ -30,9 +30,12 @@ public class FiltroToken extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
 
+
         String requestURI = request.getRequestURI();
 
-        if (requestURI.equals("/") || requestURI.startsWith("/actuator") || requestURI.startsWith("/swagger") || requestURI.startsWith("/v3/api-docs")) {
+        if (requestURI.equals("/")  || requestURI.startsWith("/health")
+                || requestURI.startsWith("/actuator") || requestURI.startsWith("/swagger")
+                || requestURI.startsWith("/v3/api-docs")) {
             filterChain.doFilter(request, response);
             return;
         }
