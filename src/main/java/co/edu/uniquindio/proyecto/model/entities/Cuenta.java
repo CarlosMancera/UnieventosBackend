@@ -69,7 +69,7 @@ public class Cuenta {
 
     private String password;
 
-    @Column(name = "token", nullable = true)
+    @Column(name = "token", columnDefinition = "text")
     private String token;
 
     @Column(name = "en_sesion", nullable = false, columnDefinition = "boolean default false")
